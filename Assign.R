@@ -237,7 +237,7 @@ handleChr <- function(alns) {
 		detach("ivals")
 		return(NULL)
 	}
-	msg(c("Overlap matrix is", ncol(olaps), "by", nrow(olaps)))
+	msg(c("Overlap matrix is", nrow(olaps), "rows by", ncol(olaps),"cols"))
 	
 	# Check each possible overlap and, where one exists, print an alignment
 	# tuple; pri key = Lab, sec key = 1
