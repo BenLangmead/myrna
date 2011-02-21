@@ -441,6 +441,19 @@ while(1) {
 				system("cp * $errorDir/Assign.pl.$$/ 2>/dev/null");
 				system("cp .* $errorDir/Assign.pl.$$/ 2>/dev/null");
 			}
+			# Print messages while reading records from R; otherwise,
+			# Hadoop might want to kill us for being inactive
+			my $doneFile = ".write_table.$parts.done";
+			my $pid = fork();
+			if($pid == 0) {
+				my $sleepSecs = 0;
+				while(! -f $doneFile) {
+					print STDERR "Waited for R for $sleepSecs...\n";
+					sleep(10);
+					$sleepSecs += 10;
+				}
+				exit 0;
+			}
 			open (CMD, $cmd) || die "Could not open pipe '$cmd'\n";
 			while(<CMD>) {
 				chomp;
@@ -454,6 +467,7 @@ while(1) {
 				print join("\t", @s)."\n";
 			}
 			close(CMD);
+			system("touch $doneFile");
 			die "Invocation of '$cmd' aborted with exitlevel $?\n" if $? != 0;
 			if(defined($errorDir) && $errorDir ne "") {
 				system("rm -rf $errorDir/Assign.pl.$$");
