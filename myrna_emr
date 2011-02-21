@@ -1,0 +1,156 @@
+#!/usr/bin/perl -w
+
+##
+# Author: Ben Langmead
+#   Date: February 20, 2010
+#
+# Use 'elastic-mapreduce' ruby script to invoke an EMR job described
+# in a dynamically-generated JSON file.  Constructs the elastic-
+# mapreduce invocation from paramteres/defaults/environment variables.
+#
+
+use strict;
+use warnings;
+
+use FindBin qw($Bin);
+use lib $Bin;
+use MyrnaIface;
+
+my $APP = "Myrna";
+my $app = lc $APP;
+my $SCRIPT = "myrna_emr";
+my $VERSION = `cat $Bin/VERSION`; $VERSION =~ s/\s//g;
+
+our $usage = qq{
+$SCRIPT: Run $APP v$VERSION as an Elastic MapReduce job
+
+Usage: perl $SCRIPT --input <url> --output <url> \
+                    [--reference <url> | --just-preprocess ] [options]
+
+Options (defaults in []):
+
+ EMR params:
+
+  --credentials <path>   Path to credentials.json file [elastic-mapreduce
+                         script's default]
+  --emr-script <path>    Path to 'elastic-mapreduce' script [First under
+                         \$${APP}_EMR, then in \$PATH]
+  --hadoop-version <ver> Hadoop version to use on EMR; for now, the options are
+                         0.18 and 0.20 [0.20]
+  --dry-run              Produce job's .json and .sh files and print
+                         'elastic-mapreduce' command but don't run it
+  --name <name>          Name for EMR job ["$APP"]
+  --stay-alive           Keep cluster running even if it completes or a step
+                         fails [off]
+  --instance-type <type> EC2 instance type [c1.xlarge (highly recommended)]
+  --nodes <int>          Number of nodes (instances) to allocate [1]
+  --emr-args "<args>"    Extra arguments for 'elastic-mapreduce' script [none]
+  --logs <url>           By default, logs are deposited in 'log' directory
+                         alongside the --output URL.  Override by specifying
+                         --logs and an S3 URL. Can't be a subdirectory of
+                         --output.
+  --no-logs              Disables copying of logs entirely [off]
+  --no-emr-debug         Disable SimpleDB-based debugging.  SimpleDB-based
+                         debugging enables the "Debug" button in the AWS
+                         Console.  User must have SimpleDB account when this is
+                         *not* specified. [off]
+
+ Job params (don't affect results):
+
+  --input <url>          S3 URL for input.  Usually a directory with
+                         preprocessed reads.  If --preprocess or
+                         --just-preprocess are specified, URL is a manifest
+                         file.
+  --output <url>         Final output (S3)
+  --intermediate <url>   Intermediate output (can be HDFS, S3).  Use an S3 URL
+                         if you'd like keep to keep intermediate results after
+                         cluster is deallocated. [hdfs:///$app/intermediate]
+  --partition-len <int>  Partition length in bases [1 million]
+
+ $APP params (affect results):
+
+  --reference <url>      Reference jar (can be HDFS, S3, local, HTTP, FTP)
+  --quality <type>       Encoding for sequence quality values; one of: phred33,
+                         phred64, solexa64 [phred33]
+  --bin <int>            If set, Myrna uses non-overlapping genomic bins
+                         instead of gene/exon intervals.  <int> = bin width
+                         [off].  If used with --sam-passthrough, --reference
+                         need not be specified. [off]
+  --top <int>            Make plots and save alignments for <int> genes with
+                         lowest P values [50]
+  --test <family>        Statistical family to use for differential expression
+                         test; one of: "poisson", "gaussian" [poisson]
+  --norm <type>          Per-gene count normalization scheme to use; one of:
+                         "upper-quartile", "median", "total" ["upper-quartile"]
+  --gene-footprint <type>Interval model used to model genes; one of: "union",
+                         "constitutive", "intersect" ["intersect"]
+  --influence <int>      Maximum "influence" per alignment.  If alignment
+                         length is < <int>, overlaps are calculated as if
+                         length = <int> [1]
+  --from5prime           Measure read's influence from the 5' end [from 3' end]
+  --sam-passthrough      Reuse SAM's alignments instead of calculating new
+                         ones.  If both --sam-passthrough and --bin are
+                         specified, --reference is not required. [off]
+  --sam-lab-rg           When --sam-passthrough is specified, set each read's
+                         label equal to the value of the RG:Z optional field.
+  --just-align           Stop after alignment; alignments put in --output [off]
+  --just-count           Don't do normalization or statistics; --output will
+                         just contain per-gene counts [off]
+  --resume-align         --input URL is an S3 intermediate directory from a
+                         previous run; pipeline resumes before overlapping
+                         [off]
+  --resume-olaps         --input URL is an S3 intermediate directory from a
+                         previous run; resumes before normalization [off]
+  --resume-normal        --input URL is an S3 intermediate directory from a
+                         previous run; resumes before statistics [off]
+  --resume-stats         --input URL is an S3 intermediate directory from a
+                         previous run; resumes before summarization [off]
+  --resume-summ          --input URL is an S3 intermediate directory from a
+                         previous run; resumes before postprocessing [off]
+  --bowtie-args "<args>" Arguments for Bowtie [-m 1] (Note: --partition --mm -t
+                         --hadoopout --startverbose are always set by $APP)
+  --bypass-pvals         Don't calculate interval stastics; all intervals get a
+                         differential expression P-value of 1. [off]
+  --discard-reads <frac> Randomly discard specified fraction of input reads.
+                         [off]
+  --truncate <int>       Truncate reads longer than <int> bases to <int> bases
+                         by trimming from the 3' end [off]
+  --truncate-discard <int> Same as --truncate except that reads shorter than
+                         <int> bases are discarded. [off]
+
+  Preprocessing params (not necessary if --input points to preprocessed reads):
+
+  --preprocess           --input URL is a manifest file describing a set of
+                         unpreprocessed, FASTQ read files; preprocess them
+                         before running $APP [off]
+  --just-preprocess      Like --preprocess but $APP isn't run; --output
+                         contains preprocessed reads [off]
+  --pre-output <url>     If --preprocess is on, put preprocessed output here
+                         instead of in the intermediate directory [off].  Has
+                         no effect if --just-preprocess is specifeid (use
+                         --output).  Useful if future jobs will make use of the
+                         same input.
+  --pre-compress <type>  Compression type; one of: gzip, none [gzip]
+  --pre-stop <int>       Stop preprocessing after <int> reads/mates [no limit]
+  --pre-filemax <int>    Split preprocessed output such that there are no more
+                         than <int> reads/mates per preprocessed read file;
+                         0 = no limit. [500,000]
+
+  Other params:
+
+  --test                 Try to locate all necessary software; print a helpful
+                         message showing what was found and quit [off]
+  --tempdir <path>       Put temporary scripts and files in <path> [/tmp]
+
+};
+
+# Try to avoid forcing the user to use the equals sign in cases where
+# they're specifying a set of arguments, as in --bowtie-args "-n 3 -l 35"
+for(my $i = 0; $i < scalar(@ARGV)-1; $i++) {
+	if($ARGV[$i] =~ /^-.*-args$/) {
+		$ARGV[$i] = "$ARGV[$i]=\"".$ARGV[$i+1]."\"";
+		splice @ARGV, $i+1, 1;
+	}
+}
+
+MyrnaIface::myrna(\@ARGV, $SCRIPT, $usage, undef, undef, undef, undef);

@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Myrna: Cloud-scale differential gene expression for RNA-seq</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="../css/style.css" media="screen" />
+<meta name="verify-v1" content="YJT1CfXN3kzE9cr+jvNB+Q73lTfHrv8eivoY+xjblc0=" />
+</head>
+<body>
+<div id="wrap">
+  <!--#include virtual="top.ssi" -->
+  <div id="subheader">
+  <table width="100%"><tr>
+  <td>
+
+  <strong>Myrna</strong>
+  is a cloud computing tool for calculating differential gene expression in
+  large RNA-seq datasets.  Myrna uses
+  <a href="http://bowtie-bio.sf.net">Bowtie</a>
+  for short read alignment and
+  <a href="http://www.r-project.org/">R</a>/<a href="http://www.bioconductor.org/">Bioconductor</a>
+  for interval calculations, normalization, and statistical testing.  These
+  tools are combined in an automatic, parallel pipeline that runs in the
+  cloud (<a href="http://aws.amazon.com/elasticmapreduce/">Elastic MapReduce</a> in this case) on a local
+  <a href="http://hadoop.apache.org/">Hadoop</a>
+  cluster, or on a single computer, exploiting
+  multiple computers and CPUs wherever possible.
+
+<td align=right valign=middle>
+  <a href="http://opensource.org"><img border=0 alt="Open Source Software" src="/images/osi-certified.gif"></img></a>
+  </td></tr>
+  </table>
+  </div>
+  <div id="main">
+    <!--#include virtual="rhsidebar.ssi" -->
+    <div id="leftside">
+      <!--#include virtual="recent_news.ssi" -->
+    </div>
+  </div>
+  <!--#include virtual="foot.ssi" -->
+</div>
+
+<!-- Google analytics code -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-5334290-1");
+pageTracker._trackPageview();
+</script>
+<!-- End google analytics code -->
+
+</body>
+</html>

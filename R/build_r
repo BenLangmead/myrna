@@ -1,0 +1,64 @@
+#!/bin/bash
+
+##
+# Author: Ben Langmead
+#   Date: 3/26/2010
+#
+# Build an R installation with all the packages needed by Myrna.
+# Intended to be run from an EC2 EMR node.
+#
+
+# Install R
+# When building an R install for an Amazon EMR machine, this should all
+# be done in /mnt
+#cd /mnt
+R_VER=R-2.10.1
+if [ ! -d $R_VER ] ; then
+	[ ! -f $R_VER.tar.gz ] && wget http://cran.r-project.org/src/base/R-2/$R_VER.tar.gz
+	tar zxvf $R_VER.tar.gz
+	rm -f $R_VER.tar.gz
+	mv $R_VER/* .
+	rmdir $R_VER
+fi
+if [ ! -x bin/Rscript ] ; then
+	./configure --with-readline=no --with-x=no --prefix=`pwd` $*
+	make
+	[ $? -ne 0 ] && echo "Error running make" && exit 1
+	if [ 0 -eq 1 ] ; then
+		make check
+		[ $? -ne 0 ] && echo "Error running make check" && exit 1
+	else
+		echo "Skipping 'make check'"
+	fi
+	# I don't run 'make install'
+else
+	echo "bin/Rscript already present"
+fi
+if [ ! -x bin/Rscript ] ; then
+	echo "Cannot run bin/Rscript"
+	exit 1
+fi
+
+RHOME=
+R_HOME=
+
+# Install R packages
+bin/Rscript -e 'install.packages("lmtest", repos="http://cran.r-project.org")'
+[ $? -ne 0 ] && echo "Error installing lmtest" && exit 1
+bin/Rscript -e 'install.packages("multicore", repos="http://cran.r-project.org")'
+[ $? -ne 0 ] && echo "Error installing multicore" && exit 1
+
+# Install Bioconductor packages
+bin/Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite("IRanges")'
+[ $? -ne 0 ] && echo "Error installing Biocondctor base" && exit 1
+bin/Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite("biomaRt")'
+[ $? -ne 0 ] && echo "Error installing Biocondctor biomaRt package" && exit 1
+bin/Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite("geneplotter")'
+[ $? -ne 0 ] && echo "Error installing Biocondctor geneplotter package" && exit 1
+
+cd ..
+echo "===="
+echo "R successfully built"
+echo "Path to 'R' binary: $PWD/bin/R"
+echo "Path to 'Rscript' binary: $PWD/bin/Rscript"
+echo "===="

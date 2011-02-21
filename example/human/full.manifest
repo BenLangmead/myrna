@@ -1,0 +1,13 @@
+# Human reads from the Gilad et al study; note: study also has reads for chimp and rhesus
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR032/SRR032116/SRR032116.lite.sra	0	HF-1-1
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR032/SRR032117/SRR032117.lite.sra	0	HF-1-2
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR032/SRR032118/SRR032118.lite.sra	0	HF-2-1
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR032/SRR032119/SRR032119.lite.sra	0	HF-2-2
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR032/SRR032120/SRR032120.lite.sra	0	HF-3-1
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR032/SRR032121/SRR032121.lite.sra	0	HF-3-2
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR032/SRR032122/SRR032122.lite.sra	0	HM-1-1
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR032/SRR032123/SRR032123.lite.sra	0	HM-1-2
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR032/SRR032124/SRR032124.lite.sra	0	HM-2-1
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR032/SRR032125/SRR032125.lite.sra	0	HM-2-2
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR032/SRR032126/SRR032126.lite.sra	0	HM-3-1
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR032/SRR032127/SRR032127.lite.sra	0	HM-3-2

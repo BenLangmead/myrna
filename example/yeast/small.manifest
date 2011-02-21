@@ -1,0 +1,9 @@
+# Reads from study "Novel Low Abundance and Transient RNAs in Yeast
+# Revealed by Tiling Microarrays and Ultra High–Throughput Sequencing
+# Are Not Conserved Across Closely Related Yeast Species"
+
+# Wild-type reads
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014335/SRR014335.lite.sra	0	wild-1
+
+# "rrp6 lsm1 pat1"
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014339/SRR014339.lite.sra	0	rrp6_lsm1_pat1-1

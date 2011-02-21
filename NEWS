@@ -1,0 +1,146 @@
+Myrna: Cloud-scale differential expression for RNA-seq
+http://bowtie-bio.sf.net/myrna
+
+Myrna NEWS
+==========
+
+   Myrna is now available for download.  1.0.0-beta2 was the first
+version to be released, and it was released under the OSI Artistic
+License (see LICENSE file) and freely available to the public for
+download.  The current version is 1.1.2.
+
+Reporting Issues
+================
+
+Please report any issues using the Sourceforge bug tracker:
+
+  https://sourceforge.net/tracker/?group_id=236897&atid=1101606
+
+Version Release History
+=======================
+
+Version 1.1.2 - February ?, 2011
+   * Updated jar files to use Ensembl v61 (used to be v58).
+   * Added --exon option that allows the user to obtain differential
+     exon expression results rather than differential gene expression
+     results.
+   * Added --from-middle option that causes a read's overlap
+     "influence" to be measured from the middle of the read rather than
+     from one of the ends.
+   * Added --just-align and --resume-align options.  --just-align
+     causes Myrna to put the results of the Alignment phase in the
+     --output directory and quit after the alignment phase.  You can
+     later "resume" Myrna by specifying this directory as the --input
+     directory and specifying the --resume-align option.
+
+Version 1.1.1 - February 7, 2011
+   * Added support for the .sra file format, used by the Sequence Read
+     Archive.  These files can now be specified in the manifest.  Myrna
+     uses the fastq-convert tool from the SRA Toolkit to convert .sra
+     files to .fastq files in the preprocess stage.
+   * The examples that included defunct SRA FASTQ files were updated to
+     point to new .sra files instead.
+   * Fixed labeling scheme in $MYRNA_HOME/example/human/full.manifest
+     to use proper <Group ID>-<BioRep ID>-<TechRep ID> format.
+   * Removed the --union-constitutive gene footprint which was
+     effectively superseded by the --union-intersection footprint.
+   * Fixed issues with the Ensembl.pl/Ensembl.R scripts that would
+     cause them to abort when no exons were marked as constitutive.
+   * Upgraded Bowtie version to 0.12.7.
+
+Version 1.0.9 - September 13, 2010
+   * Fixed bug in cloud mode that would cause crashing in the Map
+     portion of the Postprocess stage
+   * Fixed example manifests that point to Short Read Archive files to
+     use .bz2 instead of .gz extensions.
+
+Version 1.0.8 - September 4, 2010
+   * Set the memory cap on the sort task to be inversely proportional
+     to --cpus, to avoid memory footprint blowup on computers with more
+     processors.
+   * Fixed a final issue that affected how Myrna handles quality
+     value conversion.
+   * Fixed issue whereby bzip2'ed data would be handled incorrectly by
+     the preprocessor.
+   * Fixed counter in Preprocess step that would erroneously refer to
+     unpaired reads as paired.  Also "Read data fetched to EC2" has
+     been changed to "Read data fetched".
+   * In EMR mode, updated where user credentials are found; Amazon
+     changed their path sometime around 8/30/2010.
+   * In EMR mode, updated the manner in which the bootstrap action is
+     specified; the old way was disabled by Amazon sometime around
+     8/30/2010.
+   * Fixed issue whereby ReduceWrap.pl would crash in cases with a
+     large number of bins (>10 million) .
+   * NOTE: The Short Read Archive (SRA) seems to be in the midst of a
+     reorganization that includes files that were previously gzipped
+     being replaced with versions zipped with bzip2.  The files will
+     sometimes disappear for a while.  If you are having problems with
+     an example where input reads come from the SRA, try renaming files
+     in the manifest file as appropriate.  If that doesn't work, please
+     contact us.
+
+Version 1.0.7 - August 27, 2010
+   * Fixed issue whereby the order of the arguments to bowtie would
+     result in a crash when POSIXLY_CORRECT is set.
+   * Fixed --keep-all option, which was causing a crash.
+   * Fixed a lingering quality bug whereby qualities were converted
+     immediately to phred33 but phred64 or solexa64 flags would be
+     spuriously passed to Bowtie.
+
+Version 1.0.6 - August 26, 2010
+   * Single-computer mode now copies the output that it writes to the
+     console to a file 'myrna.local.(pid).out'.  Please include the
+     contents of this file when reporting issues.
+   * Sorting in single-computer mode is now more portable; switched
+     from command-line sort to pure-Perl File::Sort.
+   * Fixed issue with mkdir commands that failed under some OSs.
+   * More helpful output from MapWrap.pl and ReduceWrap.pl to make it
+     easier to debug issues in single-computer-mode runs.
+   * Fixed issue where web form would incorrectly convert + signs in
+     AWS secret key to spaces, causing some good credentials to fail
+     verification.
+   * Fixed issue in preprocessor that mishandles copies when user's AWS
+     secret key contains slash characters.
+
+Version 1.0.5 - August 16, 2010
+   * Fixed issue that prevented MYRNA_EMR_HOME environment variable
+     from working.
+   * Fixed issue whereby Align.pl script fails to report a count for
+     the number of reads with alignments sampled due to Bowtie's -M
+     option.
+   * Fixed issue that made it difficult to specify a space-separated
+     list of arguments to the --bowtie-args and other --*-args
+     parameters.
+   * Fixed issue whereby most documentation referred to arguments with
+     a single-dash prefix, whereas users with the POSIXLY_CORRECT
+     environment variable set must use a double-dash prefix.
+     Documentation and code have been updated to always use double-dash
+     prefixes.
+
+Version 1.0.4 - July 22, 2010
+   * A web-based GUI for composing and submitting Myrna Elastic
+     MapReduce jobs has been added.  Most helpfully, the web GUI has
+     features for sanity-checking inputs; e.g. whether the user's
+     credentials as entered are valid, whether the input URL exists,
+     etc.
+   * Updated EMR and Hadoop modes to support Hadoop 0.20.  0.20 is now
+     the default mode for myrna_emr (and for the elastic-mapreduce
+     script)
+   * When starting a cloud-mode job from the command line, the
+     elastic-mapreduce script must be at least as new as Amazon's
+     2010-06-02 release
+   * Many improvements to the manual, including fixes to the examples
+     and pointers to Amazon's new AWS Console tool for interacting with
+     S3
+   * Various bugfixes
+
+Version 1.0.0-beta6 - July 12, 2010
+   * Fixed several documentation issues.
+   * Updated pre-built jars and scripts to use Ensembl 58.
+   * Added RPKM calculation.
+   * Added output files encoding the calculated normalization factors.
+
+Version 1.0.0-beta2 - May 17, 2010
+   * Beta release of Myrna, a tool for investigating differential gene
+     expression in very large RNA-seq datasets.

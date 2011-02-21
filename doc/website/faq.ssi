@@ -1,0 +1,32 @@
+<h2>What's the difference between Myrna and (other tool)?</h2>
+There are many tools that handle different aspects of analyzing RNA-seq
+data, but each tool usually has a specialty.  Myrna's cloud mode and
+statistical models make it especially appropriate for very large
+datasets and datasets consisting of many biological replicates.
+Myrna's biggest drawback is that it does not attempt to align reads
+across junctions, assemble isoforms, or otherwise analyze on the
+isoform or junction level.
+
+<h2>How do you say "Myrna"?</h2>
+We say it like the first name Myrna ("mer nuh").  But you can say it
+however you want.
+
+<h2>Does Myrna support colorspace?</h2>
+Yes.  All pre-built indexes (ending in <tt>.jar</tt>) have colorspace
+versions (ending in <tt>.cs.jar</tt>).  Just be sure to specify the
+colorspace version of your reference jar of choice, and specify
+<a href="http://bowtie-bio.sourceforge.net/manual.shtml#bowtie-options-C">-C/--color</a> among the options passed to Bowtie.
+
+<h2>Can Myrna handle a mix of colorspace and normal (nucleotide-space) reads in a single job?</h2>
+No.  As of now, Myrna applies the same set of Bowtie arguments to every
+invocation of Bowtie, and so cannot be used on both types of reads in the
+same job.
+
+<h2>Can I use Myrna to analyze an experiment with only one "group"</h2>
+No.  As of now, Myrna requires that the input be labeled such that
+there are at least two non-empty groups.  Myrna will report per-gene
+differential expression p-values between these groups.
+
+<h2>Why does my Myrna job fail in the statistics stage?</h2>
+This is sometimes because the input consisted of just one group.
+See previous question.

@@ -1,0 +1,235 @@
+#!/usr/bin/perl -w
+
+##
+# Author: Ben Langmead
+#   Date: February 11, 2010
+#
+# Initiate a Hadoop streaming Crossbow job.  Must be on the Hadoop master node.
+#
+
+use strict;
+use warnings;
+use Getopt::Long qw(:config pass_through);
+use FindBin qw($Bin);
+use lib $Bin;
+use MyrnaIface;
+use Cwd 'abs_path';
+
+my $APP = "Myrna";
+my $app = lc $APP;
+my $SCRIPT = "myrna_hadoop";
+my $VERSION = `cat $Bin/VERSION`; $VERSION =~ s/\s//g;
+
+my $usage = qq{
+$SCRIPT: Run $APP v$VERSION as a Hadoop job
+
+Usage: perl $SCRIPT --input <url> --output <url> \
+                    [--reference <url> | --just-preprocess ] [options]
+
+Options (defaults in []):
+
+ Job params:
+
+  --dry-run              Produce and print path to a script for running the
+                         Hadoop job, but don't run it.
+  --input <url>          HDFS or S3 URL for input.  URL is typically a
+                         directory containing preprocessed reads.  If
+                         --preprocess or --just-preprocess are enabled, URL is
+                         a manifest file.  If --resume-align is enabled, URL is
+                         a directory containing $APP alignments.
+  --output <url>         Final output (can be HDFS, S3)
+  --intermediate <url>   Intermediate output (can be HDFS, S3).  Use an S3 URL
+                         if you'd like keep to keep intermediate results after
+                         cluster is deallocated. [hdfs:///crossbow]
+  --partition-len <int>  Partition length in bases [1 million]
+  --bowtie <path>        Path to bowtie binary on slaves [search
+                         \$MYRNA_BOWTIE_HOME, \$MYRNA_HOME/bin, \$PATH locally]
+  --Rhome <path>         R home on slaves [search \$MYRNA_RHOME, \$MYRNA_HOME/R,
+                         \$PATH locally]
+
+ $APP params (affect results):
+
+  --reference <path>     Path to directory with reference information (must be
+                         local, with "index", and "ivals" subdirs)
+  --bin <int>            If set, Myrna uses non-overlapping genomic bins
+                         instead of gene/exon intervals.  <int> = bin width
+                         [off].  If used with --sam-passthrough, --reference
+                         need not be specified.
+  --top <int>            Make plots and save alignments for <int> genes with
+                         lowest P values [50]
+  --test <family>        Statistical family to use for differential expression
+                         test; one of: "poisson", "gaussian" [poisson]
+  --norm <type>          Per-gene count normalization scheme to use; one of:
+                         "upper-quartile", "median", "total" ["upper-quartile"]
+  --ival-model <type>    Interval model used to model genes; one of: "union",
+                         "union-constitutive", "union-intersection"
+                         ["union-intersection"]
+  --influence <int>      Maximum "influence" per alignment.  If alignment
+                         length is < <int>, overlaps are calculated as if
+                         length = <int> [1]
+  --from5prime           Measure read's influence from the 5' end [from 3' end]
+  --sam-passthrough      Re-use SAM's alignments instead of calculating new
+                         ones.  If used with --bin, --reference need not be
+                         specified.
+  --sam-lab-rg           When --sam-passthrough is specified, set each read's
+                         label equal to the value of the RG:Z optional field.
+  --just-align           Stop after alignment; alignments put in --output [off]
+  --just-count           Don't do normalization or statistics; --output will
+                         just contain per-gene counts [off]
+  --resume-align         --input URL is an S3 intermediate directory from a
+                         previous run; pipeline resumes before overlapping
+                         [off]
+  --resume-olaps         --input URL is an S3 intermediate directory from a
+                         previous run; resumes before normalization [off]
+  --resume-normal        --input URL is an S3 intermediate directory from a
+                         previous run; resumes before statistics [off]
+  --resume-stats         --input URL is an S3 intermediate directory from a
+                         previous run; resumes before summarization [off]
+  --resume-summ          --input URL is an S3 intermediate directory from a
+                         previous run; resumes before postprocessing [off]
+  --bowtie-args "<args>" Arguments for Bowtie [-m 1] (Note: --partition --mm -t
+                         --hadoopout --startverbose are always set by $APP)
+  --bypass-pvals         Don't calculate interval stastics; all intervals get a
+                         differential expression P-value of 1. [off]
+  --quality <type>       Encoding for sequence quality values; one of: phred33,
+                         phred64, solexa64 [phred33]
+  --discard-reads <frac> Randomly discard specified fraction of input reads.
+                         [off]
+  --truncate <int>       Truncate reads longer than <int> bases to <int> bases
+                         by trimming from the 3' end.
+  --truncate-discard <int> Same as --truncate except that reads shorter than
+                         <int> bases are discarded.
+
+  Preprocessing params (not necessary if --input points to preprocessed reads):
+
+  --preprocess           --input URL is a manifest file describing a set of
+                         unpreprocessed, FASTQ read files; preprocess them
+                         before running $APP [off]
+  --just-preprocess      Like --preprocess but $APP isn't run; --output
+                         contains preprocessed reads [off]
+  --pre-output <url>     If --preprocess is on, put preprocessed output here
+                         instead of in the intermediate directory [off].  Has
+                         no effect if --just-preprocess is specified (--output
+                         is used instead).  Useful if future jobs use same
+                         input.
+  --pre-compress <type>  Compression type; one of: gzip, none [gzip]
+  --pre-stop <int>       Stop preprocessing after <int> reads/mates [no limit]
+  --pre-filemax <int>    Split preprocessed output such that there are no more
+                         than <int> reads/mates per preprocessed read file;
+                         0 = no limit. [500,000]
+
+  Other params:
+
+  --test                 Try to locate all necessary software; print a helpful
+                         message showing what was found and quit [off]
+  --tempdir <path>       Put temporary scripts in <path>
+                         [/tmp/$APP/invoke.scripts]
+                         (umask 0077 used to protect credentials)
+
+};
+
+sub dieusage($$$) {
+	my ($text, $usage, $lev) = @_;
+	print STDERR "$usage\nError:\n";
+	print STDERR "$text\n\n";
+	exit $lev;
+}
+
+# Try to avoid forcing the user to use the equals sign in cases where
+# they're specifying a set of arguments, as in --bowtie-args "-n 3 -l 35"
+for(my $i = 0; $i < scalar(@ARGV)-1; $i++) {
+	if($ARGV[$i] =~ /^-.*-args$/) {
+		$ARGV[$i] = "$ARGV[$i]=\"".$ARGV[$i+1]."\"";
+		splice @ARGV, $i+1, 1;
+	}
+}
+
+my $input = "";
+my $output = "";
+my $intermediate = "";
+my $ref = "";
+my $bowtie = "";
+my $Rhome = "";
+my $samtools = "";
+my $verbose = 0;
+my $test = 0;
+
+GetOptions (
+	"input:s"        => \$input,
+	"output:s"       => \$output,
+	"intermediate:s" => \$intermediate,
+	"reference:s"    => \$ref,
+	"Rhome:s"        => \$Rhome,
+	"bowtie:s"       => \$bowtie,
+	"samtools:s"     => \$samtools,
+	"test"           => \$test,
+	"verbose"        => \$verbose
+);
+
+##
+# Take a path and make it absolute.  If it has a protocol, assume it's
+# already absolute.
+#
+sub absPath($$$) {
+	my ($path, $check, $name) = @_;
+	return $path if $path =~ /^s3n?:\//i;
+	return $path if $path =~ /^hdfs:\//i;
+	return $path if $path =~ /^file:\//i;
+	$path =~ s/^~/$ENV{HOME}/;
+	die "Error: $name path doesn't exist: $path" unless (!$check || -f $path || -d $path);
+	return abs_path($path);
+}
+
+if($verbose) {
+	print STDERR "Relative paths:\n";
+	print STDERR "  input: $input\n";
+	print STDERR "  output: $output\n";
+	print STDERR "  intermediate: $intermediate\n";
+	print STDERR "  reference: $ref\n";
+	print STDERR "  Rhome: $Rhome\n";
+	print STDERR "  bowtie: $bowtie\n";
+	print STDERR "  samtools: $samtools\n";
+}
+
+$input        = absPath($input, 1, "--input") if $input ne "";
+$output       = absPath($output, 0, "--output") if $output ne "";
+$intermediate = absPath($intermediate, 0, "--intermediate") if $intermediate ne "";
+$ref          = absPath($ref, 1, "--reference") if $ref ne "";
+$Rhome        = absPath($Rhome, 1, "--Rhome") if $Rhome ne "";
+$bowtie       = absPath($bowtie, 1, "--bowtie") if $bowtie ne "";
+$samtools     = absPath($samtools, 1, "--samtools") if $samtools ne "";
+
+if($verbose) {
+	print STDERR "Absolute paths:\n";
+	print STDERR "  input: $input\n";
+	print STDERR "  output: $output\n";
+	print STDERR "  intermediate: $intermediate\n";
+	print STDERR "  reference: $ref\n";
+	print STDERR "  Rhome: $Rhome\n";
+	print STDERR "  bowtie: $bowtie\n";
+	print STDERR "  samtools: $samtools\n";
+}
+
+if(!$test) {
+	$input ne ""  || dieusage("Must specify --input",  $usage, 1);
+	$output ne "" || dieusage("Must specify --output", $usage, 1);
+}
+
+my @args = ();
+
+push @args, "--hadoop-job";
+push @args, ("--input", $input) if $input ne "";
+push @args, ("--output", $output) if $output ne "";
+push @args, ("--intermediate", $intermediate) if $intermediate ne "";
+push @args, ("--reference", $ref) if $ref ne "";
+push @args, ("--Rhome", $Rhome) if $Rhome ne "";
+push @args, ("--bowtie", $bowtie) if $bowtie ne "";
+push @args, ("--samtools", $samtools) if $samtools ne "";
+push @args, "--verbose" if $verbose;
+push @args, "--test" if $test;
+
+$ref ne "" || $test || die "Must specify --reference\n";
+
+push @args, @ARGV;
+
+MyrnaIface::myrna(\@args, $SCRIPT, $usage, undef, undef, undef, undef);
