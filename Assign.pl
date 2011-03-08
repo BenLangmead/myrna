@@ -163,7 +163,9 @@ sub fs_ensure_dir_weak {
 		mkpath(@$paths);
 	} else {
 		my $pathstr = join(' ', @$paths);
-		system("($Tools::hadoop fs -mkdir $pathstr) >& /dev/null");
+		my $hadoop = Tools::hadoop();
+		$hadoop ne "" || die "Empty hadoop path: '$hadoop'";
+		system("($hadoop fs -mkdir $pathstr) >& /dev/null");
 	}
 }
 
@@ -178,7 +180,9 @@ my @set_mset_global_delayed = ();
 #
 sub set_mset_flush {
 	if(scalar(@set_mset_global_delayed) > 0) {
-		fs_ensure_dir_weak(\@set_mset_global_delayed, Util::is_local($set_mset_global_delayed[0]));
+		fs_ensure_dir_weak(
+			\@set_mset_global_delayed,
+			Util::is_local($set_mset_global_delayed[0]));
 	}
 	@set_mset_global_delayed = ();
 	counter("Bowtie,Label update flushes,1");
@@ -186,12 +190,13 @@ sub set_mset_flush {
 
 sub set_mset_global {
 	my ($k, $v) = @_;
+	my $local = Util::is_local($globals_dir);
 	if($set_mset_global_first) {
-		fs_ensure_dir_weak([ "$globals_dir/multiset" ]);
+		fs_ensure_dir_weak([ "$globals_dir/multiset" ], $local);
 		$set_mset_global_first = 0;
 	}
 	unless(defined($set_mset_global_first_key{$k})) {
-		fs_ensure_dir_weak([ "$globals_dir/multiset/$k" ]);
+		fs_ensure_dir_weak([ "$globals_dir/multiset/$k" ], $local);
 		$set_mset_global_first_key{$k} = 1;
 	}
 	unless(defined($set_mset_global_first_keyval{"$k/$v"})) {
@@ -210,7 +215,8 @@ sub get_mset_global {
 		$v = `ls -1 $globals_dir/multiset/$k`;
 	} else {
 		my $hadoop = Tools::hadoop();
-		$v = `$hadoop fs -ls $globals_dir/multiset/$k`;		
+		$hadoop ne "" || die "Empty hadoop path: '$hadoop'";
+		$v = `$hadoop fs -ls $globals_dir/multiset/$k`;
 	}
 	for my $line (split(/[\r\n]+/, $v)) {
 		# Take everything after the final slash

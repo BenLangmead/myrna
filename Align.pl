@@ -149,7 +149,7 @@ msg(`ls -al`);
 
 my %counters = ();
 Counters::getCounters($cntfn, \%counters, \&msg, 1);
-msg("Retrived ".scalar(keys %counters)." counters from previous stages\n");
+msg("Retrived ".scalar(keys %counters)." counters from previous stages");
 
 $globals_dir = "/globals" if $globals_dir eq "";
 $globals_dir =~ s/^S3N/s3n/;
