@@ -448,14 +448,15 @@ close(RPKM);
 
 # Make plots
 my $ret = 0;
-if($als > 0) {
+if($als > 0 && !$noGenes) {
+	# TODO: still make plots when $noGenes is set, ignoring exons
 	msg("6/7: Making plots");
 	$noGenes || -f "exons.txt" || die;
 	my $cmd = "$r $r_args $Bin/Postprocess.R --args $cores";
 	msg("$cmd");
 	$ret = system($cmd);
 } else {
-	msg("SKIPPING 6/7: No alignments");
+	msg("SKIPPING 6/7: No alignments or no exons");
 }
 
 # Push results

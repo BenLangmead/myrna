@@ -393,7 +393,7 @@ GetOptions (
 	"truncate-discard:i"        => \$truncateDiscard,
 	"ival-local:s"              => \$ivalLocal,
 	"ivals-local:s"             => \$ivalLocal,
-	"bin:i"                     => \$bin,	
+	"bin:i"                     => \$bin,
 	"influence:i"               => \$influence,
 	"from3prime"                => sub { $fromStr = ""; },
 	"from5prime"                => sub { $fromStr = "--from5prime"; },
@@ -616,7 +616,6 @@ $top >= 1 || die "--top must be >= 1; was $top\n";
 $influence = 1 if $influence == 0;
 $maxalns = 350000 if $maxalns == 0;
 $partbin = 200 if $partbin == 0;
-my $dobin = $bin > 0;
 $justCount = 0 unless(defined($justCount));
 $pairedTest == 0 || $permTest == 0 ||
 	die "Cannot specify both --paired-ttest and non-zero --perm-tests\n";
