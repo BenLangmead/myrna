@@ -170,7 +170,9 @@ sub fs_ensure_dir_weak {
 		mkpath(@$paths);
 	} else {
 		my $pathstr = join(' ', @$paths);
-		system("($Tools::hadoop fs -mkdir $pathstr) >& /dev/null");
+		my $hadoop = Tools::hadoop();
+		$hadoop ne "" || die "Empty hadoop path: '$hadoop'";
+		system("($hadoop fs -mkdir $pathstr) >& /dev/null");
 	}
 }
 
@@ -185,7 +187,9 @@ my @set_mset_global_delayed = ();
 #
 sub set_mset_flush {
 	if(scalar(@set_mset_global_delayed) > 0) {
-		fs_ensure_dir_weak(\@set_mset_global_delayed, Util::is_local($set_mset_global_delayed[0]));
+		fs_ensure_dir_weak(
+			\@set_mset_global_delayed,
+			Util::is_local($set_mset_global_delayed[0]));
 	}
 	@set_mset_global_delayed = ();
 	counter("Bowtie,Label update flushes,1");
@@ -217,7 +221,8 @@ sub get_mset_global {
 		$v = `ls -1 $globals_dir/multiset/$k`;
 	} else {
 		my $hadoop = Tools::hadoop();
-		$v = `$hadoop fs -ls $globals_dir/multiset/$k`;		
+		$hadoop ne "" || die "Empty hadoop path: '$hadoop'";
+		$v = `$hadoop fs -ls $globals_dir/multiset/$k`;
 	}
 	for my $line (split(/[\r\n]+/, $v)) {
 		# Take everything after the final slash

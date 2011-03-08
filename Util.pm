@@ -22,9 +22,9 @@ use Tools;
 sub parse_url_proto($) {
 	my @s = split(/[:]/, shift);
 	defined($s[0]) || return "local";
-	if($s[0] =~ /s3n?/i) {
+	if($s[0] =~ /^s3n?/i) {
 		return "s3";
-	} elsif($s[0] =~ /hdfs/i) {
+	} elsif($s[0] =~ /^hdfs/i) {
 		return "hdfs";
 	} else {
 		return "local";
