@@ -20,7 +20,7 @@ use Tools;
 # be needed to download it.
 #
 sub parse_url_proto($) {
-	my @s = split(/[:]/, shift);
+	my @s = split(/[:]/, $_[0]);
 	defined($s[0]) || return "local";
 	if($s[0] =~ /^s3n?/i) {
 		return "s3";
@@ -35,7 +35,7 @@ sub parse_url_proto($) {
 # Return true iff given url is local.
 #
 sub is_local($) {
-	return parse_url_proto(shift) eq "local";
+	return parse_url_proto($_[0]) eq "local";
 }
 
 ##

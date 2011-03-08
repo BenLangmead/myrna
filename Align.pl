@@ -197,12 +197,13 @@ sub set_mset_flush {
 
 sub set_mset_global {
 	my ($k, $v) = @_;
+	my $local = Util::is_local($globals_dir);
 	if($set_mset_global_first) {
-		fs_ensure_dir_weak([ "$globals_dir/multiset" ]);
+		fs_ensure_dir_weak([ "$globals_dir/multiset" ], $local);
 		$set_mset_global_first = 0;
 	}
 	unless(defined($set_mset_global_first_key{$k})) {
-		fs_ensure_dir_weak([ "$globals_dir/multiset/$k" ]);
+		fs_ensure_dir_weak([ "$globals_dir/multiset/$k" ], $local);
 		$set_mset_global_first_key{$k} = 1;
 	}
 	unless(defined($set_mset_global_first_keyval{"$k/$v"})) {
