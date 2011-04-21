@@ -67,7 +67,7 @@ mkdir -p $PKG/doc
 cp doc/*.html $PKG/doc
 cp doc/*.css $PKG/doc
 
-cp VERSION NEWS MANUAL LICENSE* TUTORIAL $PKG/
+cp VERSION NEWS MANUAL LICENSE* TUTORIAL TOOLNAME $PKG/
 
 pushd $PKG_BASE
 zip -r $APP-${VERSION}.zip $APP-${VERSION}
