@@ -56,11 +56,15 @@ sub runAndWait($$) {
 	print STDERR "$cmd\n";
 	my $f = fork();
 	if($f == 0) {
-		open OUT, ">.Util.pm.$$" || die "Could not open .Util.pm.$$ for writing\n";
+		# Run the command, echoing its stdout to our stdout
 		open(CMD, "$cmd |");
 		while(<CMD>) { print $_; }
 		close(CMD);
+		# Check its exitlevel
 		my $ret = $?;
+		# Write its exitlevel to a file.  TODO: is there a better way
+		# to do this?
+		open(OUT, ">.Util.pm.$$") || die "Could not open .Util.pm.$$ for writing\n";
 		print OUT "$ret\n";
 		close(OUT);
 		exit $ret;
@@ -98,8 +102,8 @@ sub backtickAndWait($$) {
 	print STDERR "$cmd\n";
 	my $f = fork();
 	if($f == 0) {
-		open TMP, ">.tmp.Get.pm" || die;
-		open CMD, "$cmd |" || die;
+		open(TMP, ">.tmp.Get.pm") || die;
+		open(CMD, "$cmd |") || die;
 		while(<CMD>) { print TMP $_; }
 		close(CMD);
 		my $ret = $?;
