@@ -404,10 +404,10 @@ sub doUnpairedUrl($$$$$) {
 	
 	# turn FASTQ entries into single-line reads
 	my $fh;
-	open $fh, $fn || die "Could not open input file $fn";
+	open($fh, $fn) || die "Could not open input file $fn";
 	my $r = 0;
 	my $fileno = 1;
-	open $of, ">${fn}_$fileno.out";
+	open($of, ">${fn}_$fileno.out") || die "Could not open output file ${fn}_$fileno.out";
 	my $fn_nospace = $fn;
 	$fn_nospace =~ s/[\s]+//g;
 	my $rname = "FN:".$fn_nospace; # Add filename
@@ -434,7 +434,7 @@ sub doUnpairedUrl($$$$$) {
 				system("rm -f ${fn}_$fileno.out ${fn}_$fileno.out.* >&2");
 			}
 			$fileno++;
-			open $of, ">${fn}_$fileno.out" || die;
+			open($of, ">${fn}_$fileno.out") || die "Could not open output file ${fn}_$fileno.out";
 		}
 		$totunpaired++;
 		if(++$unpaired >= 100000) {
@@ -477,12 +477,12 @@ sub doPairedUrl($$$$$$$) {
 	
 	# turn FASTQ pairs into tuples
 	my ($fh1, $fh2);
-	open $fh1, $fn1 || die "Could not open input file $fn1";
-	open $fh2, $fn2 || die "Could not open input file $fn2";
+	open($fh1, $fn1) || die "Could not open input file $fn1";
+	open($fh2, $fn2) || die "Could not open input file $fn2";
 	my $r = 0;
 	my $fileno = 1;
 	my $of;
-	open $of, ">${fn1}_$fileno.out" || die;
+	open($of, ">${fn1}_$fileno.out") || die;
 	my $fn1_nospace = $fn1;
 	$fn1_nospace =~ s/[\s]+//g;
 	my $rname .= "FN:".$fn1_nospace; # Add filename
@@ -514,86 +514,7 @@ sub doPairedUrl($$$$$$$) {
 				system("rm -f ${fn1}_$fileno.out ${fn1}_$fileno.out.* >&2");
 			}
 			$fileno++;
-			open $of, ">${fn1}_$fileno.out" || die;
-		}
-		$totpaired++;
-		if(++$paired >= 100000) {
-			counter("Short read preprocessor,Paired reads,$paired");
-			$paired = 0;
-		}
-	}
-	counter("Short read preprocessor,Paired reads,$paired");
-	close($fh1);
-	close($fh2);
-	close($of);
-	flushDelayedCounters("Short read preprocessor");
-
-	# Remove input files
-	system("rm -f $fn1 $origFn1 >&2") unless $keep;
-	system("rm -f $fn2 $origFn2 >&2") unless $keep;
-	if($push ne "") {
-		# Push and remove output files
-		pushBatch("${fn1}_$fileno.out");
-		system("rm -f ${fn1}_$fileno.out ${fn1}_$fileno.out.* >&2");
-	} else {
-		# Just keep the output files around
-	}
-}
-
-##
-# Handle the copy for a single .sra entry, which may be either
-# paired-end or unpaired.
-#
-sub doSraUrl($$$$$$$) {
-	my ($url, $md5, $lab, $format, $color) = @_;
-	my @path = split /\//, $url;
-	my $fn = $path[-1];
-	my $origFn = $fn;
-	$fn = fetch($fn, $url, $md5);
-	if(defined($lab)) {
-		$lab =~ /[:\s]/ && die "Label may not contain a colon or whitespace character; was \"$lab\"\n";
-	}
-	
-	# turn FASTQ pairs into tuples
-	my ($fh1, $fh2);
-	open $fh1, $fn1 || die "Could not open input file $fn1";
-	open $fh2, $fn2 || die "Could not open input file $fn2";
-	my $r = 0;
-	my $fileno = 1;
-	my $of;
-	open $of, ">${fn1}_$fileno.out" || die;
-	my $fn1_nospace = $fn1;
-	$fn1_nospace =~ s/[\s]+//g;
-	my $rname .= "FN:".$fn1_nospace; # Add filename
-	while(1) {
-		last if($stopAfter != 0 && $rtot >= $stopAfter);
-		parseRead($fh1, $sam, $color);
-		my ($name1, $seq1, $qual1) = ($name, $seq, $qual);
-		parseRead($fh2, $sam, $color);
-		defined($name) == defined($name1) ||
-			die "Mate files didn't come together properly: $fn1,$fn2\n";
-		last unless defined($name);
-		my $fullname = $rname;
-		if($labReadGroup) {
-			defined($readGroup) || die;
-			$fullname .= ";LB:$readGroup";
-			$delayedCounters{"Pairs with label $readGroup"}++;
-		} elsif(defined($lab)) {
-			$fullname .= ";LB:$lab";
-			$delayedCounters{"Pairs with label $lab"}++;
-		}
-		$fullname .= ";$name";
-		print $of "$fullname\t$seq1\t$qual1\t$seq\t$qual\n";
-		$r++;
-		$rtot += 2;
-		if($maxPerFile > 0 && ($r % $maxPerFile) == 0) {
-			close($of);
-			if($push ne "") {
-				pushBatch("${fn1}_$fileno.out");
-				system("rm -f ${fn1}_$fileno.out ${fn1}_$fileno.out.* >&2");
-			}
-			$fileno++;
-			open $of, ">${fn1}_$fileno.out" || die;
+			open($of, ">${fn1}_$fileno.out") || die "Could not open output file ${fn1}_$fileno.out";
 		}
 		$totpaired++;
 		if(++$paired >= 100000) {
