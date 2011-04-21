@@ -41,6 +41,7 @@ defined($emsg)  || ($emsg  = sub { print STDERR @_ });
 defined($emsgf) || ($emsgf = sub { printf STDERR @_ });
 
 our $APP = "Myrna";
+my $pre = "MYRNA_";
 our $app = lc $APP;
 our $VERSION = `cat $Bin/VERSION`; $VERSION =~ s/\s//g;
 if($VERSION eq "") {
@@ -759,7 +760,6 @@ $useSamtools = $stages{align} && $sampass;
 my $useBowtie = $stages{align};
 my $sraToolkit = $stages{preprocess};
 my $useR = $stages{overlap} || $stages{statistics} || $stages{postprocess};
-my $pre = "MYRNA_";
 $bowtie   =~ s/^~/$ENV{HOME}/;
 $samtools =~ s/^~/$ENV{HOME}/;
 $Rhome    =~ s/^~/$ENV{HOME}/;
