@@ -269,7 +269,7 @@ sub fetch($$$) {
 		my $sra_conv = Tools::sra();
 		$newfname =~ s/\.sra$/.fastq/;
 		mkpath("./sra_tmp");
-		Util::runAndWait("$sra_conv $fname -O ./sra_tmp", "fastq-dump") == 0 ||
+		Util::runAndWait("$sra_conv $fname -O ./sra_tmp > /dev/null", "fastq-dump") == 0 ||
 			die "Error performing SRA-to-FASTQ $fname";
 		Util::runAndWait("cat ./sra_tmp/* > $newfname", "cat") == 0 ||
 			die "Error copying resuld of SRA-to-FASTQ $fname";
@@ -603,10 +603,6 @@ while (<>) {
 		my ($url2, $md52) = (addkey($s[2]), $s[3]);
 		doPairedUrl($url1, $md51, $url2, $md52, $s[4], urlToFormat($url1), $color);
 		counter("Short read preprocessor,Paired URLs,1");
-	} elsif($url1 =~ /\.sra$/) {
-		msg("Doing SRA entry $turl1");
-		doUnpairedUrl($url1, $md51, $s[2], "fastq", $color);
-		counter("Short read preprocessor,SRA URLs,1");
 	} else {
 		# If s[2] is defined, it contains the sample label
 		msg("Doing unpaired entry $turl1");
