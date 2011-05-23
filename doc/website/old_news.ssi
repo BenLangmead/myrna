@@ -1,0 +1,34 @@
+<h2>Version 1.0.4 - July 22, 2010</h2>
+<ul>
+ <li>A
+     <a href="ui.html">web-based GUI</a>
+     for composing and submitting Myrna
+     <a href="http://aws.amazon.com/elasticmapreduce/">Elastic MapReduce</a>
+     jobs has been added.  Most helpfully, the web GUI has features for
+     sanity-checking inputs; e.g. whether the user's credentials as
+     entered are valid, whether the input URL exists, etc.
+ <li>Updated EMR and <a href="http://hadoop.apache.org/">Hadoop</a> modes to support Hadoop 0.20.  0.20 is now
+     the default mode for <tt>myrna_emr</tt> (and for the elastic-mapreduce
+     script)
+ <li>When starting a cloud-mode job from the command line, the
+     <a href="manual.shtml#installing-amazons-elastic-mapreduce-tool"><tt>elastic-mapreduce</tt> script</a>
+     must be at least as new as <a href="http://developer.amazonwebservices.com/connect/entry.jspa?externalID=2264">Amazon's 2010-06-02 release</a> 
+ <li>Many improvements to the <a href="manual.shtml">manual</a>, including fixes to the examples
+     and pointers to Amazon's new <a href="https://console.aws.amazon.com/s3/home">AWS Console tool for interacting with
+     S3</a>
+ <li>Various bugfixes
+</ul>
+
+<h2>Myrna 1.0.0-beta6 release - July 12, 2010</h2>
+<ul>
+ <li>Fixed several documentation issues.
+ <li>Updated pre-built jars and scripts to use Ensembl 58.
+ <li>Added RPKM calculation.
+ <li>Added output files encoding the calculated normalization factors.
+</ul>
+
+<h2>Myrna 1.0.0-beta2 release - May 17, 2010</h2>
+<ul>
+ <li>Beta release of Myrna, a tool for investigating differential gene
+     expression in very large RNA-seq datasets.
+</ul>
