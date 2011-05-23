@@ -19,11 +19,8 @@ Please report any issues using the Sourceforge bug tracker:
 Version Release History
 =======================
 
-Version 1.1.2 - February ?, 2011
+Version 1.1.2 - May 23, 2011
    * Updated jar files to use Ensembl v61 (used to be v58).
-   * Added --exon option that allows the user to obtain differential
-     exon expression results rather than differential gene expression
-     results.
    * Added --from-middle option that causes a read's overlap
      "influence" to be measured from the middle of the read rather than
      from one of the ends.
@@ -32,6 +29,9 @@ Version 1.1.2 - February ?, 2011
      --output directory and quit after the alignment phase.  You can
      later "resume" Myrna by specifying this directory as the --input
      directory and specifying the --resume-align option.
+   * Fixed issue with SRA input whereby status output from fastq-dump
+     would be interpreted as a read.
+   * Other minor bugfixes.
 
 Version 1.1.1 - February 7, 2011
    * Added support for the .sra file format, used by the Sequence Read
