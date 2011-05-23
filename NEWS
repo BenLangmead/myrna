@@ -29,7 +29,7 @@ Version 1.1.2 - May 23, 2011
      --output directory and quit after the alignment phase.  You can
      later "resume" Myrna by specifying this directory as the --input
      directory and specifying the --resume-align option.
-   * Fixed issue with SRA input whereby status output from fastq-dump
+   * Fixed issue with .sra input whereby status output from fastq-dump
      would be interpreted as a read.
    * Other minor bugfixes.
 

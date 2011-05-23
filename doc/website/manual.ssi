@@ -1,5 +1,5 @@
 <h1>Table of Contents</h1>
-<p>&nbsp;Version <b>1.1.1</b></p>
+<p>&nbsp;Version <b>1.1.2</b></p>
 <div id="TOC"
 ><ul
   ><li
@@ -1389,7 +1389,7 @@
 <p
 ><a href="http://aws.amazon.com/s3/"
   >S3</a
-  > URL where all intermediate results should be be deposited. This can be useful if you later want to resume the computation from partway through the pipeline (e.g. after alignment but before SNP calling). By default, intermediate results are stored in <a href="http://hadoop.apache.org/hdfs/docs/current/hdfs_design.html"
+  > URL where all intermediate results should be be deposited. By default, intermediate results are stored in <a href="http://hadoop.apache.org/hdfs/docs/current/hdfs_design.html"
   >HDFS</a
   > and disappear once the cluster is terminated.</p
 ></td></tr><tr><td id="myrna-emr-preprocess-output">
@@ -2331,6 +2331,48 @@
   > and store the preprocessed reads in the <code
   >--output</code
   > directory and quit. Default: off.</p
+></td></tr><tr><td id="myrna-just-align">
+
+
+<pre
+><code
+  >--just-align
+</code
+  ></pre
+></td><td>
+<p
+>Instead of running the Myrna pipeline all the way through to the end, run the pipeline up to and including the align stage and store the results in the <a href="#myrna-local-output"
+  ><code
+    >--output</code
+    ></a
+  > URL. To resume the run later, use <a href="#myrna-resume-align"
+  ><code
+    >--resume-align</code
+    ></a
+  >.</p
+></td></tr><tr><td id="myrna-resume-align">
+
+
+<pre
+><code
+  >--resume-align
+</code
+  ></pre
+></td><td>
+<p
+>Resume the Myrna pipeline from just after the alignment stage. The <a href="#myrna-local-input"
+  ><code
+    >--input</code
+    ></a
+  > URL must point to an <a href="#myrna-local-output"
+  ><code
+    >--output</code
+    ></a
+  > URL from a previous run using <a href="#myrna-just-align"
+  ><code
+    >--just-align</code
+    ></a
+  >.</p
 ></td></tr><tr><td id="myrna-bowtie-args">
 
 
@@ -2373,17 +2415,56 @@
   ></pre
 ></td><td>
 <p
->A read's &quot;influence&quot; is the number of bases from the 3' (or 5' if <a href="#myrna-from5prime"
+>A read's &quot;influence&quot; is the number of bases from the 3' end (or the 5' end if <a href="#myrna-from5prime"
   ><code
     >--from5prime</code
     ></a
-  > is specified) end that should be considered when overlapping its alignment with a gene footprint. Default: 1. See also: <a href="#myrna-gene-footprint"
+  > is specified, or the middle if <a href="#myrna-from-middle"
+  ><code
+    >--from-middle</code
+    ></a
+  > is specified) that should be considered when overlapping its alignment with a gene footprint. Default: 1. See also: <a href="#myrna-gene-footprint"
   ><code
     >--gene-footprint</code
     ></a
-  > and <a href="#myrna-from5prime"
+  >, <a href="#myrna-from3prime"
+  ><code
+    >--from3prime</code
+    ></a
+  >, <a href="#myrna-from5prime"
   ><code
     >--from5prime</code
+    ></a
+  >, <a href="#myrna-from-middle"
+  ><code
+    >--from-middle</code
+    ></a
+  >.</p
+></td></tr><tr><td id="myrna-from3prime">
+
+
+<pre
+><code
+  >--from3prime
+</code
+  ></pre
+></td><td>
+<p
+>If specified, a read's &quot;influence&quot; is measured from its 3' end after all trimming. This is the default. See also: <a href="#myrna-gene-footprint"
+  ><code
+    >--gene-footprint</code
+    ></a
+  >, <a href="#myrna-influence"
+  ><code
+    >--influence</code
+    ></a
+  >, <a href="#myrna-from5prime"
+  ><code
+    >--from5prime</code
+    ></a
+  >, <a href="#myrna-from-middle"
+  ><code
+    >--from-middle</code
     ></a
   >.</p
 ></td></tr><tr><td id="myrna-from5prime">
@@ -2396,13 +2477,48 @@
   ></pre
 ></td><td>
 <p
->If specified, a read's &quot;influence&quot; is measured from its 5' end rather than its 3' end. Default: 3' end. See also: <a href="#myrna-gene-footprint"
+>If specified, a read's &quot;influence&quot; is measured from its 5' end after all trimming. Default: influence is measured from the 3' end. See also: <a href="#myrna-gene-footprint"
   ><code
     >--gene-footprint</code
     ></a
-  > and <a href="#myrna-influence"
+  >, <a href="#myrna-influence"
   ><code
     >--influence</code
+    ></a
+  >, <a href="#myrna-from3prime"
+  ><code
+    >--from3prime</code
+    ></a
+  >, <a href="#myrna-from-middle"
+  ><code
+    >--from-middle</code
+    ></a
+  >.</p
+></td></tr><tr><td id="myrna-from-middle">
+
+
+<pre
+><code
+  >--from-middle
+</code
+  ></pre
+></td><td>
+<p
+>If specified, a read's &quot;influence&quot; is measured from the middle of the read, after all trimming. Default: influence is measured from 3' end. See also: <a href="#myrna-gene-footprint"
+  ><code
+    >--gene-footprint</code
+    ></a
+  >, <a href="#myrna-influence"
+  ><code
+    >--influence</code
+    ></a
+  >, <a href="#myrna-from3prime"
+  ><code
+    >--from3prime</code
+    ></a
+  >, <a href="#myrna-from5prime"
+  ><code
+    >--from5prime</code
     ></a
   >.</p
 ></td></tr><tr><td id="myrna-top">

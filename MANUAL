@@ -578,9 +578,7 @@ alignment files in the [Myrna output format].  This option must be specified.
 
     --intermediate <URL>
 
-[S3] URL where all intermediate results should be be deposited.  This
-can be useful if you later want to resume the computation from partway
-through the pipeline (e.g. after alignment but before SNP calling).  By
+[S3] URL where all intermediate results should be be deposited.  By
 default, intermediate results are stored in [HDFS] and disappear once
 the cluster is terminated.
 
@@ -966,6 +964,19 @@ directory of preprocessed reads.  Myrna will preprocess the reads
 listed in the [labeled manifest file] and store the preprocessed reads
 in the `--output` directory and quit.  Default: off.
 
+    --just-align
+
+Instead of running the Myrna pipeline all the way through to the end,
+run the pipeline up to and including the align stage and store the
+results in the `--output` URL.  To resume the run later, use
+`--resume-align`.
+
+    --resume-align
+
+Resume the Myrna pipeline from just after the alignment stage.  The
+`--input` URL must point to an `--output` URL from a previous run
+using `--just-align`.
+
     --bowtie-args "<args>"
 
 Pass the specified arguments to [Bowtie] for the Align stage.  Default:
@@ -984,16 +995,32 @@ debugging.  Default: 0.0.
 
     --influence <int>
 
-A read's "influence" is the number of bases from the 3' (or 5' if
-`--from5prime` is specified) end that should be considered when
-overlapping its alignment with a gene footprint. Default: 1.  See
-also: `--gene-footprint` and `--from5prime`.
+A read's "influence" is the number of bases from the 3' end (or the 5'
+end if `--from5prime` is specified, or the middle if
+`--from-middle` is specified) that should be considered when
+overlapping its alignment with a gene footprint. Default: 1.  See also:
+`--gene-footprint`, `--from3prime`, `--from5prime`,
+`--from-middle`.
+
+    --from3prime
+
+If specified, a read's "influence" is measured from its 3' end after
+all trimming.  This is the default.  See also: `--gene-footprint`,
+`--influence`, `--from5prime`, `--from-middle`.
 
     --from5prime
 
-If specified, a read's "influence" is measured from its 5' end rather
-than its 3' end.  Default: 3' end.  See also: `--gene-footprint` and
-`--influence`.
+If specified, a read's "influence" is measured from its 5' end after
+all trimming.  Default: influence is measured from the 3' end.  See
+also: `--gene-footprint`, `--influence`, `--from3prime`,
+`--from-middle`.
+
+    --from-middle
+
+If specified, a read's "influence" is measured from the middle of the
+read, after all trimming.  Default: influence is measured from 3' end.
+See also: `--gene-footprint`, `--influence`, `--from3prime`,
+`--from5prime`.
 
     --top <int>
 

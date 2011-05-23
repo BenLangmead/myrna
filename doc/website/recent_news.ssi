@@ -1,3 +1,37 @@
+<h2>Version 1.1.2 - May 23, 2011</h2>
+<ul>
+  <li>
+     Updated jar files to use Ensembl v61 (used to be v58).
+  <li>
+     Added
+     <a href="manual.shtml#myrna-from-middle"><tt>--from-middle</tt></a>
+     option that causes a read's overlap
+     "influence" to be measured from the middle of the read rather than
+     from one of the ends.
+  <li>
+     Added
+     <a href="manual.shtml#myrna-just-align"><tt>--just-align</tt></a>
+     and
+     <a href="manual.shtml#myrna-resume-align"><tt>--resume-align</tt></a>
+     options.
+     <a href="manual.shtml#myrna-just-align"><tt>--just-align</tt></a>
+     causes Myrna to put the results of the Alignment phase in the
+     <tt>--output</tt>
+     directory and quit after the alignment phase.  You can
+     later "resume" Myrna by specifying this directory as the
+     <tt>--input</tt>
+     directory and specifying the
+     <a href="manual.shtml#myrna-resume-align"><tt>--resume-align</tt></a>
+     option.
+  <li>
+     Fixed issue with
+     <tt>.sra</tt>
+     input whereby status output from <tt>fastq-dump</tt>
+     would be interpreted as a read.
+  <li>
+     Other minor bugfixes.
+</ul>
+
 <h2>Version 1.1.1 - February 7, 2011</h2>
 <ul>
   <li>
