@@ -24,6 +24,7 @@ for i in $ARGS ; do
 	scp -i $EC2_KEYPAIR VERSION root@$i:/var/www/cgi-bin/test/VERSION_MYRNA
 	scp -i $EC2_KEYPAIR webui/wait.gif root@$i:/home/webuser/helloworld/htdocs/
 	ssh -i $EC2_KEYPAIR root@$i chmod a+x /var/www/cgi-bin/test/*.pl
+	ssh -i $EC2_KEYPAIR root@$i rm -f /var/www/cgi-bin/test/VERSION
 
 	# URL to surf to
 	echo "http://$i/cgi-bin/test/myrna.pl\n";
