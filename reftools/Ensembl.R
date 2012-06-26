@@ -8,6 +8,11 @@
 # species, then perform set operations to condition the per-gene
 # information as desired.
 #
+# 6/26/2012: Fixed the GO stuff to reflect the new Ensembl organization where
+# the different GO ontologies are no longer distinguished.  Now instead of
+# writing three different tables for the three GO ontologies, we write one big
+# table associating gene ids with go ids.
+#
 #library(biomaRt)
 #library(IRanges)
 
@@ -227,29 +232,39 @@ write.table(genes, file="ivals/genes.txt",
             col.names=TRUE, row.names=FALSE, quote=FALSE, sep="\t")
 
 log("5/10. Getting tables of go terms (somewhat slow)")
-genes.go <- getBM(attributes=c(
-	"ensembl_gene_id",
-	"go_biological_process_id"), mart=ensembl)
+if(FALSE) {
+	genes.go <- getBM(attributes=c(
+		"ensembl_gene_id",
+		"go_biological_process_id"), mart=ensembl)
 
-# Write genes-to-GO for biological process
-write.table(genes.go, file="ivals/genes_go_bproc.txt",
-            col.names=TRUE, row.names=FALSE, quote=FALSE, sep="\t")
+	# Write genes-to-GO for biological process
+	write.table(genes.go, file="ivals/genes_go_bproc.txt",
+				col.names=TRUE, row.names=FALSE, quote=FALSE, sep="\t")
 
-genes.go <- getBM(attributes=c(
-	"ensembl_gene_id",
-	"go_cellular_component_id"), mart=ensembl)
+	genes.go <- getBM(attributes=c(
+		"ensembl_gene_id",
+		"go_cellular_component_id"), mart=ensembl)
 
-# Write genes-to-GO for cellular component
-write.table(genes.go, file="ivals/genes_go_ccomp.txt",
-            col.names=TRUE, row.names=FALSE, quote=FALSE, sep="\t")
+	# Write genes-to-GO for cellular component
+	write.table(genes.go, file="ivals/genes_go_ccomp.txt",
+				col.names=TRUE, row.names=FALSE, quote=FALSE, sep="\t")
 
-genes.go <- getBM(attributes=c(
-	"ensembl_gene_id",
-	"go_molecular_function_id"), mart=ensembl)
+	genes.go <- getBM(attributes=c(
+		"ensembl_gene_id",
+		"go_molecular_function_id"), mart=ensembl)
 
-# Write genes-to-GO for molecular function
-write.table(genes.go, file="ivals/genes_go_mfunc.txt",
-            col.names=TRUE, row.names=FALSE, quote=FALSE, sep="\t")
+	# Write genes-to-GO for molecular function
+	write.table(genes.go, file="ivals/genes_go_mfunc.txt",
+				col.names=TRUE, row.names=FALSE, quote=FALSE, sep="\t")
+} else {
+	genes.go <- getBM(attributes=c(
+		"ensembl_gene_id",
+		"go_id"), mart=ensembl)
+
+	# Write genes-to-GO for biological process
+	write.table(genes.go, file="ivals/genes_go.txt",
+				col.names=TRUE, row.names=FALSE, quote=FALSE, sep="\t")
+}
 
 ##
 # Take a data frame of exons from Ensembl (must have $ensembl_gene_id,

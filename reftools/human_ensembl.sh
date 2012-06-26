@@ -14,7 +14,7 @@
 
 SUFFIX=$1
 shift
-ENSEMBL_VER=61
+ENSEMBL_VER=67
 ENSEMBL_PREFIX=Homo_sapiens.GRCh37.$ENSEMBL_VER
 ENSEMBL_ORGANISM=hsapiens
 ENSEMBL_FTP=ftp://ftp.ensembl.org/pub/release-$ENSEMBL_VER/fasta/homo_sapiens/dna
