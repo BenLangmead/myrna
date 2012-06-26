@@ -7,8 +7,8 @@
 
 SUFFIX=$1
 shift
-ENSEMBL_VER=61
-ENSEMBL_PREFIX=Caenorhabditis_elegans.WS220.$ENSEMBL_VER
+ENSEMBL_VER=67
+ENSEMBL_PREFIX=Caenorhabditis_elegans.WBcel215.$ENSEMBL_VER
 ENSEMBL_ORGANISM=celegans
 ENSEMBL_FTP=ftp://ftp.ensembl.org/pub/release-$ENSEMBL_VER/fasta/caenorhabditis_elegans/dna
 INDEX=worm_ensembl_${ENSEMBL_VER}$SUFFIX
