@@ -35,7 +35,7 @@ while [ $i -lt 23 ] ; do
 	fi
 	i=`expr $i + 1`
 done
-BASE_CHRS="$BASE_CHRS chromosome.X chromosome.Y chromosome.MT chromosome.M chromosome.Un nonchromosomal"
+BASE_CHRS="$BASE_CHRS chromosome.X chromosome.Y nonchromosomal"
 CHRS_TO_INDEX=$BASE_CHRS
 
 [ -z "$MYRNA_HOME" ] && echo "MYRNA_HOME not set" && exit 1
