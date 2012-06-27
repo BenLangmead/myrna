@@ -19,7 +19,7 @@ mkdir -p $SIMPLE_NAME
 cd $SIMPLE_NAME
 
 BASE_CHRS=
-for i in 2-micron I II III IV IX Mito V VI VII VIII X XI XII XIII XIV XV XVI ; do
+for i in I II III IV IX Mito V VI VII VIII X XI XII XIII XIV XV XVI ; do
 	BASE_CHRS="$BASE_CHRS chromosome.$i"
 done
 CHRS_TO_INDEX=$BASE_CHRS
