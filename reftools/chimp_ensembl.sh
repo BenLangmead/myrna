@@ -29,7 +29,7 @@ BASE_CHRS="chromosome.1"
 while [ $i -lt 23 ] ; do
 	if [ $i -eq 2 ] ; then
 		# "Chromosome 2" comes in 2 parts
-		BASE_CHRS="$BASE_CHRS chromosome.2a chromosome.2b"
+		BASE_CHRS="$BASE_CHRS chromosome.2A chromosome.2B"
 	else
 		BASE_CHRS="$BASE_CHRS chromosome.$i"
 	fi
