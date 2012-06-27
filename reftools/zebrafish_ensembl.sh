@@ -15,7 +15,7 @@
 
 SUFFIX=$1
 shift
-ENSEMBL_VER=61
+ENSEMBL_VER=67
 ENSEMBL_PREFIX=Danio_rerio.Zv9.$ENSEMBL_VER
 ENSEMBL_ORGANISM=drerio
 ENSEMBL_FTP=ftp://ftp.ensembl.org/pub/release-$ENSEMBL_VER/fasta/danio_rerio/dna

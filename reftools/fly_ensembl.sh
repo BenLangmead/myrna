@@ -15,8 +15,8 @@
 
 SUFFIX=$1
 shift
-ENSEMBL_VER=61
-ENSEMBL_PREFIX=Drosophila_melanogaster.BDGP5.25.$ENSEMBL_VER
+ENSEMBL_VER=67
+ENSEMBL_PREFIX=Drosophila_melanogaster.BDGP5.$ENSEMBL_VER
 ENSEMBL_ORGANISM=dmelanogaster
 ENSEMBL_FTP=ftp://ftp.ensembl.org/pub/release-$ENSEMBL_VER/fasta/drosophila_melanogaster/dna
 INDEX=fly_ensembl_${ENSEMBL_VER}$SUFFIX

@@ -14,7 +14,7 @@
 
 SUFFIX=$1
 shift
-ENSEMBL_VER=61
+ENSEMBL_VER=67
 ENSEMBL_PREFIX=Canis_familiaris.BROADD2.$ENSEMBL_VER
 ENSEMBL_ORGANISM=cfamiliaris
 ENSEMBL_FTP=ftp://ftp.ensembl.org/pub/release-$ENSEMBL_VER/fasta/canis_familiaris/dna

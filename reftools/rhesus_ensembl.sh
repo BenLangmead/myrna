@@ -14,7 +14,7 @@
 
 SUFFIX=$1
 shift
-ENSEMBL_VER=61
+ENSEMBL_VER=67
 ENSEMBL_PREFIX=Macaca_mulatta.MMUL_1.$ENSEMBL_VER
 ENSEMBL_ORGANISM=mmulatta
 ENSEMBL_FTP=ftp://ftp.ensembl.org/pub/release-$ENSEMBL_VER/fasta/macaca_mulatta/dna

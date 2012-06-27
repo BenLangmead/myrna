@@ -14,7 +14,7 @@
 
 SUFFIX=$1
 shift
-ENSEMBL_VER=61
+ENSEMBL_VER=67
 ENSEMBL_PREFIX=Rattus_norvegicus.RGSC3.4.$ENSEMBL_VER
 ENSEMBL_ORGANISM=rnorvegicus
 ENSEMBL_FTP=ftp://ftp.ensembl.org/pub/release-$ENSEMBL_VER/fasta/rattus_norvegicus/dna

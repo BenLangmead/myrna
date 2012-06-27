@@ -14,8 +14,8 @@
 
 SUFFIX=$1
 shift
-ENSEMBL_VER=61
-ENSEMBL_PREFIX=Pan_troglodytes.CHIMP2.1.$ENSEMBL_VER
+ENSEMBL_VER=67
+ENSEMBL_PREFIX=Pan_troglodytes.CHIMP2.1.4.$ENSEMBL_VER
 ENSEMBL_ORGANISM=ptroglodytes
 ENSEMBL_FTP=ftp://ftp.ensembl.org/pub/release-$ENSEMBL_VER/fasta/pan_troglodytes/dna
 INDEX=chimp_ensembl_${ENSEMBL_VER}$SUFFIX

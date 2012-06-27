@@ -7,8 +7,8 @@
 
 SUFFIX=$1
 shift
-ENSEMBL_VER=61
-ENSEMBL_PREFIX=Saccharomyces_cerevisiae.EF2.$ENSEMBL_VER
+ENSEMBL_VER=67
+ENSEMBL_PREFIX=Saccharomyces_cerevisiae.EF4.$ENSEMBL_VER
 ENSEMBL_ORGANISM=scerevisiae
 ENSEMBL_FTP=ftp://ftp.ensembl.org/pub/release-$ENSEMBL_VER/fasta/saccharomyces_cerevisiae/dna
 INDEX=yeast_ensembl_${ENSEMBL_VER}$SUFFIX
