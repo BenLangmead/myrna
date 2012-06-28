@@ -3,7 +3,7 @@ all: doc bin package
 MYRNA_VERSION=$(shell cat VERSION)
 SF_BOWTIE_BASE=https://sourceforge.net/projects/bowtie-bio/files/bowtie
 SF_BOWTIE_MID=
-BOWTIE_VERSION=0.12.7
+BOWTIE_VERSION=0.12.8
 
 doc: doc/manual.html MANUAL
 .PHONY: doc

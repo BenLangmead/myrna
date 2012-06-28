@@ -254,17 +254,17 @@ sub submitClicked {
 	# Map from short names to URLs for the pre-built reference jars.
 	#
 	my %refMap = (
-		"human_61"     => "s3n://myrna-refs/human_ensembl_61.jar",
-		"mouse_61"     => "s3n://myrna-refs/mouse_ensembl_61.jar",
-		"rat_61"       => "s3n://myrna-refs/rat_ensembl_61.jar",
-		"chimp_61"     => "s3n://myrna-refs/chimp_ensembl_61.jar",
-		"macaque_61"   => "s3n://myrna-refs/rhesus_ensembl_61.jar",
-		"dog_61"       => "s3n://myrna-refs/dog_ensembl_61.jar",
-		"chicken_61"   => "s3n://myrna-refs/chicken_ensembl_61.jar",
-		"worm_61"      => "s3n://myrna-refs/worm_ensembl_61.jar",
-		"fly_61"       => "s3n://myrna-refs/fly_ensembl_61.jar",
-		"yeast_61"     => "s3n://myrna-refs/yeast_ensembl_61.jar",
-		"zebrafish_61" => "s3n://myrna-refs/zebrafish_ensembl_61.jar"
+		"human_67"     => "s3n://myrna-refs/human_ensembl_67.jar",
+		"mouse_67"     => "s3n://myrna-refs/mouse_ensembl_67.jar",
+		"rat_67"       => "s3n://myrna-refs/rat_ensembl_67.jar",
+		"chimp_67"     => "s3n://myrna-refs/chimp_ensembl_67.jar",
+		"macaque_67"   => "s3n://myrna-refs/rhesus_ensembl_67.jar",
+		"dog_67"       => "s3n://myrna-refs/dog_ensembl_67.jar",
+		"chicken_67"   => "s3n://myrna-refs/chicken_ensembl_67.jar",
+		"worm_67"      => "s3n://myrna-refs/worm_ensembl_67.jar",
+		"fly_67"       => "s3n://myrna-refs/fly_ensembl_67.jar",
+		"yeast_67"     => "s3n://myrna-refs/yeast_ensembl_67.jar",
+		"zebrafish_67" => "s3n://myrna-refs/zebrafish_ensembl_67.jar"
 	);
 	
 	$name = "Myrna" unless defined($name) && $name ne "";
@@ -661,17 +661,17 @@ div.nextButton:active{
   </td>
   <td class="right">
    <select id="app-genome-dropdown" class="other" name="Genome" onmouseover="ddrivetip('Genome assembly to use as reference genome and annotation database to use for gene, transcript and exon annotations.', 200)" onmouseout="hideddrivetip()">
-    <option value="human_61">Human (Ensembl 61)</option>
-    <option value="mouse_61">Mouse (Ensembl 61)</option>
-    <option value="rat_61">Rat (Ensembl 61)</option>
-    <option value="chimp_61">Chimp (Ensembl 61)</option>
-    <option value="macaque_61">Macaque (Ensembl 61)</option>
-    <option value="dog_61">Dog (Ensembl 61)</option>
-    <option value="chicken_61">Chicken (Ensembl 61)</option>
-    <option value="zebrafish_61">Zebrafish (Ensembl 61)</option>
-    <option value="worm_61">Worm (Ensembl 61)</option>
-    <option value="fly_61">Fly (Ensembl 61)</option>
-    <option value="yeast_61">Yeast (Ensembl 61)</option>
+    <option value="human_67">Human (Ensembl 67)</option>
+    <option value="mouse_67">Mouse (Ensembl 67)</option>
+    <option value="rat_67">Rat (Ensembl 67)</option>
+    <option value="chimp_67">Chimp (Ensembl 67)</option>
+    <option value="macaque_67">Macaque (Ensembl 67)</option>
+    <option value="dog_67">Dog (Ensembl 67)</option>
+    <option value="chicken_67">Chicken (Ensembl 67)</option>
+    <option value="zebrafish_67">Zebrafish (Ensembl 67)</option>
+    <option value="worm_67">Worm (Ensembl 67)</option>
+    <option value="fly_67">Fly (Ensembl 67)</option>
+    <option value="yeast_67">Yeast (Ensembl 67)</option>
    </select>
    <input id="app-ref-colorspace-check"
     type="checkbox"
