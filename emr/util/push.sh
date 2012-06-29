@@ -24,3 +24,11 @@ s3cmd -c $S3CFG \
 	put \
 	$d/*.pl $d/*.pm $d/*.R \
 	s3://myrna-emr/$VERSION/
+
+for i in 32 64 ; do
+	s3cmd -c $S3CFG \
+		--acl-public \
+		put \
+		bin/linux$i/bowtie \
+		s3://myrna-emr/$VERSION/bowtie$i
+done
