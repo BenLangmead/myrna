@@ -1690,12 +1690,12 @@ Start the [EMR] job with the following command (substituting for
         --preprocess \
         --input=s3n://<YOUR-BUCKET>/example/yeast/small.manifest \
         --output=s3n://<YOUR-BUCKET>/example/yeast/output_small \
-        --reference=s3n://myrna-refs/yeast_ensembl_61.jar \
+        --reference=s3n://myrna-refs/yeast_ensembl_67.jar \
         --quality solexa64 \
         --instances 5
 
 The `--reference` option instructs Myrna to use a pre-built reference
-jar at URL `s3n://myrna-refs/yeast_ensembl_61.jar`.  The
+jar at URL `s3n://myrna-refs/yeast_ensembl_67.jar`.  The
 [`--preprocess`] option instructs Myrna to treat the input as a
 [manifest file], rather than a directory of already-preprocessed reads.
 As the first stage of the pipeline, Myrna downloads files specified in
@@ -1724,38 +1724,38 @@ missing on the master.  *You must also ensure* that the same tools are
 installed in the same paths on all slave nodes, and are runnable by
 the slaves.
 
-Download `yeast_ensembl_61.jar` from the following URL:
+Download `yeast_ensembl_67.jar` from the following URL:
 
-    http://myrna-refs.s3.amazonaws.com/yeast_ensembl_61.jar
+    http://myrna-refs.s3.amazonaws.com/yeast_ensembl_67.jar
 
 E.g. with this command:
 
-    wget http://myrna-refs.s3.amazonaws.com/yeast_ensembl_61.jar
+    wget http://myrna-refs.s3.amazonaws.com/yeast_ensembl_67.jar
 
 Equivalently, you can use an [S3 tool] to download the same file from this URL:
 
-    s3n://myrna-refs/yeast_ensembl_61.jar
+    s3n://myrna-refs/yeast_ensembl_67.jar
 
 E.g. with this [s3cmd] command:
 
-    s3cmd get s3://myrna-refs/yeast_ensembl_61.jar
+    s3cmd get s3://myrna-refs/yeast_ensembl_67.jar
 
-Install `yeast_ensembl_61.jar` in [HDFS] (the [Hadoop] distributed filesystem)
+Install `yeast_ensembl_67.jar` in [HDFS] (the [Hadoop] distributed filesystem)
 with the following commands.  If the `hadoop` script is not in your `PATH`,
 either add it to your `PATH` (recommended) or specify the full path to the
 `hadoop` script in the following commands.
 
     hadoop dfs -mkdir /myrna-refs
-    hadoop dfs -put yeast_ensembl_61.jar /myrna-refs/yeast_ensembl_61.jar
+    hadoop dfs -put yeast_ensembl_67.jar /myrna-refs/yeast_ensembl_67.jar
 
 The first creates a directory in [HDFS] (you will see a warning message
 if the directory already exists) and the second copies the local jar
 files into that directory.  In this example, we deposit the jars in the
 `/myrna-refs` directory, but any [HDFS] directory is fine.
 
-Remove the local `yeast_ensembl_61.jar` file to save space.  E.g.:
+Remove the local `yeast_ensembl_67.jar` file to save space.  E.g.:
 
-    rm -f yeast_ensembl_61.jar
+    rm -f yeast_ensembl_67.jar
 
 Next install the [labeled manifest file] in [HDFS]:
 
@@ -1770,7 +1770,7 @@ Now start the job by running:
         --preprocess \
         --input=hdfs:///myrna/example/yeast/small.manifest \
         --output=hdfs:///myrna/example/yeast/output_small \
-        --reference=hdfs:///myrna-refs/yeast_ensembl_61.jar \
+        --reference=hdfs:///myrna-refs/yeast_ensembl_67.jar \
         --quality solexa64
 
 The [`--preprocess`] option instructs Myrna to treat the input as a
@@ -1796,29 +1796,29 @@ will be the default path Myrna searches for reference jars.
 Permanently set the `MYRNA_REFS` environment variable to the
 selected directory.
 
-Create a subdirectory called `$MYRNA_REFS/yeast_ensembl_61`:
+Create a subdirectory called `$MYRNA_REFS/yeast_ensembl_67`:
 
-    mkdir $MYRNA_REFS/yeast_ensembl_61
+    mkdir $MYRNA_REFS/yeast_ensembl_67
 
-Download `yeast_ensembl_61.jar` from
-`http://myrna-refs.s3.amazonaws.com/yeast_ensembl_61.jar` to the new directory,
+Download `yeast_ensembl_67.jar` from
+`http://myrna-refs.s3.amazonaws.com/yeast_ensembl_67.jar` to the new directory,
 e.g., with this command:
 
-    wget -O $MYRNA_REFS/yeast_ensembl_61/yeast_ensembl_61.jar http://myrna-refs.s3.amazonaws.com/yeast_ensembl_61.jar
+    wget -O $MYRNA_REFS/yeast_ensembl_67/yeast_ensembl_67.jar http://myrna-refs.s3.amazonaws.com/yeast_ensembl_67.jar
 
 Equivalently, you can use an [S3 tool] to download the same file from:
-`s3n://myrna-refs/yeast_ensembl_61.jar`, e.g. with this [s3cmd] command:
+`s3n://myrna-refs/yeast_ensembl_67.jar`, e.g. with this [s3cmd] command:
 
-    s3cmd get s3://myrna-refs/yeast_ensembl_61.jar $MYRNA_REFS/yeast_ensembl_61/yeast_ensembl_61.jar
+    s3cmd get s3://myrna-refs/yeast_ensembl_67.jar $MYRNA_REFS/yeast_ensembl_67/yeast_ensembl_67.jar
 
-Change to the new `yeast` directory and expand `yeast_ensembl_61.jar`
+Change to the new `yeast` directory and expand `yeast_ensembl_67.jar`
 using the command:
 
-    cd $MYRNA_REFS/yeast_ensembl_61 && unzip yeast_ensembl_61.jar
+    cd $MYRNA_REFS/yeast_ensembl_67 && unzip yeast_ensembl_67.jar
 
-Now you may remove `yeast_ensembl_61.jar` to save space:
+Now you may remove `yeast_ensembl_67.jar` to save space:
 
-    rm -f $MYRNA_REFS/yeast_ensembl_61/yeast_ensembl_61.jar
+    rm -f $MYRNA_REFS/yeast_ensembl_67/yeast_ensembl_67.jar
 
 Now run Myrna.  Change to the `$MYRNA_HOME/example/yeast` directory and
 start the job via the `myrna_local` script:
@@ -1827,7 +1827,7 @@ start the job via the `myrna_local` script:
     $MYRNA_HOME/myrna_local \
         --input=$MYRNA_HOME/example/yeast/small.manifest \
         --preprocess \
-        --reference=$MYRNA_REFS/yeast_ensembl_61 \
+        --reference=$MYRNA_REFS/yeast_ensembl_67 \
         --output=output_small \
         --quality solexa64 \
         --cpus=<CPUS>
@@ -1881,19 +1881,19 @@ The `human_ensembl.sh` script will automatically:
 2. Build an index from the sequence downloaded in step 1.
 3. Download gene annotations from [Ensembl] via [`biomaRt`].
 4. Package the information in a `.jar` file
-   `$MYRNA_HOME/reftools/human/human_ensembl_61.jar`
+   `$MYRNA_HOME/reftools/human/human_ensembl_67.jar`
 
 At the time of this writing, the scripts in the `$MYRNA_HOME/reftools`
-directory will only work if the current version of [Ensembl] is v61.
+directory will only work if the current version of [Ensembl] is v67.
 If the [Ensembl] version changes, the user must edit the `ENSEMBL_VER`
 and `ENSEMBL_PREFIX` variables (at the top of the script) accordingly.
 This will be fixed in a future version.
 
-Next, use an [S3 tool] to upload the `human_ensembl_61.jar` file to the
+Next, use an [S3 tool] to upload the `human_ensembl_67.jar` file to the
 `myrna-refs` subdirectory in your bucket.  E.g. with this [s3cmd]
 command (substituting for `<YOUR-BUCKET>`):
 
-    s3cmd put $MYRNA_HOME/reftools/human/human_ensembl_61.jar s3://<YOUR-BUCKET>/myrna-refs/
+    s3cmd put $MYRNA_HOME/reftools/human/human_ensembl_67.jar s3://<YOUR-BUCKET>/myrna-refs/
 
 [S3 tool]: #s3-tools
 
@@ -1974,19 +1974,19 @@ The `human_ensembl.sh` script will automatically:
 2. Build an index from the sequence downloaded in step 1.
 3. Download gene annotations from [Ensembl] via [`biomaRt`].
 4. Package the information in a `.jar` file
-   `$MYRNA_HOME/reftools/human/human_ensembl_61.jar`
+   `$MYRNA_HOME/reftools/human/human_ensembl_67.jar`
 
 At the time of this writing, the scripts in the `$MYRNA_HOME/reftools`
-directory will only work if the current version of [Ensembl] is v61.
+directory will only work if the current version of [Ensembl] is v67.
 If the [Ensembl] version changes, the user must edit the `ENSEMBL_VER`
 and `ENSEMBL_PREFIX` variables (at the top of the script) accordingly.
 This will be fixed in a future version.
 
-Next, use an [S3 tool] to upload the `human_ensembl_61.jar` file to the
+Next, use an [S3 tool] to upload the `human_ensembl_67.jar` file to the
 `myrna-refs` subdirectory in your bucket.  E.g. with this [s3cmd]
 command (substituting for `<YOUR-BUCKET>`):
 
-    s3cmd put $MYRNA_HOME/reftools/human/human_ensembl_61.jar s3://<YOUR-BUCKET>/myrna-refs/
+    s3cmd put $MYRNA_HOME/reftools/human/human_ensembl_67.jar s3://<YOUR-BUCKET>/myrna-refs/
 
 [S3 tool]: #s3-tools
 
@@ -2009,7 +2009,7 @@ To start the [EMR] job, run the following command (substituting for
         --preprocess \
         --input=s3n://<YOUR-BUCKET>/example/human/full.manifest \
         --output=s3n://<YOUR-BUCKET>/example/human/output_full \
-        --reference=s3n://<YOUR-BUCKET>/myrna-refs/human_ensembl_61.jar \
+        --reference=s3n://<YOUR-BUCKET>/myrna-refs/human_ensembl_67.jar \
         --instances 9
 
 This job typically takes about 55 minutes on 9 `c1.xlarge` [EC2] nodes.
@@ -2045,22 +2045,22 @@ The `human_ensembl.sh` script will automatically:
 2. Build an index from the sequence downloaded in step 1.
 3. Download gene annotations from [Ensembl] via [`biomaRt`].
 4. Package the information in a `.jar` file
-   `$MYRNA_HOME/reftools/human/human_ensembl_61.jar`
+   `$MYRNA_HOME/reftools/human/human_ensembl_67.jar`
 
 Note that, due chiefly to the amount of time it takes to build a Bowtie index
 for the human genome, this command usually takes several hours to complete.
 
 At the time of this writing, the scripts in the `$MYRNA_HOME/reftools`
-directory will only work if the current version of [Ensembl] is v61.
+directory will only work if the current version of [Ensembl] is v67.
 If the [Ensembl] version changes, the user must edit the `ENSEMBL_VER`
 and `ENSEMBL_PREFIX` variables (at the top of the script) accordingly.
 This will be fixed in a future version.
 
-Next, use the `hadoop` script to put the `human_ensembl_61.jar` file in
+Next, use the `hadoop` script to put the `human_ensembl_67.jar` file in
 the `myrna-refs` [HDFS] directory:
 
     hadoop dfs -mkdir /myrna-refs
-    hadoop dfs -put $MYRNA_HOME/reftools/human_ensembl_61/human_ensembl_61.jar /myrna-refs/human_ensembl_61.jar
+    hadoop dfs -put $MYRNA_HOME/reftools/human_ensembl_67/human_ensembl_67.jar /myrna-refs/human_ensembl_67.jar
 
 The first command will yield a warning if the directory already exists;
 ignore this.  In this example, we deposit the jars in the `/myrna-refs`
@@ -2085,7 +2085,7 @@ To start the [Hadoop] job, run the following command (substituting for
         --preprocess \
         --input=hdfs:///myrna/example/human/full.manifest \
         --output=hdfs:///myrna/example/human/output_full \
-        --reference=hdfs:///myrna-refs/human_ensembl_61.jar
+        --reference=hdfs:///myrna-refs/human_ensembl_67.jar
 
 ### Single computer
 
@@ -2114,10 +2114,10 @@ The `human_ensembl.sh` script will automatically:
 2. Build an index from the sequence downloaded in step 1.
 3. Download gene annotations from [Ensembl] via [`biomaRt`].
 4. Package the information in a `.jar` file
-   `$MYRNA_HOME/reftools/human/human_ensembl_61.jar`
+   `$MYRNA_HOME/reftools/human/human_ensembl_67.jar`
 
 At the time of this writing, the scripts in the `$MYRNA_HOME/reftools`
-directory will only work if the current version of [Ensembl] is v61.
+directory will only work if the current version of [Ensembl] is v67.
 If the [Ensembl] version changes, the user must edit the `ENSEMBL_VER`
 and `ENSEMBL_PREFIX` variables (at the top of the script) accordingly.
 This will be fixed in a future version.
@@ -2125,7 +2125,7 @@ This will be fixed in a future version.
 Move the directory containing the new reference jar into the `$MYRNA_REFS`
 directory:
 
-    mv $MYRNA_HOME/reftools/human_ensembl_61 $MYRNA_REFS/
+    mv $MYRNA_HOME/reftools/human_ensembl_67 $MYRNA_REFS/
 
 Now change to the `$MYRNA_HOME/example/human` directory and run Myrna
 (substitute the number of CPUs you'd like to use for `<CPUS>`):
@@ -2134,7 +2134,7 @@ Now change to the `$MYRNA_HOME/example/human` directory and run Myrna
     $MYRNA_HOME/myrna_local \
         --input=$MYRNA_HOME/example/human/full.manifest \
         --preprocess \
-        --reference=$MYRNA_REFS/human_ensembl_61 \
+        --reference=$MYRNA_REFS/human_ensembl_67 \
         --output=output_full \
         --cpus=<CPUS>
 
@@ -2357,7 +2357,7 @@ in the Myrna package.
 [`bowtie-build`]: http://bowtie-bio.sf.net/manual.shtml#the-bowtie-build-indexer
 
 At the time of this writing, the scripts in the `$MYRNA_HOME/reftools`
-directory will only work if the current version of [Ensembl] is v61.
+directory will only work if the current version of [Ensembl] is v67.
 If the [Ensembl] version changes, the user must edit the `ENSEMBL_VER`
 and `ENSEMBL_PREFIX` variables (at the top of the script) accordingly.
 This will be fixed in a future version.
@@ -2522,23 +2522,15 @@ Myrna's output consists of:
        normalization factor used for `<SAMPLE>` by Myrna.  This factor
        controls for variability due to technical effects, e.g., the
        number of reads yielded per lane.
-4. [GO] annotations for genes:
-    a. **`genes_go_bproc.txt`**: a table associating genes with terms
-       they're assigned to in the [Biological Process] [GO] ontology.
-       Each row is an association between a gene (first column) and a
-       [GO] term (second column).  If a gene is associated with
-       multiple Biological Process [GO] terms, each association is
-       presented on a separate row.  If a gene is not associated with
-       any Biological Process [GO] terms, the gene name appears on a
-       single line with no [GO] term printed in the second column.  The
-       first line is a header with column labels: `ensembl_gene_id` and
-       `go_biological_process_id`.
-    b. **`genes_go_ccomp.txt`**: same as 3a but for the [Cellular
-       Component] [GO] ontology.  The second coumn is labeled
-       `go_cellular_component_id`.
-    c. **`genes_go_mfunc.txt`**: same as 3a but for the [Molecular
-       Function] [GO] ontology.  The second coumn is labeled
-       `go_molecular_function_id`.
+4. [GO] terms for genes:
+    a. **`genes_go.txt`**: a table associating genes with GO terms.  A given GO
+       term might be from the [Biological Process] ontology, the [Cellular
+       Component] ontology, or the [Molecular Function] ontology.  If a gene is
+       associated with multiple  terms, each association is presented on a
+       separate row.  If a gene is not associated with any [GO] terms, the gene
+       name appears on a single line with no [GO] term printed in the second
+       column.  The first line is a header with column labels: `ensembl_gene_id`
+       and `go_id`.
 5. Per-gene alignments and coverage.   These files are generated only
    for the "top" genes; i.e. those with the `T` lowest [p-values] where
    `T` is set via [`--top`]:
