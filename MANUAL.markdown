@@ -280,9 +280,9 @@ Otherwise:
 
 ## Installing R and Bioconductor
 
-To run Myrna on a [Hadoop] cluster or local computer, [R] 2.10 and
+To run Myrna on a [Hadoop] cluster or local computer, [R] 2.14 and
 [Bioconductor] must be installed along with all [packages required by
-Myrna].  If you already have [R] v2.10, [Bioconductor] and [all
+Myrna].  If you already have [R] v2.14, [Bioconductor] and [all
 appropriate packages] but Myrna can't find where they're installed, set
 the `MYRNA_RHOME` environment variable to point the appropriate R home
 directory, i.e., the directory containing `bin/R` and `bin/Rscript`
@@ -292,7 +292,7 @@ executables for the proper installation.
 [all appropriate packages]: #manually-installing-rbioconductor
 [required packages]: #manually-installing-rbioconductor
 
-If you do not already have an [R] v2.10.0/[Bioconductor] installation,
+If you do not already have an [R] v2.14/[Bioconductor] installation,
 try the instructions in either or both of the following sections,
 [Building R/Bioconductor automatically] or [Manually installing
 R/Bioconductor].
@@ -302,7 +302,7 @@ R/Bioconductor].
 
 ### Building R/Bioconductor automatically
 
-The Myrna package includes a bash script that builds [R] 2.10.1 from
+The Myrna package includes a bash script that builds [R] 2.14.2 from
 sources and installs [Bioconductor] and all required packages
 automatically:
 
@@ -310,7 +310,7 @@ automatically:
 
 This script will:
 
-1. Download [R] v2.10.1 and expand it to subdirectory `R-2.10.1`
+1. Download [R] v2.14.2 and expand it to subdirectory `R-2.14.2`
 2. Run R's `./configure` script
 3. Run `make`
 4. Install [R] packages `multicore` and `lmtest`
@@ -337,7 +337,7 @@ Note: you can override Myrna's default of using the installation in
 
 ### Manually installing R/Bioconductor
 
-To install [R] version 2.10, follow the instructions in the [R
+To install [R] version 2.14, follow the instructions in the [R
 Installation and Administration] guide.  If you plan to run in [Hadoop]
 mode, make sure that [R] is installed on all nodes, including the
 master.  To avoid copying, you might wish to install [R] on a shared
@@ -397,10 +397,12 @@ The SRA uses a special file format to store archived read data.  These
 files end in extensions [`.sra`], and they can be specified as inputs
 to Myrna's preprocessing step in exactly the same way as [FASTQ] files.
 
-However, if you plan to use [`.sra`] files as input to Myrna in either
-[Hadoop] mode or in single-computer mode, you must first install the
-[SRA toolkit]'s `fastq-dump` tool appropriately.  See the [SRA toolkit]
-page for details about how to download and install.
+However, if you plan to use [`.sra`] files as input to Myrna in either [Hadoop]
+mode or in single-computer mode, you must first install the [SRA toolkit].  Once
+the toolkit is installed, be aware of where it placed the `sra-dump` binary
+program. See the [SRA toolkit] page for details about how to download and
+install. We highly recommend installing the pre-compiled binaries rather than
+trying to build the SRA toolkit from source.
 
 When searching for the `fastq-dump` tool at runtime, Myrna searches the
 following places in order:
@@ -813,7 +815,7 @@ typically small or zero (depending on your account's [SimpleDB tier]).
    automatically unless the platform is not Mac or Linux or unless
    overridden by [`--bowtie`](#myrna-hadoop-bowtie) or by defining `MYRNA_BOWTIE_HOME`.
 
-3. [R]/[Bioconductor] v2.10.0 or later must be installed at the same
+3. [R]/[Bioconductor] v2.14.2 or later must be installed at the same
    path on all cluster nodes (including the master).  The R home
    directory (containing `bin/R` and `bin/Rscript`) must be
    specified via the [`--Rhome`](#myrna-hadoop-rhome) option OR specified in the `MYRNA_RHOME`
@@ -983,7 +985,7 @@ directory, and the `PATH`.
    later, so most Mac and Linux users do not need to install either
    tool.
 
-2. An installation of [R]/[Bioconductor] v2.10.0 or later must exist on
+2. An installation of [R]/[Bioconductor] v2.14.2 or later must exist on
    the local computer, with all required packages installed.  The R home
    directory (containing `bin/R` and `bin/Rscript`) must be specified via
    the [`--Rhome`](#myrna-local-rhome) option OR specified in the `$MYRNA_RHOME` environment
