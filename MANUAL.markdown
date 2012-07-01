@@ -180,10 +180,9 @@ Install Ruby and the Command Line Interface].  That document describes:
    credential file path with the [`--credentials`] option each time you
    run `myrna_emr`.
 
-We strongly recommend using a version of the `elastic-mapreduce` Ruby
-script released on or after June 2, 2010.  This is when the script
-switched to using Hadoop 0.20 by default, which is the preferred way of
-running Myrna.
+We strongly recommend using a version of the `elastic-mapreduce` Ruby script
+released on or after June 2, 2010.  This is when the script switched to using
+Hadoop 0.20.2 by default, which is the preferred way of running Myrna.
 
 [Ruby]: http://www.ruby-lang.org/
 
@@ -407,10 +406,8 @@ trying to build the SRA toolkit from source.
 When searching for the `fastq-dump` tool at runtime, Myrna searches the
 following places in order:
 
-1. The directory specified in the [`--sra-toolkit`] option
-2. The directory specified in the `$MYRNA_SRATOOLKIT_HOME` environment
-   variable.
-3. In the system `PATH`
+1. The path specified in the [`--fastq-dump`] option
+2. The system `PATH`
 
 [Sequence Read Archive]: http://www.ncbi.nlm.nih.gov/books/NBK47533/
 [National Center for Biotechnology Information]: http://www.ncbi.nlm.nih.gov/
@@ -938,19 +935,16 @@ ways that Myrna searches for `bowtie`, including the
 `MYRNA_BOWTIE_HOME` environment variable, the subdirectories of the
 `$MYRNA_HOME/bin` directory, and the `PATH`.
 
-</td></tr><tr><td id="myrna-hadoop-sra-toolkit">
+</td></tr><tr><td id="myrna-hadoop-fastq-dump">
 
-[`--sra-toolkit`]: #myrna-hadoop-sra-toolkit
+[`--fastq-dump`]: #myrna-hadoop-fastq-dump
 
-    --sra-toolkit <path>
+    --fastq-dump <path>
 
 </td><td>
 
-Path to the directory containing the programs in the [SRA toolkit],
-including `fastq-dump`.  This overrides all other ways that Myrna
-searches for `fastq-dump`, including the `MYRNA_SRATOOLKIT_HOME`
-environment variable, the subdirectories of the `$MYRNA_HOME/bin`
-directory, and the `PATH`.
+Path to the `fastq-dump` binary from the [SRA toolkit].  If this option is not
+specified, Myrna also looks for `fastq-dump` in the `PATH`.
 
 </td></tr><tr><td id="myrna-hadoop-rhome">
 
@@ -1173,19 +1167,16 @@ overrides all other ways that Myrna searches for `bowtie`, including
 the `MYRNA_BOWTIE_HOME` environment variable, the subdirectories of the
 `$MYRNA_HOME/bin` directory, and the `PATH`.
 
-</td></tr><tr><td id="myrna-local-sra-toolkit">
+</td></tr><tr><td id="myrna-local-fastq-dump">
 
-[`--sra-toolkit`]: #myrna-local-sra-toolkit
+[`--fastq-dump`]: #myrna-local-fastq-dump
 
-    --sra-toolkit <path>
+    --fastq-dump <path>
 
 </td><td>
 
-Path to the directory containing the programs in the [SRA toolkit],
-including `fastq-dump`.  This overrides all other ways that Myrna
-searches for `fastq-dump`, including the `MYRNA_SRATOOLKIT_HOME`
-environment variable, the subdirectories of the `$MYRNA_HOME/bin`
-directory, and the `PATH`.
+Path to the `fastq-dump` binary from the [SRA toolkit].  If this option is not
+specified, Myrna also looks for `fastq-dump` in the `PATH`.
 
 </td></tr><tr><td id="myrna-local-rhome">
 
@@ -2164,7 +2155,7 @@ from these various types of sources.
 `.bz2` file extensions).  If [`.sra`] files are specified in the
 manifest and Myrna is being run in single-computer or [Hadoop] modes,
 then the `fastq-dump` tool must be installed and Myrna must be able to
-locate it.  See the [`--sra-toolkit`] option and the [SRA Toolkit
+locate it.  See the [`--fastq-dump`] option and the [SRA Toolkit
 section of the manual].
 
 [SRA Toolkit section of the manual]: #the-sra-toolkit

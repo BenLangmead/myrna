@@ -536,8 +536,8 @@ our %instTypeBitsMap = (
 #
 sub partitionConf($) {
 	my $binFields = shift;
-	my @vers = split(/\./, $hadoopVersion);
-	scalar(@vers >= 2) || die "Could not parse Hadoop version: \"$hadoopVersion\"\n";
+	my @vers = split(/[^0-9]+/, $hadoopVersion);
+	scalar(@vers) >= 2 && scalar(@vers <= 4) || die "Could not parse Hadoop version: \"$hadoopVersion\"\n";
 	my ($hadoopMajorVer, $hadoopMinorVer) = ($vers[0], $vers[1]);
 	my $hadoop18Partition = "num.key.fields.for.partition=$binFields";
 	my $hadoop19Partition = "mapred.text.key.partitioner.options=-k1,$binFields";
@@ -552,8 +552,8 @@ sub partitionConf($) {
 # was -jobconf; in newer versions, it's -D.
 #
 sub confParam() {
-	my @vers = split(/\./, $hadoopVersion);
-	scalar(@vers >= 2) || die "Could not parse Hadoop version: \"$hadoopVersion\"\n";
+	my @vers = split(/[^0-9]+/, $hadoopVersion);
+	scalar(@vers) >= 2 && scalar(@vers <= 4) || die "Could not parse Hadoop version: \"$hadoopVersion\"\n";
 	my ($hadoopMajorVer, $hadoopMinorVer) = ($vers[0], $vers[1]);
 	if($hadoopMajorVer == 0 && $hadoopMinorVer < 19) {
 		return "-jobconf\", \"";
@@ -565,8 +565,8 @@ sub confParam() {
 # Return the parameter used to ask streaming Hadoop to cache a file.
 #
 sub cacheFile() {
-	my @vers = split(/\./, $hadoopVersion);
-	scalar(@vers >= 2) || die "Could not parse Hadoop version: \"$hadoopVersion\"\n";
+	my @vers = split(/[^0-9]+/, $hadoopVersion);
+	scalar(@vers) >= 2 && scalar(@vers <= 4) || die "Could not parse Hadoop version: \"$hadoopVersion\"\n";
 	my ($hadoopMajorVer, $hadoopMinorVer) = ($vers[0], $vers[1]);
 	#if($hadoopMajorVer == 0 && $hadoopMinorVer < 19) {
 		return "-cacheFile";
@@ -583,7 +583,7 @@ sub instanceTypeBits($) {
 	return $instTypeBitsMap{$_[0]};
 }
 
-$hadoopVersion = "0.20" if !defined($hadoopVersion) || $hadoopVersion eq "";
+$hadoopVersion = "0.20.205" if !defined($hadoopVersion) || $hadoopVersion eq "";
 my $appDir = "$app-emr/$VERSION";
 $accessKey = $ENV{AWS_ACCESS_KEY_ID} if
 	$accessKey eq "" && $awsEnv && defined($ENV{AWS_ACCESS_KEY_ID});
@@ -836,13 +836,20 @@ if(!$hadoopJob && !$localJob) {
 		$emrArgs .= " " if ($emrArgs ne "" && $emrArgs !~ /\s$/);
 		$emrArgs .= "--log-uri $logs ";
 	}
-	if($hadoopVersion ne "0.20") {
-		if($hadoopVersion ne "0.18") {
-			print STDERR "Error: Expected hadoop version 0.18 or 0.20, got $hadoopVersion\n";
-			exit 1;
-		}
+	my @vers = split(/[^0-9]+/, $hadoopVersion);
+	scalar(@vers) >= 2 && scalar(@vers <= 4) || die "Could not parse Hadoop version: \"$hadoopVersion\"\n";
+	if($vers[0] == 0 && $vers[1] == 20 && $vers[2] == 2) {
 		$emrArgs .= " " if ($emrArgs ne "" && $emrArgs !~ /\s$/);
-		$emrArgs .= "--hadoop-version=0.18 ";
+		$emrArgs .= "--hadoop-version=0.20.2 ";
+	} elsif($vers[0] == 0 && $vers[1] == 20 && $vers[2] == 205) {
+		$emrArgs .= " " if ($emrArgs ne "" && $emrArgs !~ /\s$/);
+		$emrArgs .= "--hadoop-version=0.20.205 ";
+	} elsif($vers[0] == 0 && $vers[1] == 18 && $vers[2] == 3) {
+		$emrArgs .= " " if ($emrArgs ne "" && $emrArgs !~ /\s$/);
+		$emrArgs .= "--hadoop-version=0.18.3 ";
+	} else {
+		print STDERR "Error: Expected hadoop version 0.18.3, 0.20.2 or 0.20.205, got $hadoopVersion\n";
+		exit 1;
 	}
 }
 my $intermediateSet = ($intermediate ne "" || $intermediateLocal ne "");
@@ -969,7 +976,12 @@ if(!$localJob && !$hadoopJob) {
 		$hadoopHome = `dirname $hadoopHome`;
 		chomp($hadoopHome);
 		$hadoopStreamingJar = "";
-		my @hadoopStreamingJars = <$hadoopHome/contrib/streaming/hadoop-*-streaming.jar>;
+		my @hadoopStreamingJars;
+		@hadoopStreamingJars = <$hadoopHome/contrib/streaming/hadoop-*-streaming.jar>;
+		if(scalar(@hadoopStreamingJars) == 0) {
+			# Alternate naming scheme
+			@hadoopStreamingJars = <$hadoopHome/contrib/streaming/hadoop-streaming-*.jar>;
+		}
 		$hadoopStreamingJar = $hadoopStreamingJars[0] if scalar(@hadoopStreamingJars) > 0;
 	} else {
 		$hadoopStreamingJar = $hadoopStreamingJar_arg;
@@ -982,6 +994,11 @@ if(!$localJob && !$hadoopJob) {
 		}
 	}
 	$hadoopStreamingJar =~ /hadoop-([^\/\\]*)-streaming.jar/;
+	if(!defined($1)) {
+		# Alternate naming scheme
+		$hadoopStreamingJar =~ /hadoop-streaming-([^\/\\]*).jar/;
+	}
+	# Hadoop version might be as simlpe as 0.20 or as complex as 0.20.2+737
 	$hadoopVersion = $1;
 	$hadoopVersion =~ s/\+.*$//; # trim patch indicator
 } elsif($localJob) {
