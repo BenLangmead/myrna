@@ -19,11 +19,16 @@ Please report any issues using the Sourceforge bug tracker:
 Version Release History
 =======================
 
-Version 1.1.3 - June 28, 2012
+Version 1.1.3 - July XX, 2012
+   * Updated default Hadoop version for EMR jobs to 0.20.205
    * Updated Bowtie version used to 0.12.8
+   * Updated R version used to 2.14.2
    * Updated jar files to use Ensembl v67 (used to be v61).  In the
      process, fixed an issue whereby $MYRNA_HOME/reftools scripts
      would die due to unexpected new format of Ensembl database schema.
+   * Fixed issues with streaming jar version parsing
+   * Fixed documentation bugs regarding --sra-toolkit option, which is
+     superseded by the --fastq-dump option.
 
 Version 1.1.2 - May 23, 2011
    * Updated jar files to use Ensembl v61 (used to be v58).
