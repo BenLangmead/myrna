@@ -314,10 +314,11 @@ deTest <- function(fn, all.labels.str, famstr, nulls.per.unit, bypass.pvals, add
 		msg("Calculating batch of fake P-values")
 		calcFakePvals(dat)
 	} else {
-		msg("Calculating batch of",rows(dat),"observed P-values")
 		pvals <- if(paired) {
+			msg("Calculating batch of",rows(dat),"observed P-values (paired)")
 			calcObsPairedPvals(dat, all.grp, totals, famstr)
 		} else {
+			msg("Calculating batch of",rows(dat),"observed P-values (unpaired)")
 			calcObsPvals(dat, all.grp, totals, famstr, nulls.per.unit > 0)
 		}
 		if(!all(pvals >= 0)) {
