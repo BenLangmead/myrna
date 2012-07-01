@@ -1,0 +1,54 @@
+How to release a new version of Myrna
+=====================================
+
+Changing the Ensembl version used:
+- For each script in the reftools subdirectory:
+  + Change the ENSEMBL_VER variable at the top of the script to reflect new
+    version
+  + Check whether the naming scheme for the FASTA files has changed.  I.e. go
+    look in ftp://ftp.ensembl.org/pub/release-<rel>/fasta/<species_name>/dna
+    and if the name doesn't look like the one in the ENSEMBL_PREFIX variable,
+    update the variable.
+  + Check whether the list of chromosomes in the ftp directory matches the list
+    placed into the CHRS_TO_INDEX variable.
+- Build all the jars using the scripts in the reftools subdirectory.  Perhaps
+  use the sge.sh script to build them simultaneously on an SGE cluster.
+- Upload all the jars to s3://myrna-refs/.  Make sure they are world-readable.
+- Update webui/myrna.pl to refer to the new jars and the new Ensembl version.
+- Update MANUAL.markdown to refer to the new jars and the new Ensembl version.
+
+Changing the R version used:
+- Change R_VER at the top of the R/build_r script
+- Change $R_VER in MyrnaIface.pm
+- Build R using R/build_r, then package it up in a tarball and upload to the
+  s3://myrna-emr/<ver> directory.  Made it world-readable.
+
+Changing the Bowtie version used:
+- Edit the BOWTIE_VERSION variable in Makefile
+
+Updating the public scripts for EMR version:
+- Use the emr/pull_push.sh script, giving it the previous Myrna version number
+  and the new Myrna version number as arguments
+
+Updating the manual:
+- 'make doc'
+
+Updating the manual on the website:
+- Copy the contents of doc/manual.html from the first <div id="TOC" up to just
+  before the </body> at the bottom.  Paste just after the "Version" line in
+  the file doc/website/manual.ssi.  Be sure to replace any existing text after
+  the "Version" line.
+
+Updating the website:
+- Follow the instructions in doc/website/push.sh
+
+Update the following files with information about the new Myrna version:
+- NEWS
+- VERSION
+- doc/website/recent_news.ssi
+
+Building the package:
+- 'make package'
+
+Testing the release:
+- Try all the examples in the manual!
