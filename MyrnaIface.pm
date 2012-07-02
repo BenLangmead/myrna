@@ -1000,7 +1000,6 @@ if(!$localJob && !$hadoopJob) {
 	}
 	defined($hadoopVersion) || die "Could not parse streaming jar name: $hadoopStreamingJar";
 	# Hadoop version might be as simlpe as 0.20 or as complex as 0.20.2+737
-	$hadoopVersion = $1;
 	$emsg->("Detected Hadoop version '$hadoopVersion'") if $verbose;
 } elsif($localJob) {
 	system("sort < /dev/null") == 0 || die "Could not invoke 'sort'; is it in the PATH?\n";
