@@ -993,10 +993,10 @@ if(!$localJob && !$hadoopJob) {
 			die "Cannot find streaming jar in $hadoopHome/contrib/streaming; please specify --streaming-jar\n";
 		}
 	}
-	$hadoopStreamingJar =~ /hadoop-([^-]*)-streaming.jar/;
+	$hadoopStreamingJar =~ /hadoop-(.*)-streaming.jar/;
 	if(!defined($1)) {
 		# Alternate naming scheme
-		$hadoopStreamingJar =~ /hadoop-streaming-([^\.]*).jar/;
+		$hadoopStreamingJar =~ /hadoop-streaming-(.*).jar/;
 	}
 	defined($1) || die "Could not parse streaming jar name: $hadoopStreamingJar";
 	# Hadoop version might be as simlpe as 0.20 or as complex as 0.20.2+737
