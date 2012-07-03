@@ -1,0 +1,79 @@
+Commands to run to test Myrna
+=============================
+
+Remove existing output directories
+
+s3cmd del --recursive s3://ec2-jeff-tmp/example/yeast s3://ec2-jeff-tmp/example/human
+
+Yeast:
+
+ EMR:
+
+$MYRNA_HOME/myrna_emr \
+    --name "Myrna-Yeast" \
+    --preprocess \
+    --input=s3n://ec2-jeff-tmp/example/yeast/small.manifest \
+    --output=s3n://ec2-jeff-tmp/example/yeast/output_small \
+    --reference=s3n://myrna-refs/yeast_ensembl_67.jar \
+    --quality solexa64 \
+    --pre-output=s3n://ec2-jeff-tmp/example/yeast/preproc \
+    --hadoop-version=0.20.205 \
+    --instances 3
+
+ Hadoop:
+
+hadoop dfs -mkdir /myrna-refs
+hadoop dfs -mkdir /myrna/example/yeast
+hadoop dfs -put $MYRNA_REFS/yeast_ensembl_67.jar /myrna-refs/yeast_ensembl_67.jar
+hadoop dfs -rmr /myrna/example/yeast && \
+hadoop dfs -put $MYRNA_HOME/example/yeast/full.manifest /myrna/example/yeast/full.manifest && \
+$MYRNA_HOME/myrna_hadoop \
+    --preprocess \
+    --pre-output=hdfs:///myrna/example/yeast/preproc \
+    --input=hdfs:///myrna/example/yeast/full.manifest \
+    --output=hdfs:///myrna/example/yeast/output_full \
+    --reference=hdfs:///myrna-refs/yeast_ensembl_67.jar
+
+ Local:
+
+rm -rf /tmp/preproc && \
+cd $MYRNA_HOME/example/yeast && \
+$MYRNA_HOME/myrna_local \
+    --input=$MYRNA_HOME/example/yeast/small.manifest \
+    --preprocess \
+    --reference=$MYRNA_REFS/yeast_ensembl_67 \
+    --pre-output=/tmp/preproc \
+    --output=output_small \
+    --quality solexa64 \
+    --cpus=10
+
+
+Human:
+
+  EMR:
+  
+  Hadoop:
+
+hadoop dfs -mkdir /myrna-refs
+hadoop dfs -mkdir /myrna/example/human
+hadoop dfs -put $MYRNA_REFS/human_ensembl_67.jar /myrna-refs/human_ensembl_67.jar
+hadoop dfs -rmr /myrna/example/human && \
+hadoop dfs -put $MYRNA_HOME/example/human/full.manifest /myrna/example/human/full.manifest && \
+$MYRNA_HOME/myrna_hadoop \
+    --preprocess \
+    --pre-output=hdfs:///myrna/example/human/preproc \
+    --input=hdfs:///myrna/example/human/full.manifest \
+    --output=hdfs:///myrna/example/human/output_full \
+    --reference=hdfs:///myrna-refs/human_ensembl_67.jar
+
+  Local:
+
+rm -rf /tmp/preproc_human /tmp/output_human && \
+cd $MYRNA_HOME/example/human && \
+$MYRNA_HOME/myrna_local \
+    --input=$MYRNA_HOME/example/human/full.manifest \
+    --preprocess \
+    --reference=$MYRNA_REFS/human_ensembl_67 \
+    --pre-output=/tmp/preproc \
+    --output=/tmp/output_human \
+    --cpus=8

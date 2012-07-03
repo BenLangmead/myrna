@@ -1,0 +1,22 @@
+- Stop using 'hadoop' script
+
+Use of 'hadoop' script from within the streaming jobs is problematic because it
+spins up a new JVM, and it requires that we know where 'hadoop' is.  For the
+'hadoop dfs' commands, maybe there's a lighter-weight tool, like an efficient
+Perl or Python interface, that we can use instead.  Alternately, maybe we can
+wrap our streaming tools using Java instead of Perl, giving us access to the
+Hadoop APIs and (hopefully) not requiring a new JVM.
+
+- Getting counters is slow
+
+Why do we try to retrieve counters programatically and store them?  Mostly I
+think because EMR doesn't save them for us and they're a useful debugging tool.
+(Actually, EMR does save them if you specify a log URI, but they're in an
+unreadable, unsummarized format.)
+
+But James G points out that this can be slow in Hadoop mode when there are a
+large number of archived jobs in the Hadoop log.  But this feature is also not
+very necessary in Hadoop mode because the user can just check the jobtracker.
+
+So maybe we can just turn this feature off in Hadoop mode.
+
