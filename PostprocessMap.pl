@@ -94,9 +94,9 @@ msg("Contents of directory:");
 msg("ls -al");
 msg(`ls -al`);
 
-my %counters = ();
-Counters::getCounters($cntfn, \%counters, \&msg, 1);
-msg("Retrived ".scalar(keys %counters)." counters from previous stages");
+#my %counters = ();
+#Counters::getCounters($cntfn, \%counters, \&msg, 1);
+#msg("Retrived ".scalar(keys %counters)." counters from previous stages");
 
 ##
 # Parse an alignment output by the Normal stage.

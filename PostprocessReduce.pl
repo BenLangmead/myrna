@@ -129,9 +129,9 @@ for my $k (sort keys %args) {
 	msg("$k: ".${$args{$k}});
 }
 
-my %counters = ();
-Counters::getCounters($cntfn, \%counters, \&msg, 1);
-msg("Retrived ".scalar(keys %counters)." counters from previous stages");
+#my %counters = ();
+#Counters::getCounters($cntfn, \%counters, \&msg, 1);
+#msg("Retrived ".scalar(keys %counters)." counters from previous stages");
 
 $resultsFn = "results.tar.gz" if $resultsFn eq "";
 

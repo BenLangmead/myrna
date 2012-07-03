@@ -57,9 +57,9 @@ msg("Normalization: $normal");
 msg("Output URL:    $output_url");
 msg("Counters file: $cntfn");
 
-my %counters = ();
-Counters::getCounters($cntfn, \%counters, \&msg, 1);
-msg("Retrived ".scalar(keys %counters)." counters from previous stages\n");
+#my %counters = ();
+#Counters::getCounters($cntfn, \%counters, \&msg, 1);
+#msg("Retrived ".scalar(keys %counters)." counters from previous stages\n");
 
 sub validNormal {
 	my $n = shift;

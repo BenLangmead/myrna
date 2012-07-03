@@ -87,9 +87,9 @@ GetOptions(
 	"verbose"      => \$verbose)
 	|| die "GetOptions failed\n";
 
-my %counters = ();
-Counters::getCounters($cntfn, \%counters, \&msg, 1);
-msg("Retrived ".scalar(keys %counters)." counters from previous stages");
+#my %counters = ();
+#Counters::getCounters($cntfn, \%counters, \&msg, 1);
+#msg("Retrived ".scalar(keys %counters)." counters from previous stages");
 
 my $ws = 0;
 
