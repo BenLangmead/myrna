@@ -840,15 +840,15 @@ if(!$hadoopJob && !$localJob) {
 	scalar(@vers) >= 2 && scalar(@vers <= 4) || die "Could not parse Hadoop version: \"$hadoopVersion\"\n";
 	if($vers[0] == 0 && $vers[1] == 20 && $vers[2] == 2) {
 		$emrArgs .= " " if ($emrArgs ne "" && $emrArgs !~ /\s$/);
-		$emrArgs .= "--hadoop-version=0.20.2 ";
+		$emrArgs .= "--hadoop-version=0.20 --ami-version 1.0 ";
 	} elsif($vers[0] == 0 && $vers[1] == 20 && $vers[2] == 205) {
 		$emrArgs .= " " if ($emrArgs ne "" && $emrArgs !~ /\s$/);
-		$emrArgs .= "--hadoop-version=0.20.205 ";
+		$emrArgs .= "--hadoop-version=0.20.205 --ami-version 2.0 ";
 	} elsif($vers[0] == 0 && $vers[1] == 18 && $vers[2] == 3) {
 		$emrArgs .= " " if ($emrArgs ne "" && $emrArgs !~ /\s$/);
-		$emrArgs .= "--hadoop-version=0.18.3 ";
+		$emrArgs .= "--hadoop-version=0.18 --ami-version 1.0 ";
 	} else {
-		print STDERR "Error: Expected hadoop version 0.18.3, 0.20.2 or 0.20.205, got $hadoopVersion\n";
+		print STDERR "Error: Expected hadoop version 0.18, 0.20 or 0.20.205, got $hadoopVersion\n";
 		exit 1;
 	}
 }
