@@ -70,6 +70,7 @@ GetOptions(
 	"compress:s"   => \$compress,
 	"push:s"       => \$push,
 	"samtools:s"   => \$Tools::samtools_arg,
+	"fastq-dump:s"   => \$Tools::samtools_arg,
 	"s3cmd:s"      => \$Tools::s3cmd_arg,
 	"s3cfg:s"      => \$Tools::s3cfg,
 	"md5:s"        => \$Tools::md5_arg,
@@ -266,10 +267,10 @@ sub fetch($$$) {
 		counter("Short read preprocessor,Read data fetched (uncompressed),".(-s $newfname));
 		counter("Short read preprocessor,Read data fetched (BAM-to-SAM),".(-s $newfname));
 	} elsif($fname =~ /\.sra$/) {
-		my $sra_conv = Tools::sra();
+		my $fastq_dump = Tools::fastq_dump();
 		$newfname =~ s/\.sra$/.fastq/;
 		mkpath("./sra_tmp");
-		Util::runAndWait("$sra_conv $fname -O ./sra_tmp > /dev/null", "fastq-dump") == 0 ||
+		Util::runAndWait("$fastq_dump $fname -O ./sra_tmp > /dev/null", "fastq-dump") == 0 ||
 			die "Error performing SRA-to-FASTQ $fname";
 		Util::runAndWait("cat ./sra_tmp/* > $newfname", "cat") == 0 ||
 			die "Error copying resuld of SRA-to-FASTQ $fname";

@@ -116,9 +116,9 @@ our $cores = 0;
 our $dontForce = 0;
 our $bowtie = "";
 our $samtools = "";
-our $sra = "";
+our $fastq_dump = "";
 our $useSamtools = 0;
-our $useSraToolkit = 0;
+our $useFastqDump = 0;
 our $Rhome = "";
 our $externalSort = 0;
 our $maxSortRecords = 800000;
@@ -378,7 +378,7 @@ GetOptions (
 	"no-overwrite"              => \$dontForce,
 	"bowtie:s"                  => \$bowtie,
 	"samtools:s"                => \$samtools,
-	"fastq-dump:s"              => \$sra,
+	"fastq-dump:s"              => \$fastq_dump,
 	"Rhome:s"                   => \$Rhome,
 	"external-sort"             => \$externalSort,
 # Hadoop job params
@@ -756,34 +756,33 @@ $lastStage ne "" || die;
 my $numStages = 0;
 for my $k (keys %stages) { $numStages += $stages{$k}; }
 
-$useSraToolkit = $stages{preprocess};
+$useFastqDump = $stages{preprocess};
 $useSamtools = $stages{align} && $sampass;
 my $useBowtie = $stages{align};
-my $sraToolkit = $stages{preprocess};
 my $useR = $stages{overlap} || $stages{statistics} || $stages{postprocess};
-$bowtie   =~ s/^~/$ENV{HOME}/;
-$samtools =~ s/^~/$ENV{HOME}/;
-$Rhome    =~ s/^~/$ENV{HOME}/;
-$sra      =~ s/^~/$ENV{HOME}/;
+$bowtie     =~ s/^~/$ENV{HOME}/;
+$samtools   =~ s/^~/$ENV{HOME}/;
+$Rhome      =~ s/^~/$ENV{HOME}/;
+$fastq_dump =~ s/^~/$ENV{HOME}/;
 if($test) {
 	$verbose = 1;
 	my $failed = 0;
 	if($localJob || $hadoopJob) {
 		# Check for binaries
-		$bowtie   = checkExe($bowtie,   "bowtie",    "${pre}BOWTIE_HOME",     "",    "--bowtie"  ,    0);
-		$samtools = checkExe($samtools, "samtools",  "${pre}SAMTOOLS_HOME",   "",    "--samtools",    0) if $useSamtools;
-		$Rhome    = checkExe($Rhome,    "Rscript",   "${pre}RHOME",           "bin", "--Rhome"   ,    0);
-		$sra      = checkExe($sra,      "fastq-dump","${pre}SRATOOLKIT_HOME", "",    "--sra-toolkit", 0, 4);
+		$bowtie     = checkExe($bowtie,     "bowtie",    "${pre}BOWTIE_HOME",     "",    "--bowtie"  ,    0);
+		$samtools   = checkExe($samtools,   "samtools",  "${pre}SAMTOOLS_HOME",   "",    "--samtools",    0) if $useSamtools;
+		$Rhome      = checkExe($Rhome,      "Rscript",   "${pre}RHOME",           "bin", "--Rhome"   ,    0);
+		$fastq_dump = checkExe($fastq_dump, "fastq-dump","${pre}SRATOOLKIT_HOME", "",    "--fastq-dump",  0, 4);
 		$msg->("Summary:\n");
-		$msgf->("  bowtie: %s\n",     ($bowtie   ne "" ? "INSTALLED at $bowtie"   : "NOT INSTALLED"));
-		$msgf->("  samtools: %s\n",   ($samtools ne "" ? "INSTALLED at $samtools" : "NOT INSTALLED")) if $useSamtools;
-		$msgf->("  R: %s\n",          ($Rhome    ne "" ? "INSTALLED with RHOME at $Rhome" : "NOT INSTALLED"));
-		$msgf->("  fastq-dump: %s\n", ($sra      ne "" ? "INSTALLED at $sra"      : "NOT INSTALLED"));
+		$msgf->("  bowtie: %s\n",     ($bowtie     ne "" ? "INSTALLED at $bowtie"           : "NOT INSTALLED"));
+		$msgf->("  samtools: %s\n",   ($samtools   ne "" ? "INSTALLED at $samtools"         : "NOT INSTALLED")) if $useSamtools;
+		$msgf->("  R: %s\n",          ($Rhome      ne "" ? "INSTALLED with RHOME at $Rhome" : "NOT INSTALLED"));
+		$msgf->("  fastq-dump: %s\n", ($fastq_dump ne "" ? "INSTALLED at $fastq_dump"       : "NOT INSTALLED")) if $useFastqDump;
 		$msg->("Hadoop note: executables must be runnable via the SAME PATH on all nodes.\n") if $hadoopJob;
 		$failed = $bowtie eq "" || ($useSamtools && $samtools eq "") || $Rhome eq ""; # || $sra eq "";
 		if($failed) {
 			$msg->("FAILED install test\n");
-		} elsif($sra eq "") {
+		} elsif($fastq_dump eq "") {
 			$msg->("PASSED WITH ***WARNING***: SRA toolkit fastq-dump not found; .sra inputs won't work but others will\n");
 		} else {
 			$msg->("PASSED install test\n");
@@ -799,13 +798,13 @@ if($test) {
 }
 if($localJob || $hadoopJob) {
 	# Check for binaries
-	$bowtie    = checkExe($bowtie,   "bowtie",     "${pre}BOWTIE_HOME",     "",    "--bowtie"  ,    1) if $useBowtie;
-	$samtools  = checkExe($samtools, "samtools",   "${pre}SAMTOOLS_HOME",   "",    "--samtools",    1) if $useSamtools;
-	$Rhome     = checkExe($Rhome,    "Rscript",    "${pre}RHOME",           "bin", "--Rhome",       1) if $useR;
-	$sra       = checkExe($sra,      "fastq-dump", "${pre}SRATOOLKIT_HOME", "",    "--sra-toolkit", 0, 4) if $useSraToolkit;
-	if($sra eq "") {
+	$bowtie     = checkExe($bowtie,     "bowtie",     "${pre}BOWTIE_HOME",     "",    "--bowtie"  ,      1) if $useBowtie;
+	$samtools   = checkExe($samtools,   "samtools",   "${pre}SAMTOOLS_HOME",   "",    "--samtools",      1) if $useSamtools;
+	$Rhome      = checkExe($Rhome,      "Rscript",    "${pre}RHOME",           "bin", "--Rhome",         1) if $useR;
+	$fastq_dump = checkExe($fastq_dump, "fastq-dump", "${pre}SRATOOLKIT_HOME", "",    "--fastq-dump", 0, 4) if $useFastqDump;
+	if($fastq_dump eq "") {
 		print STDERR "***WARNING***\n";
-		print STDERR "***WARNING***: SRA toolkit fastq-dump not found; .sra inputs won't work but others will\n";
+		print STDERR "***WARNING***: fastq-dump not found; .sra inputs won't work but others will\n";
 		print STDERR "***WARNING***\n";
 	}
 } else {
@@ -1009,6 +1008,7 @@ if(!$localJob && !$hadoopJob) {
 my $bowtie_arg = "";
 my $samtools_arg = "";
 my $R_arg = "";
+my $fastq_dump_arg = "";
 if($localJob || $hadoopJob) {
 	if($useSamtools) {
 		$samtools ne "" || die;
@@ -1026,6 +1026,12 @@ if($localJob || $hadoopJob) {
 		$Rhome ne "" || die;
 		$msg->("$APP expects 'Rscript' to be at path $Rhome on the workers\n") unless $localJob;
 		$R_arg = "--R $Rhome";
+	}
+
+	if($useFastqDump) {
+		$fastq_dump ne "" || die;
+		$msg->("$APP expects 'fastq-dump' to be at path $fastq_dump on the workers\n") unless $localJob;
+		$fastq_dump_arg = "--fastq-dump $fastq_dump";
 	}
 }
 
@@ -1123,6 +1129,7 @@ perl $Bin/MapWrap.pl \\
 			--compress=$preprocCompress \\
 			--stop=$preprocStop \\
 			--maxperfile $preprocMax \\
+			$fastq_dump_arg \\
 			$samLabRg \\
 			--push $outputPreproc \\
 			--counters ${output}_counters/counters.txt

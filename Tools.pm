@@ -22,8 +22,8 @@ our $s3cmd = "";
 our $s3cfg = "";
 our $hadoop_arg = "";
 our $hadoop = "";
-our $sra_conv_arg = "";
-our $sra_conv = "";
+our $fastq_dump_arg = "";
+our $fastq_dump = "";
 our $samtools_arg = "";
 our $samtools = "";
 our $jar = "";
@@ -64,21 +64,21 @@ sub ensureSamtools() {
 }
 sub samtools() { ensureSamtools(); return $samtools; }
 
-my $sraEnsured = 0;
-sub ensureSRAConvert() {
-	return if $sraEnsured;
-	$sra_conv = $sra_conv_arg if $sra_conv_arg ne "";
-	my $ret = system("$sra_conv -H >&2 >/dev/null") >> 8;
+my $fqdumpEnsured = 0;
+sub ensureFastqDump() {
+	return if $fqdumpEnsured;
+	$fastq_dump = $fastq_dump_arg if $fastq_dump_arg ne "";
+	my $ret = system("$fastq_dump -H >&2 >/dev/null") >> 8;
 	if($ret != 4) {
-		if($sra_conv_arg ne "") {
-			die "--sraconv argument \"$sra_conv\" doesn't exist or isn't executable\n";
+		if($fastq_dump_arg ne "") {
+			die "--fastq-dump argument \"$fastq_dump\" doesn't exist or isn't executable\n";
 		} else {
-			die "fastq-dump could not be found in SRATOOLKIT_HOME or PATH; please specify --sraconv\n";
+			die "fastq-dump could not be found in SRATOOLKIT_HOME or PATH; please specify --fastq-dump\n";
 		}
 	}
-	$sraEnsured = 1;
+	$fqdumpEnsured = 1;
 }
-sub sra() { ensureSRAConvert(); return $sra_conv; }
+sub fastq_dump() { ensureFastqDump(); return $fastq_dump; }
 
 ##
 # Write a temporary s3cfg file with appropriate keys.
@@ -200,7 +200,7 @@ sub initTools() {
 	}
 	
 	#
-	# JAVA_HOME
+	# JAVA_HOME, so we can use 'jar' binary
 	#
 	
 	if($pre ne "" && defined($ENV{"${pre}JAVA_HOME"})) {
@@ -219,7 +219,7 @@ sub initTools() {
 	}
 	
 	#
-	# S3CMD_HOME
+	# S3CMD_HOME, so we can use 's3cmd' for fast, lightweight S3 interactions
 	#
 
 	if($pre ne "" && defined($ENV{"${pre}S3CMD_HOME"})) {
@@ -238,7 +238,7 @@ sub initTools() {
 	}
 
 	#
-	# HADOOP_HOME
+	# HADOOP_HOME, so we can use 'hadoop'
 	#
 
 	if($pre ne "" && defined($ENV{"${pre}HADOOP_HOME"})) {
@@ -257,31 +257,32 @@ sub initTools() {
 	}
 
 	#
-	# SRATOOLKIT_HOME
+	# SRATOOLKIT_HOME, so we can use 'fastq-dump' to convert files downloaded
+	# from SRA into FASTQ files.
 	#
 
 	if($pre ne "" && defined($ENV{"${pre}SRATOOLKIT_HOME"})) {
 		my $h = $ENV{"${pre}SRATOOLKIT_HOME"};
-		$sra_conv = "$h/fastq-dump";
-		unless(-x $sra_conv) { $sra_conv = "" };
+		$fastq_dump = "$h/fastq-dump";
+		unless(-x $fastq_dump) { $fastq_dump = "" };
 	}
 	elsif(defined($ENV{SRATOOLKIT_HOME})) {
-		$sra_conv = "$ENV{SRATOOLKIT_HOME}/fastq-dump";
-		unless(-x $sra_conv) { $sra_conv = "" };
+		$fastq_dump = "$ENV{SRATOOLKIT_HOME}/fastq-dump";
+		unless(-x $fastq_dump) { $fastq_dump = "" };
 	}
-	if($sra_conv eq "") {
-		$sra_conv = `which fastq-dump 2>/dev/null`;
-		chomp($sra_conv);
-		unless(-x $sra_conv) { $sra_conv = "" };
+	if($fastq_dump eq "") {
+		$fastq_dump = `which fastq-dump 2>/dev/null`;
+		chomp($fastq_dump);
+		unless(-x $fastq_dump) { $fastq_dump = "" };
 	}
-	if($sra_conv eq "") {
-		$sra_conv = "./fastq-dump";
-		chomp($sra_conv);
-		unless(-x $sra_conv) { $sra_conv = "" };
+	if($fastq_dump eq "") {
+		$fastq_dump = "./fastq-dump";
+		chomp($fastq_dump);
+		unless(-x $fastq_dump) { $fastq_dump = "" };
 	}
 
 	#
-	# SAMTOOLS_HOME
+	# SAMTOOLS_HOME, so we can use 'samtools'
 	#
 
 	if($pre ne "" && defined($ENV{"${pre}SAMTOOLS_HOME"})) {
@@ -305,7 +306,7 @@ sub initTools() {
 	}
 
 	#
-	# R_HOME
+	# R_HOME, so we can use 'Rscript'
 	#
 
 	if($pre ne "" && defined($ENV{"${pre}R_HOME"})) {
@@ -326,6 +327,7 @@ sub initTools() {
 		$r = "Rscript";
 	}
 	
+	# md5/md5sum, for checking integrity of downloaded files
 	$md5 = `which md5 2>/dev/null`;
 	chomp($md5);
 	$md5 = "" unless(-x $md5);
@@ -335,10 +337,12 @@ sub initTools() {
 		$md5 = "" unless(-x $md5);
 	}
 	
+	# wget, for downloading files over http or ftp
 	$wget = `which wget 2>/dev/null`;
 	chomp($wget);
 	unless(-x $wget) { $wget = "" };
 	
+	# expand s3cmd if it's present
 	if(-f "s3cmd.tar.gz") {
 		system("tar zxvf s3cmd.tar.gz >/dev/null");
 	}

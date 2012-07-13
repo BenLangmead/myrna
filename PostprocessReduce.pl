@@ -147,14 +147,14 @@ if($Rfetch ne "") {
 	mkpath($dest_dir);
 	(-d $dest_dir) || die "-destdir $dest_dir does not exist or isn't a directory, and could not be created\n";
 	msg("Ensuring R is installed");
-	my $r_dir = "R-2.10.0";
+	my $r_dir = "R-2.14.2";
 	Get::ensureFetched($Rfetch, $dest_dir, \@counterUpdates, $r_dir);
 	$ENV{RHOME} = "$dest_dir/$r_dir";
 	if($r_arg ne "") {
 		msg("Overriding old r_arg = $r_arg");
-		msg("  with $dest_dir/R-2.10.0/bin/Rscript");
+		msg("  with $dest_dir/$r_dir/bin/Rscript");
 	}
-	$r = "$dest_dir/R-2.10.0/bin/Rscript";
+	$r = "$dest_dir/$r_dir/bin/Rscript";
 	(-x $r) || die "Did not extract an executable $r\n";
 } else {	
 	$r = $r_arg if $r_arg ne "";

@@ -23,6 +23,8 @@ Changing the R version used:
 - Build R using R/build_r, then package it up in a tarball and upload to the
   s3://myrna-emr/<ver> directory.  Made it world-readable.
 - Update the manual to refer to the new R version
+- Update all the 'my $r_dir = "R-XYZ";' statements.  As of this writing, thse
+  are at the top of Assign.pl, PostprocessReduce.pl, and Stats.pl
 
 Changing the Bowtie version used:
 - Edit the BOWTIE_VERSION variable in Makefile

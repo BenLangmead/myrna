@@ -9,15 +9,18 @@ Yeast:
 
  EMR:
 
+export BUCKET=ec2-jeff-tmp
+s3cmd del --recursive s3://$BUCKET/example/yeast
+s3cmd put $MYRNA_HOME/example/yeast/small.manifest s3://$BUCKET/example/yeast/
 $MYRNA_HOME/myrna_emr \
     --name "Myrna-Yeast" \
     --preprocess \
-    --input=s3n://ec2-jeff-tmp/example/yeast/small.manifest \
-    --output=s3n://ec2-jeff-tmp/example/yeast/output_small \
+    --input=s3n://$BUCKET/example/yeast/small.manifest \
+    --output=s3n://$BUCKET/example/yeast/output_small \
     --reference=s3n://myrna-refs/yeast_ensembl_67.jar \
     --quality solexa64 \
-    --pre-output=s3n://ec2-jeff-tmp/example/yeast/preproc \
-    --hadoop-version=0.20.205 \
+    --pre-output=s3n://$BUCKET/example/yeast/preproc \
+    --hadoop-version=0.20 \
     --instances 3
 
  Hadoop:
@@ -25,8 +28,8 @@ $MYRNA_HOME/myrna_emr \
 hadoop dfs -mkdir /myrna-refs
 hadoop dfs -mkdir /myrna/example/yeast
 hadoop dfs -put $MYRNA_REFS/yeast_ensembl_67.jar /myrna-refs/yeast_ensembl_67.jar
-hadoop dfs -rmr /myrna/example/yeast && \
-hadoop dfs -put $MYRNA_HOME/example/yeast/full.manifest /myrna/example/yeast/full.manifest && \
+hadoop dfs -rmr /myrna/example/yeast
+hadoop dfs -put $MYRNA_HOME/example/yeast/full.manifest /myrna/example/yeast/full.manifest
 $MYRNA_HOME/myrna_hadoop \
     --preprocess \
     --pre-output=hdfs:///myrna/example/yeast/preproc \
@@ -36,14 +39,14 @@ $MYRNA_HOME/myrna_hadoop \
 
  Local:
 
-rm -rf /tmp/preproc && \
+rm -rf /tmp/preproc_yeast /tmp/output_yeast && \
 cd $MYRNA_HOME/example/yeast && \
 $MYRNA_HOME/myrna_local \
     --input=$MYRNA_HOME/example/yeast/small.manifest \
     --preprocess \
     --reference=$MYRNA_REFS/yeast_ensembl_67 \
-    --pre-output=/tmp/preproc \
-    --output=output_small \
+    --pre-output=/tmp/preproc_yeast \
+    --output=/tmp/output_yeast \
     --quality solexa64 \
     --cpus=10
 
@@ -74,6 +77,6 @@ $MYRNA_HOME/myrna_local \
     --input=$MYRNA_HOME/example/human/full.manifest \
     --preprocess \
     --reference=$MYRNA_REFS/human_ensembl_67 \
-    --pre-output=/tmp/preproc \
+    --pre-output=/tmp/preproc_human \
     --output=/tmp/output_human \
     --cpus=8
