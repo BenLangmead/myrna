@@ -70,7 +70,7 @@ GetOptions(
 	"compress:s"   => \$compress,
 	"push:s"       => \$push,
 	"samtools:s"   => \$Tools::samtools_arg,
-	"fastq-dump:s"   => \$Tools::samtools_arg,
+	"fastq-dump:s" => \$Tools::fastq_dump_arg,
 	"s3cmd:s"      => \$Tools::s3cmd_arg,
 	"s3cfg:s"      => \$Tools::s3cfg,
 	"md5:s"        => \$Tools::md5_arg,
