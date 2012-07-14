@@ -1103,7 +1103,7 @@ $hadoop jar $hadoopStreamingJar \\
 	-D mapred.reduce.tasks=0 \\
 	-input $inputPreproc \\
 	-output $outputPreproc \\
-	-mapper '$Bin/Copy.pl $samtools_arg $preprocArgs' \\
+	-mapper '$Bin/Copy.pl $samtools_arg $fastq_dump_arg $preprocArgs' \\
 	$hadoopCacheFiles \\
 	-inputformat org.apache.hadoop.mapred.lib.NLineInputFormat
 
