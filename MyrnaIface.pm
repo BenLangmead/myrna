@@ -836,6 +836,9 @@ if(!$hadoopJob && !$localJob) {
 		$emrArgs .= "--log-uri $logs ";
 	}
 	my @vers = split(/[^0-9]+/, $hadoopVersion);
+	if($vers[0] < 1 && $vers[1] < 20) {
+		die "Error: Myrna not compatible with Hadoop versions before 0.20";
+	}
 	scalar(@vers) >= 2 && scalar(@vers <= 4) || die "Could not parse Hadoop version: \"$hadoopVersion\"\n";
 	if     ($vers[0] == 0 && $vers[1] == 20 && scalar(@vers) > 2 && $vers[2] == 205) {
 		$emrArgs .= " " if ($emrArgs ne "" && $emrArgs !~ /\s$/);
@@ -843,11 +846,8 @@ if(!$hadoopJob && !$localJob) {
 	} elsif($vers[0] == 0 && $vers[1] == 20) {
 		$emrArgs .= " " if ($emrArgs ne "" && $emrArgs !~ /\s$/);
 		$emrArgs .= "--hadoop-version=0.20 --ami-version 1.0 ";
-	} elsif($vers[0] == 0 && $vers[1] == 18) {
-		$emrArgs .= " " if ($emrArgs ne "" && $emrArgs !~ /\s$/);
-		$emrArgs .= "--hadoop-version=0.18 --ami-version 1.0 ";
 	} else {
-		print STDERR "Error: Expected hadoop version 0.18, 0.20 or 0.20.205, got $hadoopVersion\n";
+		print STDERR "Error: Expected Hadoop version 0.20 or 0.20.205, got $hadoopVersion\n";
 		exit 1;
 	}
 }
