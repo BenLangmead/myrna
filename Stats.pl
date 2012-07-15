@@ -121,10 +121,6 @@ msg("Profiling enabled: $profile");
 msg("Add fudge factor: $addFudge");
 msg("Samples are paired: $paired");
 
-#my %counters = ();
-#Counters::getCounters($cntfn, \%counters, \&msg, 1);
-#msg("Retrived ".scalar(keys %counters)." counters from previous stages");
-
 if($Rfetch ne "") {
 	mkpath($dest_dir);
 	(-d $dest_dir) || die "-destdir $dest_dir does not exist or isn't a directory, and could not be created\n";

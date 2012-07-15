@@ -72,10 +72,6 @@ msg("Capturing alignments for top $top genes");
 msg("Null statistics per gene: $nullsPerPval");
 msg("Chosen URL: $chosenUrl");
 
-#my %counters = ();
-#Counters::getCounters($cntfn, \%counters, \&msg, 1);
-#msg("Retrived ".scalar(keys %counters)." counters from previous stages");
-
 my @tops = ();
 my @pvals = ();
 

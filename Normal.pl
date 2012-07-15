@@ -57,10 +57,6 @@ msg("Normalization: $normal");
 msg("Output URL:    $output_url");
 msg("Counters file: $cntfn");
 
-#my %counters = ();
-#Counters::getCounters($cntfn, \%counters, \&msg, 1);
-#msg("Retrived ".scalar(keys %counters)." counters from previous stages\n");
-
 sub validNormal {
 	my $n = shift;
 	return $n eq "lup" || $n eq "llow" || $n eq "lmed" || $n eq "ltot" || $n eq "max";
@@ -170,18 +166,15 @@ while(<STDIN>) {
 			system("mv .tmp.Normal.pl.norms.$$ $lab.norms");
 			Get::fs_put("$lab.norm", "$output_url");
 			Get::fs_put("$lab.norms", "$output_url");
-			print STDERR "$lab: total $labTot\n";
-			print STDERR "$lab: distinct non-zero counts $num\n";
-			print STDERR "$lab: maximum $mx\n";
-			print STDERR "$lab: upper quartile $q25\n";
-			print STDERR "$lab: median $q50\n";
-			print STDERR "$lab: lower quartile $q75\n";
-			print STDERR "reporter:counter:Normal,Label $lab total,$labTot\n";
-			print STDERR "reporter:counter:Normal,Label $lab distinct non-zero counts,$num\n";
-			print STDERR "reporter:counter:Normal,Label $lab maximum,$mx\n";
-			print STDERR "reporter:counter:Normal,Label $lab upper quartile,$q25\n";
-			print STDERR "reporter:counter:Normal,Label $lab median,$q50\n";
-			print STDERR "reporter:counter:Normal,Label $lab lower quartile,$q75\n";
+			print STDERR "$lab: total = $labTot, distinct non-zero counts = $num, maximum = $mx, upper quartile = $q25, median = $q50, lower quartile = $q75\n";
+			# Too many counters; tended to exceed Hadoop's new upper limit of
+			# 120 counters per job.
+			#print STDERR "reporter:counter:Normal,Label $lab total,$labTot\n";
+			#print STDERR "reporter:counter:Normal,Label $lab distinct non-zero counts,$num\n";
+			#print STDERR "reporter:counter:Normal,Label $lab maximum,$mx\n";
+			#print STDERR "reporter:counter:Normal,Label $lab upper quartile,$q25\n";
+			#print STDERR "reporter:counter:Normal,Label $lab median,$q50\n";
+			#print STDERR "reporter:counter:Normal,Label $lab lower quartile,$q75\n";
 		}
 		# Output line represents an alignment, annotated with
 		# normalization constants:
