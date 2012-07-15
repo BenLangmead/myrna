@@ -34,6 +34,7 @@ my $output_url = "";
 my $cntfn = "";
 
 Tools::initTools();
+my %env = %ENV;
 
 sub msg($) {
 	my $m = shift;
@@ -47,6 +48,8 @@ GetOptions (
 	"normal_url:s" => \$normal_url,
 	"hadoop:s" => \$Tools::hadoop_arg,
 	"output:s" => \$output_url) || die "Bad option\n";
+
+Tools::purgeEnv();
 
 $output_url = "/myrna/output/counts" if $output_url eq "";
 $output_url =~ s/^S3N/s3n/;

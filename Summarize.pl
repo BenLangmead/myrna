@@ -51,6 +51,7 @@ my $chosenUrl = "";
 my $cntfn = "";
 
 Tools::initTools();
+my %env = %ENV;
 
 GetOptions (
 	"accessid:s"    => \$AWS::accessKey,
@@ -60,6 +61,8 @@ GetOptions (
 	"chosen-genes:s"=> \$chosenUrl,
 	"counters:s"    => \$cntfn,
 	"nulls:i"       => \$nullsPerPval) || die "Bad option\n";
+
+Tools::purgeEnv();
 
 $chosenUrl ne "" || die "Must specify -chosen-genes\n";
 $chosenUrl =~ s/^S3N/s3n/;

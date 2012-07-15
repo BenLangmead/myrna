@@ -65,7 +65,6 @@ my $ivals = ".";
 my $maxalns = 50000; # max # alignments per invocation of R
 my $Rfetch = "";
 my $r = "";
-my $r_arg = "";
 my $r_args = "--vanilla --default-packages=base,methods,utils,stats,IRanges";
 my $all9s = "999999999";
 my $maxInfluence = 999999;
@@ -79,20 +78,8 @@ my $cntfn = "";
 my $errorDir = "";
 my $globals_dir = "";
 
-if(defined($ENV{R_HOME})) {
-	$r = "$ENV{R_HOME}/bin/Rscript";
-	unless(-x $r) { $r = "" };
-}
-if($r eq "") {
-	$r = `which Rscript 2>/dev/null`;
-	chomp($r);
-	unless(-x $r) { $r = "" };
-}
-if($r eq "" && -x "Rscript") {
-	$r = "Rscript";
-}
-
 Tools::initTools();
+my %env = %ENV;
 
 GetOptions (
 	"ivalsjar:s" => \$ivalsjar,
@@ -119,9 +106,11 @@ GetOptions (
 	"from-middle" => \$fromMiddle,
 	"counters:s" => \$cntfn,
 	"globals:s"  => \$globals_dir,
-	"R:s"        => \$r_arg,
+	"R:s"        => \$Tools::r_arg,
 	"Rfetch:s"   => \$Rfetch,
 	"keep"       => \$keep) || die "Bad option";
+
+Tools::purgeEnv();
 
 msg("Interval dir: $ivals");
 msg("R path: $r");
@@ -139,10 +128,6 @@ msg("Contents of directory:");
 msg("Globals directory: $globals_dir");
 msg("ls -al");
 msg(`ls -al`);
-
-#my %counters = ();
-#Counters::getCounters($cntfn, \%counters, \&msg, 1);
-#msg("Retrived ".scalar(keys %counters)." counters from previous stages");
 
 $globals_dir = "/globals" if $globals_dir eq "";
 $globals_dir =~ s/^S3N/s3n/;
@@ -207,8 +192,8 @@ sub set_mset_global {
 	}
 }
 
-sub get_mset_global {
-	my $k = shift;
+sub get_mset_global($$) {
+	my ($k, $env) = @_;
 	my $ret = "";
 	my $v;
 	if(Util::is_local($globals_dir)) {
@@ -232,13 +217,14 @@ sub get_mset_global {
 	return $ret;
 }
 
-sub finalizeLabCounts() {
+sub finalizeLabCounts($) {
+	my ($env) = @_;
 	while(my ($k, $v) = each(%labCnts)) {
 		counter("Bowtie,Label $k aligned reads,$v");
 	}
 	for my $k (keys %labCnts) { set_mset_global("label", $k); }
 	set_mset_flush();
-	msg("Result of get_mset_global('label'): ".get_mset_global("label")."");
+	msg("Result of get_mset_global('label'): ".get_mset_global("label", $env)."");
 }
 
 my $from3prime = $from5prime ? "0" : "1";
@@ -248,27 +234,13 @@ if($Rfetch ne "") {
 	(-d $dest_dir) || die "-destdir $dest_dir does not exist or isn't a directory, and could not be created\n";
 	msg("Ensuring R is installed");
 	my $r_dir = "R-2.14.2";
-	Get::ensureFetched($Rfetch, $dest_dir, \@counterUpdates, $r_dir);
+	Get::ensureFetched($Rfetch, $dest_dir, \@counterUpdates, $r_dir, undef, \%env);
 	$ENV{RHOME} = "$dest_dir/$r_dir";
-	if($r_arg ne "") {
-		msg("Overriding old r_arg = $r_arg");
-		msg("  with $dest_dir/$r_dir/bin/Rscript");
-	}
 	$r = "$dest_dir/$r_dir/bin/Rscript";
+	msg("Overriding with fetched Rscript = $r");
 	(-x $r) || die "Did not extract an executable $r\n";
 } else {	
-	$r = $r_arg if $r_arg ne "";
-	if(! -x $r) {
-		$r = `which $r`;
-		chomp($r);
-		if(! -x $r) {
-			if($r_arg ne "") {
-				die "-R argument \"$r_arg\" doesn't exist or isn't executable\n";
-			} else {
-				die "R could not be found in R_HOME or PATH; please specify -R\n";
-			}
-		}
-	}
+	$r = Tools::Rscript();
 }
 $partbin >= 1 || die "-partbin was $partbin, but must be >= 1\n";
 
@@ -369,7 +341,7 @@ if($ivalsjar ne "") {
 	mkpath($dest_dir);
 	(-d $dest_dir) || die "-destdir $dest_dir does not exist or isn't a directory, and could not be created\n";
 	msg("Ensuring reference jar is installed");
-	Get::ensureFetched($ivalsjar, $dest_dir, \@counterUpdates);
+	Get::ensureFetched($ivalsjar, $dest_dir, \@counterUpdates, undef, undef, \%env);
 	if($ivals ne "") {
 		msg("Overriding old ivals = $ivals");
 		msg("  with $dest_dir/ivals/$ivalModel");
@@ -499,4 +471,4 @@ unlink("$tmp.$parts") unless $keep;
 while(<STDIN>) { }
 msg("reporter:counter:Assign,Alignments handled by Assign.pl,$alsin") if $alsin > 0;
 print "FAKE\n";
-finalizeLabCounts();
+finalizeLabCounts(\%env);

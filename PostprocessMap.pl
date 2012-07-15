@@ -62,6 +62,7 @@ my $chosenUrl = "";
 my $cntfn = "";
 
 Tools::initTools();
+my %env = %ENV;
 
 GetOptions (
 	"s3cmd:s"       => \$Tools::s3cmd_arg,
@@ -75,6 +76,8 @@ GetOptions (
 	"counters:s"    => \$cntfn,
 	"chosen-genes:s"=> \$chosenUrl,
 	"no-alignments" => \$noAlignments) || die "Bad option\n";
+
+Tools::purgeEnv();
 
 $chosenUrl ne "" || die "Must specify -chosen-genes\n";
 $chosenUrl =~ s/^S3N/s3n/;
@@ -112,7 +115,7 @@ if(!Util::is_local($chosenUrl)) {
 	$dest_dir ne "" || die "-chosen-genes is non-local, but -destdir is not specified\n";
 	mkpath("$dest_dir/chosen");
 	(-d "$dest_dir/chosen") || die "Could not create directory: $dest_dir/chosen\n";
-	Get::ensureFetched("$chosenUrl/chosen_genes.txt", "$dest_dir/chosen", \@counterUpdates);
+	Get::ensureFetched("$chosenUrl/chosen_genes.txt", "$dest_dir/chosen", \@counterUpdates, undef, undef, \%env);
 	$chosenDir = "$dest_dir/chosen";
 }
 

@@ -46,8 +46,6 @@ sub flushCounters() {
 my $ivalsjar = "";
 my $dest_dir = "";
 my $tmp = ".tmp.Stats.pl.$$";
-my $r = "";
-my $r_arg = "";
 my $Rfetch = "";
 my $family = "";
 my $globals_dir = "";
@@ -62,20 +60,8 @@ my $paired = 0;
 my $errorDir = "";
 my $cntfn = "";
 
-if(defined($ENV{R_HOME})) {
-	$r = "$ENV{R_HOME}/bin/Rscript";
-	unless(-x $r) { $r = "" };
-}
-if($r eq "") {
-	$r = `which Rscript 2>/dev/null`;
-	chomp($r);
-	unless(-x $r) { $r = "" };
-}
-if($r eq "" && -x "Rscript") {
-	$r = "Rscript";
-}
-
 Tools::initTools();
+my %env = %ENV;
 
 sub msg($) {
 	my $m = shift;
@@ -84,7 +70,7 @@ sub msg($) {
 }
 
 GetOptions (
-	"R:s"           => \$r_arg,
+	"R:s"           => \$Tools::r_arg,
 	"Rfetch:s"      => \$Rfetch,
 	"destdir:s"     => \$dest_dir,
 	"errdir:s"      => \$errorDir,
@@ -107,6 +93,8 @@ GetOptions (
 	"profile"       => \$profile,
 	"globals:s"     => \$globals_dir) || die "Bad option\n";
 
+Tools::purgeEnv();
+
 $family = "poisson" if $family eq "";
 $globals_dir = "/globals" if $globals_dir eq "";
 $globals_dir =~ s/^S3N/s3n/;
@@ -121,39 +109,26 @@ msg("Profiling enabled: $profile");
 msg("Add fudge factor: $addFudge");
 msg("Samples are paired: $paired");
 
+my $r;
 if($Rfetch ne "") {
 	mkpath($dest_dir);
 	(-d $dest_dir) || die "-destdir $dest_dir does not exist or isn't a directory, and could not be created\n";
 	msg("Ensuring R is installed");
 	my $r_dir = "R-2.14.2";
-	Get::ensureFetched($Rfetch, $dest_dir, \@counterUpdates, $r_dir);
+	Get::ensureFetched($Rfetch, $dest_dir, \@counterUpdates, $r_dir, undef, \%env);
 	$ENV{RHOME} = "$dest_dir/$r_dir";
-	if($r_arg ne "") {
-		msg("Overriding old r_arg = $r_arg");
-		msg("  with $dest_dir/$r_dir/bin/Rscript");
-	}
 	$r = "$dest_dir/$r_dir/bin/Rscript";
+	msg("Overriding with fetched Rscript = $r");
 	(-x $r) || die "Did not extract an executable $r\n";
 } else {	
-	$r = $r_arg if $r_arg ne "";
-	if(! -x $r) {
-		$r = `which $r`;
-		chomp($r);
-		if(! -x $r) {
-			if($r_arg ne "") {
-				die "-R argument \"$r_arg\" doesn't exist or isn't executable\n";
-			} else {
-				die "R could not be found in R_HOME or PATH; please specify -R\n";
-			}
-		}
-	}
+	$r = Tools::Rscript();
 }
 
-sub get_mset_global {
-	my $k = shift;
+sub get_mset_global($$) {
+	my ($k, $env) = @_;
 	my $dir = "$globals_dir/multiset/$k/";
 	my $ret = "";
-	my @files = Get::lsDir($dir);
+	my @files = Get::lsDir($dir, $env);
 	for (@files) {
 		my @s = split(/\//);
 		my $str = $s[-1];
@@ -166,7 +141,7 @@ sub get_mset_global {
 	return $ret;
 }
 
-my $labs = get_mset_global("label") if $labs_arg eq "";
+my $labs = get_mset_global("label", \%env) if $labs_arg eq "";
 $labs = $labs_arg if $labs_arg ne "";
 
 msg("Result of get_mset_global('label'): $labs");

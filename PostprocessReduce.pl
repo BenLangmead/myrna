@@ -55,8 +55,6 @@ my $status = "";
 my $calls = "";
 my $exons = "";
 my $output = "";
-my $r = "";
-my $r_arg = "";
 my $Rfetch = "";
 my $ivals = "";
 my $counts = "";
@@ -69,20 +67,8 @@ my $cores = 1;
 my $keep = 0;
 my $cntfn = "";
 
-if(defined($ENV{R_HOME})) {
-	$r = "$ENV{R_HOME}/bin/Rscript";
-	unless(-x $r) { $r = "" };
-}
-if($r eq "") {
-	$r = `which Rscript 2>/dev/null`;
-	chomp($r);
-	unless(-x $r) { $r = "" };
-}
-if($r eq "" && -x "Rscript") {
-	$r = "Rscript";
-}
-
 Tools::initTools();
+my %env = %ENV;
 
 my %args = (
 	"ivalsjar:s"    => \$ivalsjar,
@@ -98,7 +84,7 @@ my %args = (
 	"secretid:s"    => \$AWS::secretKey,
 	"hadoop:s"      => \$Tools::hadoop_arg,
 	"wget:s"        => \$Tools::wget_arg,
-	"R:s"           => \$r_arg,
+	"R:s"           => \$Tools::r_arg,
 	"Rfetch:s"      => \$Rfetch,
 	"ivals:s"       => \$ivals,
 	"calls:s"       => \$calls,
@@ -110,6 +96,8 @@ my %args = (
 	"keep"          => \$keep,
 	"status:s"      => \$status
 );
+
+Tools::purgeEnv();
 
 my @args2 = ();
 for my $k (keys %args) {
@@ -139,32 +127,18 @@ $counts ne "" || die "Must specify -counts\n";
 $ivals eq "" || -d $ivals || die "No such directory as -ivals \"$ivals\"\n";
 $cores > 0 || die "-cores must be > 0 (was $cores)\n";
 
+my $r;
 if($Rfetch ne "") {
 	mkpath($dest_dir);
 	(-d $dest_dir) || die "-destdir $dest_dir does not exist or isn't a directory, and could not be created\n";
 	msg("Ensuring R is installed");
 	my $r_dir = "R-2.14.2";
-	Get::ensureFetched($Rfetch, $dest_dir, \@counterUpdates, $r_dir);
+	Get::ensureFetched($Rfetch, $dest_dir, \@counterUpdates, $r_dir, undef, \%env);
 	$ENV{RHOME} = "$dest_dir/$r_dir";
-	if($r_arg ne "") {
-		msg("Overriding old r_arg = $r_arg");
-		msg("  with $dest_dir/$r_dir/bin/Rscript");
-	}
 	$r = "$dest_dir/$r_dir/bin/Rscript";
 	(-x $r) || die "Did not extract an executable $r\n";
 } else {	
-	$r = $r_arg if $r_arg ne "";
-	if(! -x $r) {
-		$r = `which $r`;
-		chomp($r);
-		if(! -x $r) {
-			if($r_arg ne "") {
-				die "-R argument \"$r_arg\" doesn't exist or isn't executable\n";
-			} else {
-				die "R could not be found in R_HOME or PATH; please specify -R\n";
-			}
-		}
-	}
+	$r = Tools::Rscript();
 }
 
 $output =~ s/^S3N/s3n/;
@@ -175,7 +149,7 @@ if($ivalsjar ne "" && $exons eq "") {
 	mkpath($dest_dir);
 	(-d $dest_dir) || die "-destdir $dest_dir does not exist or isn't a directory, and could not be created\n";
 	msg("Ensuring reference jar is installed");
-	Get::ensureFetched($ivalsjar, $dest_dir, \@counterUpdates);
+	Get::ensureFetched($ivalsjar, $dest_dir, \@counterUpdates, undef, undef, \%env);
 	if($ivals ne "") {
 		msg("Overriding old ivals = $ivals");
 		msg("  with $dest_dir/ivals");
@@ -338,7 +312,7 @@ if($exons ne "" && !$noGenes) {
 
 # Get the set of all genes with non-0 counts
 if(!Util::is_local($counts)) {
-	Get::ensureDirFetched($counts, $dest_dir, \@counterUpdates);
+	Get::ensureDirFetched($counts, $dest_dir, \@counterUpdates, \%env);
 } else {
 	$dest_dir = $counts;
 }
@@ -473,8 +447,8 @@ system("tar cvf - $tarargs | gzip -c > results.tar.gz");
 $output .= "/" unless $output =~ /\/$/;
 system("touch FAILED") if $ret != 0;
 if($output =~ /^s3/i) {
-	Get::do_s3_put("results.tar.gz", $output, \@counterUpdates);
-	Get::do_s3_put("FAILED", $output, \@counterUpdates) if $ret != 0;
+	Get::do_s3_put("results.tar.gz", $output, \@counterUpdates, \%env);
+	Get::do_s3_put("FAILED", $output, \@counterUpdates, \%env) if $ret != 0;
 } elsif($output =~ /^hdfs/i) {
 	Get::do_hdfs_put("results.tar.gz", $output, \@counterUpdates);
 	Get::do_hdfs_put("FAILED", $output, \@counterUpdates) if $ret != 0;

@@ -65,6 +65,7 @@ sub msg($) {
 }
 
 Tools::initTools();
+my %env = %ENV;
 
 GetOptions(
 	"compress:s"   => \$compress,
@@ -88,9 +89,7 @@ GetOptions(
 	"verbose"      => \$verbose)
 	|| die "GetOptions failed\n";
 
-#my %counters = ();
-#Counters::getCounters($cntfn, \%counters, \&msg, 1);
-#msg("Retrived ".scalar(keys %counters)." counters from previous stages");
+Tools::purgeEnv();
 
 my $ws = 0;
 
@@ -108,7 +107,7 @@ $push =~ s/^HDFS/hdfs/;
 
 if ($push =~ /^s3/) {
 	msg("Checking availability of s3cmd") if $verbose;
-	Tools::ensureS3cmd();
+	Tools::ensureS3cmd(\%env);
 } else {
 	msg("s3cmd not needed") if $verbose;
 }
@@ -128,12 +127,12 @@ if (defined $owner && $push ne "") {
 ##
 # Calculate the md5 hash of an object in S3 using s3cmd.
 #
-sub s3md5($) {
-	my $path = shift;
-	my $s3cmd = Tools::s3cmd();
+sub s3md5($$) {
+	my ($path, $env) = @_;
+	my $s3cmd = Tools::s3cmd($env);
 	$s3cmdHasListMD5 = system("$s3cmd ls --list-md5 >/dev/null 2>&1") == 0;
 	return "" unless $s3cmdHasListMD5;
-	$path = Get::s3cmdify($path);
+	$path = Get::s3cmdify($path, $env);
 	my $md = `$s3cmd --list-md5 ls $path | awk '{print \$4}'`;
 	chomp($md);
 	length($md) == 32 || die "Bad MD5 obtained from s3: $md\n";
@@ -144,8 +143,8 @@ sub s3md5($) {
 # Push a file from the local filesystem to another filesystem (perhaps
 # HDFS, perhaps S3) using hadoop fs -cp.
 #
-sub pushBatch($) {
-	my $file = shift;
+sub pushBatch($$) {
+	my ($file, $env) = @_;
 	-e $file || die "No such file $file";
 	$push ne "" || die "pushBatch() called but no destination is set";
 	my $pushDest = "local filesystem";
@@ -181,12 +180,12 @@ sub pushBatch($) {
 				die "hadoop fs -chown command failed";
 		}
 	} elsif($push =~ /^s3n?:/i) {
-		my $s3cmd = Tools::s3cmd();
+		my $s3cmd = Tools::s3cmd($env);
 		# For s3cmd, change s3n -> s3 and remove login info
-		my $s3cmd_push = Get::s3cmdify($push);
+		my $s3cmd_push = Get::s3cmdify($push, $env);
 		my $cmd = "$s3cmd put $file $s3cmd_push/$file >&2";
 		Util::run($cmd) == 0 || die "Command failed: $cmd";
-		my $rmd5 = s3md5("$push/$file");
+		my $rmd5 = s3md5("$push/$file", $env);
 		$rmd5 eq "" || $md eq $rmd5 || die "Local MD5 $md does not equal S3 md5 $rmd5 for file $s3cmd_push/$file";
 	} else {
 		$push .= "/" unless $push =~ /\/$/;
@@ -215,23 +214,23 @@ sub hadoopget($$$) {
 }
 
 ## Download a file with s3cmd get
-sub s3get($$$) {
-	my ($fname, $url, $md) = @_;
-	my $s3cmd = Tools::s3cmd();
-	$url = Get::s3cmdify($url);
+sub s3get($$$$) {
+	my ($fname, $url, $md, $env) = @_;
+	my $s3cmd = Tools::s3cmd($env);
+	$url = Get::s3cmdify($url, $env);
 	my $rc = Util::run("$s3cmd get $url $fname >&2");
 	die "s3cmd get failed: $url $rc\n" if $rc;
 }
 
 ## Fetch a file
-sub fetch($$$) {
-	my ($fname, $url, $md) = @_;
+sub fetch($$$$) {
+	my ($fname, $url, $md, $env) = @_;
 	defined($md) || die;
 	msg("Fetching $url $fname $md");
 
 	if(! -f $fname) {
 		if ($url =~ /^hdfs:/) { hadoopget($fname, $url, $md); }
-		elsif ($url =~ /^s3n?:/) { s3get($fname, $url, $md); }
+		elsif ($url =~ /^s3n?:/) { s3get($fname, $url, $md, $env); }
 		elsif ($url =~ /^ftp:/ || $url =~ /^https?:/) { wget($fname, $url, $md); }
 		elsif ($url ne $fname) { Util::run("cp $url ./$fname >&2"); }
 		-f $fname || die "Failed to copy $url to $fname\n";
@@ -389,8 +388,8 @@ sub parseRead($$$) {
 ##
 # Handle the copy for a single unpaired entry
 #
-sub doUnpairedUrl($$$$$) {
-	my ($url, $md, $lab, $format, $color) = @_;
+sub doUnpairedUrl($$$$$$) {
+	my ($url, $md, $lab, $format, $color, $env) = @_;
 	my @path = split /\//, $url;
 	my $fn = $path[-1];
 	my $of;
@@ -401,7 +400,7 @@ sub doUnpairedUrl($$$$$) {
 	
 	# fetch the file
 	my $origFn = $fn;
-	$fn = fetch($fn, $url, $md);
+	$fn = fetch($fn, $url, $md, $env);
 	
 	# turn FASTQ entries into single-line reads
 	my $fh;
@@ -431,7 +430,7 @@ sub doUnpairedUrl($$$$$) {
 		if($maxPerFile > 0 && ($r % $maxPerFile) == 0) {
 			close($of);
 			if($push ne "") {
-				pushBatch("${fn}_$fileno.out");
+				pushBatch("${fn}_$fileno.out", $env);
 				system("rm -f ${fn}_$fileno.out ${fn}_$fileno.out.* >&2");
 			}
 			$fileno++;
@@ -452,7 +451,7 @@ sub doUnpairedUrl($$$$$) {
 	system("rm -f $fn $origFn >&2") unless $keep;
 	if($push ne "") {
 		# Push and remove output files
-		pushBatch("${fn}_$fileno.out");
+		pushBatch("${fn}_$fileno.out", $env);
 		system("rm -f ${fn}_$fileno.out ${fn}_$fileno.out.* >&2");
 	} else {
 		# Just keep the output files around
@@ -462,15 +461,15 @@ sub doUnpairedUrl($$$$$) {
 ##
 # Handle the copy for a single paired entry
 #
-sub doPairedUrl($$$$$$$) {
-	my ($url1, $md51, $url2, $md52, $lab, $format, $color) = @_;
+sub doPairedUrl($$$$$$$$) {
+	my ($url1, $md51, $url2, $md52, $lab, $format, $color, $env) = @_;
 	my @path1 = split /\//, $url1;
 	my @path2 = split /\//, $url2;
 	my ($fn1, $fn2) = ($path1[-1], $path2[-1]);
 	my $origFn1 = $fn1;
 	my $origFn2 = $fn2;
-	$fn1 = fetch($fn1, $url1, $md51);
-	$fn2 = fetch($fn2, $url2, $md52);
+	$fn1 = fetch($fn1, $url1, $md51, $env);
+	$fn2 = fetch($fn2, $url2, $md52, $env);
 	my $sam = $format =~ /^sam$/i;
 	if(defined($lab)) {
 		$lab =~ /[:\s]/ && die "Label may not contain a colon or whitespace character; was \"$lab\"\n";
@@ -511,7 +510,7 @@ sub doPairedUrl($$$$$$$) {
 		if($maxPerFile > 0 && ($r % $maxPerFile) == 0) {
 			close($of);
 			if($push ne "") {
-				pushBatch("${fn1}_$fileno.out");
+				pushBatch("${fn1}_$fileno.out", $env);
 				system("rm -f ${fn1}_$fileno.out ${fn1}_$fileno.out.* >&2");
 			}
 			$fileno++;
@@ -534,7 +533,7 @@ sub doPairedUrl($$$$$$$) {
 	system("rm -f $fn2 $origFn2 >&2") unless $keep;
 	if($push ne "") {
 		# Push and remove output files
-		pushBatch("${fn1}_$fileno.out");
+		pushBatch("${fn1}_$fileno.out", $env);
 		system("rm -f ${fn1}_$fileno.out ${fn1}_$fileno.out.* >&2");
 	} else {
 		# Just keep the output files around
@@ -544,10 +543,10 @@ sub doPairedUrl($$$$$$$) {
 ##
 # Add user's credentials to an s3 or s3n URI if necessary
 #
-sub addkey($) {
-	my $url = shift;
+sub addkey($$) {
+	my ($url, $env) = @_;
 	return $url unless $url =~ /^s3n?:/i;
-	AWS::ensureKeys($Tools::hadoop, $Tools::hadoop_arg);
+	AWS::ensureKeys($Tools::hadoop, $Tools::hadoop_arg, $env);
 	if($url =~ /s3n?:\/\/[^\@]*$/ && defined($AWS::accessKey)) {
 		my $ec2key = $AWS::accessKey.":".$AWS::secretKey;
 		$url =~ s/s3:\/\//s3:\/\/$ec2key\@/;
@@ -594,20 +593,20 @@ while (<>) {
 		msg("Skipping...");
 		next;
 	}
-	my ($url1, $md51) = (addkey($s[0]), $s[1]);
+	my ($url1, $md51) = (addkey($s[0], \%env), $s[1]);
 	my $color = 0; # TODO
 
 	my $turl1 = fileparse($url1);
 	if($#s >= 3) {
 		# If s[4] is defined, it contains the sample label
 		msg("Doing paired-end entry $turl1");
-		my ($url2, $md52) = (addkey($s[2]), $s[3]);
-		doPairedUrl($url1, $md51, $url2, $md52, $s[4], urlToFormat($url1), $color);
+		my ($url2, $md52) = (addkey($s[2], \%env), $s[3]);
+		doPairedUrl($url1, $md51, $url2, $md52, $s[4], urlToFormat($url1), $color, \%env);
 		counter("Short read preprocessor,Paired URLs,1");
 	} else {
 		# If s[2] is defined, it contains the sample label
 		msg("Doing unpaired entry $turl1");
-		doUnpairedUrl($url1, $md51, $s[2], urlToFormat($url1), $color);
+		doUnpairedUrl($url1, $md51, $s[2], urlToFormat($url1), $color, \%env);
 		counter("Short read preprocessor,Unpaired URLs,1");
 	}
 	msg("Total unpaired reads: $totunpaired");

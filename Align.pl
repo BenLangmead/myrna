@@ -64,20 +64,6 @@ my $poolTechReplicates = 0;
 my $test = 0;
 my $cntfn = "";
 
-my $bowtie = "";
-my $bowtie_arg = "";
-
-if(defined($ENV{BOWTIE_HOME})) {
-	$bowtie = "$ENV{BOWTIE_HOME}/bowtie";
-	unless(-x $bowtie) { $bowtie = "" };
-}
-if($bowtie eq "") {
-	$bowtie = `which bowtie 2>/dev/null`;
-	chomp($bowtie);
-	unless(-x $bowtie) { $bowtie = "" };
-}
-$bowtie = "./bowtie" if ($bowtie eq "" && -x "./bowtie");
-
 sub dieusage {
 	my $msg = shift;
 	my $exitlevel = shift;
@@ -94,9 +80,10 @@ sub msg($) {
 }
 
 Tools::initTools();
+my %env = %ENV;
 
 GetOptions (
-	"bowtie:s"        => \$bowtie_arg,
+	"bowtie:s"        => \$Tools::bowtie_arg,
 	"s3cmd:s"         => \$Tools::s3cmd_arg,
 	"s3cfg:s"         => \$Tools::s3cfg,
 	"jar:s"           => \$Tools::jar_arg,
@@ -122,12 +109,14 @@ GetOptions (
 	"destdir:s"       => \$dest_dir,
 	"test"            => \$test) || dieusage("Bad option", 1);
 
+Tools::purgeEnv();
+
 msg("s3cmd: found: $Tools::s3cmd, given: $Tools::s3cmd_arg");
 msg("jar: found: $Tools::jar, given: $Tools::jar_arg");
 msg("hadoop: found: $Tools::hadoop, given: $Tools::hadoop_arg");
 msg("wget: found: $Tools::wget, given: $Tools::wget_arg");
 msg("s3cfg: $Tools::s3cfg");
-msg("bowtie: found: $bowtie, given: $bowtie_arg");
+msg("bowtie: found: $Tools::bowtie, given: $Tools::bowtie_arg");
 msg("partition len: $partlen");
 msg("ref: $ref");
 msg("quality: $qual");
@@ -146,10 +135,6 @@ msg("dest dir: $dest_dir");
 msg("bowtie args: @ARGV");
 msg("ls -al");
 msg(`ls -al`);
-
-#my %counters = ();
-#Counters::getCounters($cntfn, \%counters, \&msg, 1);
-#msg("Retrived ".scalar(keys %counters)." counters from previous stages");
 
 $globals_dir = "/globals" if $globals_dir eq "";
 $globals_dir =~ s/^S3N/s3n/;
@@ -214,8 +199,8 @@ sub set_mset_global {
 	}
 }
 
-sub get_mset_global {
-	my $k = shift;
+sub get_mset_global($$) {
+	my ($k, $env) = @_;
 	my $ret = "";
 	my $v;
 	if(Util::is_local($globals_dir)) {
@@ -239,13 +224,14 @@ sub get_mset_global {
 	return $ret;
 }
 
-sub finalizeLabCounts() {
+sub finalizeLabCounts($) {
+	my ($env) = @_;
 	while(my ($k, $v) = each(%labCnts)) {
 		counter("Bowtie,Label $k input reads,$v");
 	}
 	for my $k (keys %labCnts) { set_mset_global("label", $k); }
 	set_mset_flush();
-	msg("Result of get_mset_global('label'): ".get_mset_global("label")."");
+	msg("Result of get_mset_global('label'): ".get_mset_global("label", $env)."");
 }
 
 ##
@@ -342,7 +328,7 @@ if($sam_passthru) {
 			$alsUnpaired = 0;
 		}
 	}
-	finalizeLabCounts();
+	finalizeLabCounts(\%env);
 	counter("Bowtie,Alignments (unpaired) passed through from SAM,".$alsUnpairedTot);
 	counter("Bowtie,Alignments (paired) passed through from SAM,".$alsPaired);
 	counter("Bowtie,Alignments passed through from SAM,".($alsUnpaired+$alsPaired));
@@ -360,23 +346,14 @@ $dest_dir = "." if $dest_dir eq "";
 mkpath($dest_dir);
 (-d $dest_dir) || die "-destdir $dest_dir does not exist or isn't a directory, and could not be created\n";
 
-$bowtie = $bowtie_arg if $bowtie_arg ne "";
-unless(-x $bowtie) {
-	# No bowtie? die
-	if($bowtie_arg ne "") {
-		die "Specified -bowtie, \"$bowtie\" doesn't exist or isn't executable\n";
-	} else {
-		die "bowtie couldn't be found in BOWTIE_HOME, PATH, or current directory; please specify -bowtie\n";
-	}
-}
-chmod 0777, $bowtie;
+my $bowtie = Tools::bowtie();
 
 ##
 # Run bowtie, ensuring that index exists first.
 #
 my $jarEnsured = 0;
-sub runBowtie($$) {
-	my ($fn, $efn) = @_;
+sub runBowtie($$$) {
+	my ($fn, $efn, $env) = @_;
 	my $args = join(" ", @ARGV);
 	msg("  ...ensuring reference jar is installed first");
 	my $index_base;
@@ -384,7 +361,7 @@ sub runBowtie($$) {
 		$index_base = $indexLocal;
 	} else {
 		if($ref ne "" && !$jarEnsured) {
-			Get::ensureFetched($ref, $dest_dir, \@counterUpdates);
+			Get::ensureFetched($ref, $dest_dir, \@counterUpdates, undef, undef, $env);
 			flushCounters();
 			$jarEnsured = 1;
 		}
@@ -604,7 +581,7 @@ for my $lab (keys %outfhs) {
 	msg(`head -4 $fn`);
 	msg("tail -4 $fn:");
 	msg(`tail -4 $fn`);
-	my $cmd = runBowtie($fn, $efn);
+	my $cmd = runBowtie($fn, $efn, \%env);
 	open BTIE, "$cmd |" || die "Could not open pipe from \"$cmd\"\n";
 	while(<BTIE>) {
 		# what <- list("",          # Chr
@@ -659,4 +636,4 @@ for my $lab (keys %outfhs) {
 }
 print "FAKE\n";
 counter("Bowtie,Reads given to Bowtie,$records");
-finalizeLabCounts();
+finalizeLabCounts(\%env);

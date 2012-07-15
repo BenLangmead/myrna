@@ -26,13 +26,16 @@ our $fastq_dump_arg = "";
 our $fastq_dump = "";
 our $samtools_arg = "";
 our $samtools = "";
+our $bowtie_arg = "";
+our $bowtie = "";
 our $jar = "";
 our $jar_arg = "";
 our $wget = "";
 our $wget_arg = "";
 our $md5 = "";
 our $md5_arg = "";
-my $r = "";
+our $r = "";
+our $r_arg = "";
 
 my $hadoopEnsured = 0;
 sub ensureHadoop() {
@@ -48,6 +51,22 @@ sub ensureHadoop() {
 	$hadoopEnsured = 1;
 }
 sub hadoop() { ensureHadoop(); return $hadoop; }
+
+# Bowtie
+my $bowtieEnsured = 0;
+sub ensureBowtie() {
+	return if $bowtieEnsured;
+	$bowtie = $bowtie_arg if $bowtie_arg ne "";
+	if(! -x $bowtie) {
+		if($bowtie_arg ne "") {
+			die "--bowtie argument \"$bowtie\" doesn't exist or isn't executable\n";
+		} else {
+			die "bowtie could not be found in BOWTIE_HOME or PATH; please specify --bowtie\n";
+		}
+	}
+	$bowtieEnsured = 1;
+}
+sub bowtie() { ensureBowtie(); return $bowtie; }
 
 my $samtoolsEnsured = 0;
 sub ensureSamtools() {
@@ -86,8 +105,9 @@ sub fastq_dump() { ensureFastqDump(); return $fastq_dump; }
 ##
 # Write a temporary s3cfg file with appropriate keys.
 #
-sub writeS3cfg() {
-	AWS::ensureKeys($hadoop, $hadoop_arg);
+sub writeS3cfg($) {
+	my ($env) = @_;
+	AWS::ensureKeys($hadoop, $hadoop_arg, $env);
 	my $cfgText = qq{
 [default]
 access_key = $AWS::accessKey
@@ -123,7 +143,8 @@ verbosity = WARNING
 }
 
 my $s3cmdEnsured = 0;
-sub ensureS3cmd() {
+sub ensureS3cmd($) {
+	my ($env) = @_;
 	return if $s3cmdEnsured;
 	$s3cmd = $s3cmd_arg if $s3cmd_arg ne "";
 	if(system("$s3cmd --version >&2") != 0) {
@@ -134,12 +155,12 @@ sub ensureS3cmd() {
 		}
 	}
 	if($s3cfg eq "") {
-		writeS3cfg() unless -f ".s3cfg";
+		writeS3cfg($env) unless -f ".s3cfg";
 		$s3cfg = ".s3cfg";
 	}
 	$s3cmdEnsured = 1;
 }
-sub s3cmd() { ensureS3cmd(); return "$s3cmd -c $s3cfg"; }
+sub s3cmd($) { ensureS3cmd($_[0]); return "$s3cmd -c $s3cfg"; }
 
 my $md5Ensured = 0;
 sub ensureMd5() {
@@ -185,6 +206,22 @@ sub ensureJar() {
 	$jarEnsured = 1;
 }
 sub jar() { ensureJar(); return $jar; }
+
+# Rscript
+my $rscriptEnsured = 0;
+sub ensureRscript() {
+	return if $rscriptEnsured;
+	$r = $r_arg if $r_arg ne "";
+	if(! -x $r) {
+		if($r_arg ne "") {
+			die "--R argument \"$r_arg\" doesn't exist or isn't executable\n";
+		} else {
+			die "Rscript could not be found in R_HOME or PATH; please specify --R\n";
+		}
+	}
+	$rscriptEnsured = 1;
+}
+sub Rscript() { ensureRscript(); return $r; }
 
 sub initTools() {
 
@@ -285,6 +322,31 @@ sub initTools() {
 	}
 
 	#
+	# BOWTIE_HOME, so we can use 'bowtie'
+	#
+
+	if($pre ne "" && defined($ENV{"${pre}BOWTIE_HOME"})) {
+		my $h = $ENV{"${pre}BOWTIE_HOME"};
+		$bowtie = "$h/bowtie";
+		unless(-x $bowtie) { $bowtie = "" };
+	}
+	elsif(defined($ENV{BOWTIE_HOME})) {
+		$bowtie = "$ENV{BOWTIE_HOME}/bowtie";
+		unless(-x $bowtie) { $bowtie = "" };
+	}
+	if($bowtie eq "") {
+		$bowtie = `which bowtie 2>/dev/null`;
+		chomp($bowtie);
+		unless(-x $bowtie) { $bowtie = "" };
+	}
+	if($bowtie eq "" && -f "./bowtie") {
+		$bowtie = "./bowtie";
+		chomp($bowtie);
+		chmod 0777, $bowtie;
+		unless(-x $bowtie) { $bowtie = "" };
+	}
+
+	#
 	# SAMTOOLS_HOME, so we can use 'samtools'
 	#
 
@@ -370,6 +432,23 @@ sub lookFor($$$) {
 	}
 	$tool = "./$exe" if ($tool eq "" && -x "./$exe");
 	return $tool;
+}
+
+##
+# Purge the environment down to a few essentials.  This fixes an issue
+# whereby some environment changes made by hadoop.sh mess with future
+# invocations of hadoop.
+#
+sub purgeEnv() {
+	foreach my $k (keys %ENV) {
+		next if $k =~ /^PATH$/;
+		next if $k =~ /^PWD$/;
+		next if $k =~ /^HOME$/;
+		next if $k =~ /^USER$/;
+		next if $k =~ /^TERM$/;
+		delete $ENV{$k};
+	}
+	$ENV{SHELL}="/bin/sh";
 }
 
 ##
