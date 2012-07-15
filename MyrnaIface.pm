@@ -981,6 +981,10 @@ if(!$localJob && !$hadoopJob) {
 			# Alternate naming scheme
 			@hadoopStreamingJars = <$hadoopHome/contrib/streaming/hadoop-streaming-*.jar>;
 		}
+		if(scalar(@hadoopStreamingJars) == 0) {
+			# Alternate naming scheme
+			@hadoopStreamingJars = <$hadoopHome/contrib/streaming/hadoop-streaming.jar>;
+		}
 		$hadoopStreamingJar = $hadoopStreamingJars[0] if scalar(@hadoopStreamingJars) > 0;
 	} else {
 		$hadoopStreamingJar = $hadoopStreamingJar_arg;
@@ -1086,7 +1090,7 @@ my $preprocessJson = qq!
   "Name": "Preprocess short reads",
   "ActionOnFailure": "$failAction",
   "HadoopJarStep": {
-    "Jar": "/home/hadoop/contrib/streaming/hadoop-$hadoopVersion-streaming.jar",
+    "Jar": "$emrStreamJar",
     "Args": [
       "${conf}mapred.reduce.tasks=0",
       "-input",       "$inputPreproc",
@@ -1181,7 +1185,7 @@ my $alignJson = qq!
   "Name": "$APP Step 1: Align with Bowtie", 
   "ActionOnFailure": "$failAction", 
   "HadoopJarStep": { 
-    "Jar": "/home/hadoop/contrib/streaming/hadoop-$hadoopVersion-streaming.jar", 
+    "Jar": "$emrStreamJar", 
     "Args": [ 
       "${conf}mapred.reduce.tasks=0",
       "-input",       "$inputAlign",
@@ -1276,7 +1280,7 @@ my $olapJson = qq!
   "Name": "$APP Step 2: Calculate overlaps", 
   "ActionOnFailure": "$failAction", 
   "HadoopJarStep": { 
-    "Jar": "/home/hadoop/contrib/streaming/hadoop-$hadoopVersion-streaming.jar", 
+    "Jar": "$emrStreamJar", 
     "Args": [
       "${conf}stream.num.map.output.key.fields=3",
       "${conf}$olapPartitionConf",
@@ -1375,7 +1379,7 @@ my $normalizeJson = qq!
   "Name": "$APP Step 3: Normalize", 
   "ActionOnFailure": "$failAction", 
   "HadoopJarStep": { 
-    "Jar": "/home/hadoop/contrib/streaming/hadoop-$hadoopVersion-streaming.jar", 
+    "Jar": "$emrStreamJar", 
     "Args": [ 
       "${conf}stream.num.map.output.key.fields=2",
       "${conf}$normalizePartitionConf",
@@ -1469,7 +1473,7 @@ my $statsJson = qq!
   "Name": "$APP Step 4: Calculate interval statistics", 
   "ActionOnFailure": "$failAction", 
   "HadoopJarStep": { 
-    "Jar": "/home/hadoop/contrib/streaming/hadoop-$hadoopVersion-streaming.jar", 
+    "Jar": "$emrStreamJar", 
     "Args": [ 
       "${conf}stream.num.map.output.key.fields=2",
       "${conf}$statsPartitionConf",
@@ -1561,7 +1565,7 @@ my $summarizeJson = qq!
   "Name": "$APP Step 5: Summarize", 
   "ActionOnFailure": "$failAction", 
   "HadoopJarStep": { 
-    "Jar": "/home/hadoop/contrib/streaming/hadoop-$hadoopVersion-streaming.jar", 
+    "Jar": "$emrStreamJar", 
     "Args": [ 
       "${conf}stream.num.map.output.key.fields=2",
       "${conf}$summarizePartitionConf",
@@ -1644,7 +1648,7 @@ my $countersJson = qq!
   "Name": "Get counters", 
   "ActionOnFailure": "$failAction", 
   "HadoopJarStep": { 
-    "Jar": "/home/hadoop/contrib/streaming/hadoop-$hadoopVersion-streaming.jar", 
+    "Jar": "$emrStreamJar", 
     "Args": [ 
       "${conf}mapred.reduce.tasks=1",
       "-input",       "$inputDummy",
@@ -1688,7 +1692,7 @@ my $postprocJson = qq!
   "Name": "$APP Step 6: Postprocess", 
   "ActionOnFailure": "$failAction", 
   "HadoopJarStep": { 
-    "Jar": "/home/hadoop/contrib/streaming/hadoop-$hadoopVersion-streaming.jar", 
+    "Jar": "$emrStreamJar", 
     "Args": [ 
       "${conf}stream.num.map.output.key.fields=3",
       "${conf}$postprocPartitionConf",
