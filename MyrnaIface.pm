@@ -1035,6 +1035,12 @@ if($localJob || $hadoopJob) {
 	}
 }
 
+# Set up name of streaming jar for EMR mode
+my $emrStreamJar = "/home/hadoop/contrib/streaming/hadoop-streaming-$hadoopVersion.jar";
+if($hadoopVersion eq "0.20" || $hadoopVersion eq "0.18") {
+	$emrStreamJar = "/home/hadoop/contrib/streaming/hadoop-$hadoopVersion-streaming.jar";
+}
+
 # Set up some variables to save us some typing:
 
 my $cachef = cacheFile();
