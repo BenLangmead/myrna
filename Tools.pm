@@ -441,11 +441,12 @@ sub lookFor($$$) {
 #
 sub purgeEnv() {
 	foreach my $k (keys %ENV) {
-		next if $k =~ /^PATH$/;
-		next if $k =~ /^PWD$/;
-		next if $k =~ /^HOME$/;
-		next if $k =~ /^USER$/;
-		next if $k =~ /^TERM$/;
+		next if $k eq "PATH";
+		next if $k eq "PWD";
+		next if $k eq "HOME";
+		next if $k eq "USER";
+		next if $k eq "TERM";
+		next if $k eq "JAVA_HOME";
 		delete $ENV{$k};
 	}
 	$ENV{SHELL}="/bin/sh";
