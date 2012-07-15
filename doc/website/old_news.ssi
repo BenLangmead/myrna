@@ -1,3 +1,38 @@
+<h2>Version 1.0.5 - August 16, 2010</h2>
+<ul>
+ <li>
+     Fixed issue that prevented <tt>MYRNA_EMR_HOME</tt> environment variable
+     from working.
+ <li>
+     Fixed issue whereby <tt>Align.pl</tt> script fails to report a count for
+     the number of reads with alignments sampled due to Bowtie's <tt>-M</tt>
+     option.
+ <li>
+     Fixed issue that made it difficult to specify a space-separated
+     list of arguments to the <tt>--bowtie-args</tt> and other <tt>--*-args</tt>
+     parameters.
+ <li>
+     Fixed issue whereby most documentation referred to arguments with
+     a single-dash prefix, whereas users with the <tt>POSIXLY_CORRECT</tt>
+     environment variable set must use a double-dash prefix.
+     Documentation and code have been updated to always use double-dash
+     prefixes.
+</ul>
+
+<h2>Myrna paper out - August 11, 2010</h2>
+<ul>
+ <li>
+   The provisional version of the <a href="http://genomebiology.com/2010/11/8/R83/abstract">Myrna paper</a>
+   appeared today in <a href="http://genomebiology.com/">Genome Biology</a>.
+</ul>
+
+<h2>Colorspace reference jars - July 30, 2010</h2>
+<ul>
+ <li>Added colorspace reference jars (see sidebar)
+ <li>Added Colorspace checkbox to the <a href="ui.html">web interface</a> to make it easy to
+     specify a colorspace version of a pre-built reference jar
+</ul>
+
 <h2>Version 1.0.4 - July 22, 2010</h2>
 <ul>
  <li>A

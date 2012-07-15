@@ -1,5 +1,7 @@
 <h2>Version 1.1.3 - Coming soon</h2>
 <ul>
+  <li>Added support for Hadoop version 0.20.205.</li>
+  <li>Dropped support for Hadoop versions prior to 0.20.</li>
   <li>Updated default Hadoop version for EMR jobs to 0.20.205</li>
   <li>Updated Bowtie version used to 0.12.8</li>
   <li>Updated R version used to 2.14.2</li>
@@ -10,7 +12,11 @@
   <li>Fixed documentation bugs regarding <tt>--sra-toolkit</tt> option, which is
      superseded by the
      <tt>--fastq-dump</tt>
-     option.<li>
+     option.</li>
+  <li>Removed some diagnostic counters because Hadoop began to enforce
+     an upper limit on the number of counters allowed per job.  For
+     instance, per-label summary statistics are no longer printed in
+     the Normalize step.</li>
 </ul>
 
 <h2>Version 1.1.2 - May 23, 2011</h2>
@@ -147,39 +153,4 @@
  <li>
      Fixed issue in preprocessor that mishandles copies when user's AWS
      secret key contains slash characters.
-</ul>
-
-<h2>Version 1.0.5 - August 16, 2010</h2>
-<ul>
- <li>
-     Fixed issue that prevented <tt>MYRNA_EMR_HOME</tt> environment variable
-     from working.
- <li>
-     Fixed issue whereby <tt>Align.pl</tt> script fails to report a count for
-     the number of reads with alignments sampled due to Bowtie's <tt>-M</tt>
-     option.
- <li>
-     Fixed issue that made it difficult to specify a space-separated
-     list of arguments to the <tt>--bowtie-args</tt> and other <tt>--*-args</tt>
-     parameters.
- <li>
-     Fixed issue whereby most documentation referred to arguments with
-     a single-dash prefix, whereas users with the <tt>POSIXLY_CORRECT</tt>
-     environment variable set must use a double-dash prefix.
-     Documentation and code have been updated to always use double-dash
-     prefixes.
-</ul>
-
-<h2>Myrna paper out - August 11, 2010</h2>
-<ul>
- <li>
-   The provisional version of the <a href="http://genomebiology.com/2010/11/8/R83/abstract">Myrna paper</a>
-   appeared today in <a href="http://genomebiology.com/">Genome Biology</a>.
-</ul>
-
-<h2>Colorspace reference jars - July 30, 2010</h2>
-<ul>
- <li>Added colorspace reference jars (see sidebar)
- <li>Added Colorspace checkbox to the <a href="ui.html">web interface</a> to make it easy to
-     specify a colorspace version of a pre-built reference jar
 </ul>
