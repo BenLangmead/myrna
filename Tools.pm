@@ -14,7 +14,7 @@ use AWS;
 use FindBin qw($Bin);
 
 # Prefix to use for environment variables.  E.g. in Myrna, we dont look for
-# MYRNA_SRATOOLKIT_HOME before we look for SRATOOLKIT_HOME.
+# MYRNA_FASTQ_DUMP_HOME before we look for FASTQ_DUMP_HOME.
 our $pre = "";
 
 our $s3cmd_arg = "";
@@ -24,6 +24,8 @@ our $hadoop_arg = "";
 our $hadoop = "";
 our $fastq_dump_arg = "";
 our $fastq_dump = "";
+our $soapsnp_arg = "";
+our $soapsnp = "";
 our $samtools_arg = "";
 our $samtools = "";
 our $bowtie_arg = "";
@@ -36,6 +38,7 @@ our $md5 = "";
 our $md5_arg = "";
 our $r = "";
 our $r_arg = "";
+our $unzip = "";
 
 my $hadoopEnsured = 0;
 sub ensureHadoop() {
@@ -68,6 +71,22 @@ sub ensureBowtie() {
 }
 sub bowtie() { ensureBowtie(); return $bowtie; }
 
+# SOAPsnp
+my $soapsnpEnsured = 0;
+sub ensureSoapsnp() {
+	return if $soapsnpEnsured;
+	$soapsnp = $soapsnp_arg if $soapsnp_arg ne "";
+	if(! -x $soapsnp) {
+		if($soapsnp_arg ne "") {
+			die "--soapsnp argument \"$soapsnp\" doesn't exist or isn't executable\n";
+		} else {
+			die "soapsnp could not be found in SOAPSNP_HOME or PATH; please specify --soapsnp\n";
+		}
+	}
+	$soapsnpEnsured = 1;
+}
+sub soapsnp() { ensureSoapsnp(); return $soapsnp; }
+
 my $samtoolsEnsured = 0;
 sub ensureSamtools() {
 	return if $samtoolsEnsured;
@@ -95,7 +114,7 @@ sub ensureFastqDump() {
 		if($fastq_dump_arg ne "") {
 			die "--fastq-dump argument \"$fastq_dump\" doesn't exist or isn't executable\n";
 		} else {
-			die "fastq-dump could not be found in SRATOOLKIT_HOME or PATH; please specify --fastq-dump\n";
+			die "fastq-dump could not be found in FASTQ_DUMP_HOME or PATH; please specify --fastq-dump\n";
 		}
 	}
 	$fqdumpEnsured = 1;
@@ -223,6 +242,8 @@ sub ensureRscript() {
 }
 sub Rscript() { ensureRscript(); return $r; }
 
+sub unzip(){ return $unzip; }
+
 sub initTools() {
 
 	# Read the tool name from the 'TOOLNAME' file.  We'll use an all-caps
@@ -240,7 +261,7 @@ sub initTools() {
 	}
 	
 	#
-	# JAVA_HOME, so we can use 'jar' binary
+	# jar
 	#
 	
 	if($pre ne "" && defined($ENV{"${pre}JAVA_HOME"})) {
@@ -258,8 +279,16 @@ sub initTools() {
 		unless(-x $jar) { $jar = "" };
 	}
 	
+	##unzip
+	if($unzip eq ""){
+	    $unzip = `which unzip 2>/dev/null`;
+	    chomp($unzip);
+	    unless(-x $unzip){ $unzip = "" };
+	}
+
+	
 	#
-	# S3CMD_HOME, so we can use 's3cmd' for fast, lightweight S3 interactions
+	# s3cmd
 	#
 
 	if($pre ne "" && defined($ENV{"${pre}S3CMD_HOME"})) {
@@ -278,7 +307,7 @@ sub initTools() {
 	}
 
 	#
-	# HADOOP_HOME, so we can use 'hadoop'
+	# hadoop
 	#
 
 	if($pre ne "" && defined($ENV{"${pre}HADOOP_HOME"})) {
@@ -297,17 +326,15 @@ sub initTools() {
 	}
 
 	#
-	# SRATOOLKIT_HOME, so we can use 'fastq-dump' to convert files downloaded
-	# from SRA into FASTQ files.
+	# fastq-dump
 	#
-
-	if($pre ne "" && defined($ENV{"${pre}SRATOOLKIT_HOME"})) {
-		my $h = $ENV{"${pre}SRATOOLKIT_HOME"};
+	if($pre ne "" && defined($ENV{"${pre}FASTQ_DUMP_HOME"})) {
+		my $h = $ENV{"${pre}FASTQ_DUMP_HOME"};
 		$fastq_dump = "$h/fastq-dump";
 		unless(-x $fastq_dump) { $fastq_dump = "" };
 	}
-	elsif(defined($ENV{SRATOOLKIT_HOME})) {
-		$fastq_dump = "$ENV{SRATOOLKIT_HOME}/fastq-dump";
+	elsif(defined($ENV{FASTQ_DUMP_HOME})) {
+		$fastq_dump = "$ENV{FASTQ_DUMP_HOME}/fastq-dump";
 		unless(-x $fastq_dump) { $fastq_dump = "" };
 	}
 	if($fastq_dump eq "") {
@@ -322,7 +349,7 @@ sub initTools() {
 	}
 
 	#
-	# BOWTIE_HOME, so we can use 'bowtie'
+	# bowtie
 	#
 
 	if($pre ne "" && defined($ENV{"${pre}BOWTIE_HOME"})) {
@@ -347,7 +374,32 @@ sub initTools() {
 	}
 
 	#
-	# SAMTOOLS_HOME, so we can use 'samtools'
+	# soapsnp
+	#
+
+	if($pre ne "" && defined($ENV{"${pre}SOAPSNP_HOME"})) {
+		my $h = $ENV{"${pre}SOAPSNP_HOME"};
+		$soapsnp = "$h/soapsnp";
+		unless(-x $soapsnp) { $soapsnp = "" };
+	}
+	elsif(defined($ENV{SOAPSNP_HOME})) {
+		$soapsnp = "$ENV{SOAPSNP_HOME}/soapsnp";
+		unless(-x $soapsnp) { $soapsnp = "" };
+	}
+	if($soapsnp eq "") {
+		$soapsnp = `which soapsnp 2>/dev/null`;
+		chomp($soapsnp);
+		unless(-x $soapsnp) { $soapsnp = "" };
+	}
+	if($soapsnp eq "" && -f "./soapsnp") {
+		$soapsnp = "./soapsnp";
+		chomp($soapsnp);
+		chmod 0777, $soapsnp;
+		unless(-x $soapsnp) { $soapsnp = "" };
+	}
+
+	#
+	# samtools
 	#
 
 	if($pre ne "" && defined($ENV{"${pre}SAMTOOLS_HOME"})) {
@@ -371,7 +423,7 @@ sub initTools() {
 	}
 
 	#
-	# R_HOME, so we can use 'Rscript'
+	# Rscript
 	#
 
 	if($pre ne "" && defined($ENV{"${pre}R_HOME"})) {

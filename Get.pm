@@ -45,8 +45,6 @@ sub parse_url($) {
 	return ($proto, $type);
 }
 
-my %env = %ENV;
-
 ##
 # Prepare an s3 URL for use with s3cmd.
 #

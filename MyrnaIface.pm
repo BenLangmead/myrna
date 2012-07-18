@@ -1031,7 +1031,7 @@ if($localJob || $hadoopJob) {
 		$msg->("$APP expects 'Rscript' to be at path $Rhome on the workers\n") unless $localJob;
 		$R_arg = "--R $Rhome";
 	}
-
+	
 	if($useFastqDump) {
 		$fastq_dump ne "" || die;
 		$msg->("$APP expects 'fastq-dump' to be at path $fastq_dump on the workers\n") unless $localJob;
@@ -1111,6 +1111,7 @@ echo ==========================
 date
 $hadoop jar $hadoopStreamingJar \\
 	-D mapred.reduce.tasks=0 \\
+	-D mapred.job.name='Preprocess $inputPreproc' \\
 	-input $inputPreproc \\
 	-output $outputPreproc \\
 	-mapper '$Bin/Copy.pl $samtools_arg $fastq_dump_arg $preprocArgs' \\
@@ -1204,6 +1205,7 @@ echo ==========================
 date
 $hadoop jar $hadoopStreamingJar \\
 	-D mapred.reduce.tasks=0 \\
+	-D mapred.job.name='Align $inputAlign' \\
 	-input $inputAlign \\
 	-output $outputAlign \\
 	-mapper '$Bin/Align.pl $bowtie_arg $alignArgs' \\
@@ -1304,6 +1306,7 @@ date
 $hadoop jar $hadoopStreamingJar \\
 	-D stream.num.map.output.key.fields=3 \\
 	-D $olapPartitionConf \\
+	-D mapred.job.name='Overlap $inputOlap' \\
 	-D mapred.reduce.tasks=$assignTasks \\
 	-input $inputOlap \\
 	-output $outputOlap \\
@@ -1402,6 +1405,7 @@ date
 $hadoop jar $hadoopStreamingJar \\
 	-D stream.num.map.output.key.fields=2 \\
 	-D $normalizePartitionConf \\
+	-D mapred.job.name='Normalize $inputNormal' \\
 	-D mapred.reduce.tasks=$normalTasks \\
 	-input $inputNormal \\
 	-output $outputNormal \\
@@ -1497,6 +1501,7 @@ date
 $hadoop jar $hadoopStreamingJar \\
 	-D stream.num.map.output.key.fields=2 \\
 	-D $statsPartitionConf \\
+	-D mapred.job.name='Statistics $inputStats' \\
 	-D mapred.reduce.tasks=$statsTasks \\
 	-input $inputStats \\
 	-output $outputStats \\
@@ -1588,6 +1593,7 @@ date
 $hadoop jar $hadoopStreamingJar \\
 	-D stream.num.map.output.key.fields=2 \\
 	-D $summarizePartitionConf \\
+	-D mapred.job.name='Summarize $inputSumm' \\
 	-D mapred.reduce.tasks=1 \\
 	-input $inputSumm \\
 	-output $outputSumm \\
@@ -1716,6 +1722,7 @@ date
 $hadoop jar $hadoopStreamingJar \\
 	-D stream.num.map.output.key.fields=3 \\
 	-D $postprocPartitionConf \\
+	-D mapred.job.name='Postprocess $inputSumm' \\
 	-D mapred.reduce.tasks=1 \\
 	-input $inputPostproc \\
 	-output $output/ignoreme2 \\

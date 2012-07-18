@@ -1,4 +1,4 @@
-<h2>Version 1.1.3 - Coming soon</h2>
+<h2>Version 1.2.0 - Coming soon</h2>
 <ul>
   <li>Added support for Hadoop version 0.20.205.</li>
   <li>Dropped support for Hadoop versions prior to 0.20.</li>
@@ -9,9 +9,9 @@
      process, fixed an issue whereby <tt>$MYRNA_HOME/reftools</tt> scripts would die due to
      unexpected new format of Ensembl database schema.</li>
   <li>Fixed issues with streaming jar version parsing</li>
-  <li>Fixed documentation bugs regarding <tt>--sra-toolkit</tt> option, which is
+  <li>Fixed documentation bugs regarding the old <tt>--sra-toolkit</tt> option, which is
      superseded by the
-     <tt>--fastq-dump</tt>
+     <a href="manual.shtml#myrna-local-fastq-dump"><tt>--fastq-dump</tt></a>
      option.</li>
   <li>Removed some diagnostic counters because Hadoop began to enforce
      an upper limit on the number of counters allowed per job.  For

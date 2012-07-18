@@ -265,6 +265,7 @@ if($sam_passthru) {
 	my $downloaded = 0;
 	while(<STDIN>) {
 		next if /^\s*FAKE\s*$/;
+		next if /^\s*$/;
 		$downloaded++;
 		if($discardReads != 0 && rand() < $discardReads) {
 			$skipped++; next;

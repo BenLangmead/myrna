@@ -1,27 +1,27 @@
 Commands to run to test Myrna
 =============================
 
-Remove existing output directories
-
-s3cmd del --recursive s3://ec2-jeff-tmp/example/yeast s3://ec2-jeff-tmp/example/human
-
 Yeast:
 
  EMR:
 
 export BUCKET=ec2-jeff-tmp
-s3cmd del --recursive s3://$BUCKET/example/yeast
-s3cmd put $MYRNA_HOME/example/yeast/small.manifest s3://$BUCKET/example/yeast/
-$MYRNA_HOME/myrna_emr \
-    --name "Myrna-Yeast" \
-    --preprocess \
-    --input=s3n://$BUCKET/example/yeast/small.manifest \
-    --output=s3n://$BUCKET/example/yeast/output_small \
-    --reference=s3n://myrna-refs/yeast_ensembl_67.jar \
-    --quality solexa64 \
-    --pre-output=s3n://$BUCKET/example/yeast/preproc \
-    --hadoop-version=0.20 \
-    --instances 3
+for VER in 0.18 0.20 0.20.205 ; do
+	echo $VER
+	export HADOOP_VERSION=$VER
+	s3cmd del --recursive s3://$BUCKET/example/yeast-$HADOOP_VERSION
+	s3cmd put $MYRNA_HOME/example/yeast/small.manifest s3://$BUCKET/example/yeast-$HADOOP_VERSION/
+	$MYRNA_HOME/myrna_emr \
+	    --name "Myrna-Yeast-$HADOOP_VERSION" \
+	    --preprocess \
+	    --input=s3n://$BUCKET/example/yeast-$HADOOP_VERSION/small.manifest \
+	    --output=s3n://$BUCKET/example/yeast-$HADOOP_VERSION/output_small \
+	    --reference=s3n://myrna-refs/yeast_ensembl_67.jar \
+	    --quality solexa64 \
+	    --pre-output=s3n://$BUCKET/example/yeast-$HADOOP_VERSION/preproc \
+	    --hadoop-version=$HADOOP_VERSION \
+	    --instances 4
+done
 
  Hadoop:
 
@@ -54,7 +54,23 @@ $MYRNA_HOME/myrna_local \
 Human:
 
   EMR:
-  
+
+export BUCKET=ec2-jeff-tmp
+for VER in 0.20 0.20.205 ; do
+	export HADOOP_VERSION=$VER
+	s3cmd del --recursive s3://$BUCKET/example/human-$HADOOP_VERSION
+	s3cmd put $MYRNA_HOME/example/human/full.manifest s3://$BUCKET/example/human-$HADOOP_VERSION/
+	$MYRNA_HOME/myrna_emr \
+	    --name "Myrna-human-$HADOOP_VERSION" \
+	    --preprocess \
+	    --input=s3n://$BUCKET/example/human-$HADOOP_VERSION/full.manifest \
+	    --output=s3n://$BUCKET/example/human-$HADOOP_VERSION/output_small \
+	    --reference=s3n://myrna-refs/human_ensembl_67.jar \
+	    --pre-output=s3n://$BUCKET/example/human-$HADOOP_VERSION/preproc \
+	    --hadoop-version=$HADOOP_VERSION \
+	    --instances 9
+done
+
   Hadoop:
 
 hadoop dfs -mkdir /myrna-refs

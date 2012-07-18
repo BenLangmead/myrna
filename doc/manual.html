@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <title>Myrna 1.1.3 Manual - Myrna: Cloud-scale differential gene expression for RNA-seq</title>
+  <title>Myrna 1.2.0 Manual - Myrna: Cloud-scale differential gene expression for RNA-seq</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="author" content="Ben Langmead, Kasper Hansen and Jeff Leek" />
@@ -371,13 +371,13 @@
   >Hadoop</a
   > cluster, as are the supporting tools: <a href="http://bowtie-bio.sf.net"
   >Bowtie</a
-  > and <a href="http://www.r-project.org"
+  >, <a href="http://www.r-project.org"
   >R</a
   >/<a href="http://www.bioconductor.org"
   >Bioconductor</a
-  >. Supporting tools must be installed on all cluster nodes, but the Myrna scripts need only be installed on the master. Myrna was tested with <a href="http://hadoop.apache.org/"
+  > and possibly the [SRA Toolkit]. Supporting tools must be installed on all cluster nodes, but the Myrna scripts need only be installed on the master. Myrna was tested with <a href="http://hadoop.apache.org/"
   >Hadoop</a
-  > v0.18.3, but should also be compatible with more recent versions. Myrna scripts require <a href="http://www.perl.org/get.html"
+  > versions 0.20 and 0.20.205, and might also be compatible with other versions newer than 0.20. Myrna scripts require <a href="http://www.perl.org/get.html"
   >Perl</a
   > 5.6 or later.</p
 ><ol start="4" style="list-style-type: decimal;"
@@ -393,7 +393,7 @@
   >R</a
   >/<a href="http://www.bioconductor.org"
   >Bioconductor</a
-  >) must be installed on the computer running Myrna. The Myrna scripts require <a href="http://www.perl.org/get.html"
+  >, and possibly the [SRA Toolkit]) must be installed on the computer running Myrna. The Myrna scripts require <a href="http://www.perl.org/get.html"
   >Perl</a
   > 5.6 or later to run. The user specifies the maximum number of CPUs that Myrna should use at a time. This mode does <em
   >not</em
@@ -537,7 +537,7 @@
 ><p
 >We strongly recommend using a version of the <code
   >elastic-mapreduce</code
-  > Ruby script released on or after June 2, 2010. This is when the script switched to using Hadoop 0.20 by default, which is the preferred way of running Myrna.</p
+  > Ruby script released on or after December 8, 2011. This is when the script switched to using Hadoop v0.20.205 by default, which is the preferred way of running Myrna.</p
 ><p
 >We also recommend that you add the directory containing the <code
   >elastic-mapreduce</code
@@ -595,7 +595,7 @@
   >Firefox</a
   > extension. Other tools include <a href="http://cyberduck.ch/"
   >Cyberduck</a
-  > (for Mac OS 10.5 or later) and <a href="http://www.bucketexplorer.com/"
+  > (for Mac OS 10.6 or later) and <a href="http://www.bucketexplorer.com/"
   >Bucket Explorer</a
   > (for Mac, Windows or Linux, but commercial software).</p
 ><h1 id="installing-myrna"
@@ -643,7 +643,7 @@
 	> cluster</em
       >:</p
     ><p
-    >If using Linux or Mac OS 10.5 or later, you likely don't have to install <a href="http://bowtie-bio.sf.net"
+    >If using Linux or Mac OS 10.6 or later, you likely don't have to install <a href="http://bowtie-bio.sf.net"
       >Bowtie</a
       > as Myrna comes with pre-built versions for those platforms. Test this by running:</p
     ><pre
@@ -660,7 +660,7 @@
       >Bowtie</a
       > installation is complete. Otherwise, obtain or build a <code
       >bowtie</code
-      > binary v0.12.5 or higher from the <a href="http://bowtie-bio.sourceforge.net/index.shtml"
+      > binary v0.12.8 or higher from the <a href="http://bowtie-bio.sourceforge.net/index.shtml"
       >Bowtie web site</a
       > and install it by setting the <code
       >MYRNA_BOWTIE_HOME</code
@@ -691,14 +691,18 @@
 	> cluster</em
       >, you may need to manually copy the <code
       >bowtie</code
-      > executable and R install directory to the same path on each <a href="http://hadoop.apache.org/"
+      > executable, the R install directory, and the <code
+      >fastq-dump</code
+      > tool to the same path on each <a href="http://hadoop.apache.org/"
       >Hadoop</a
       > cluster node. You can avoid this step by installing <code
       >bowtie</code
-      > and <a href="http://www.r-project.org"
+      >, <a href="http://www.r-project.org"
       >R</a
       >/<a href="http://www.bioconductor.org"
       >Bioconductor</a
+      >, and <code
+      >fastq-dump</code
       > on a filesystem shared by all <a href="http://hadoop.apache.org/"
       >Hadoop</a
       > nodes (e.g. an <a href="http://en.wikipedia.org/wiki/Network_File_System_(protocol)"
@@ -719,13 +723,13 @@
   >Hadoop</a
   > cluster or local computer, <a href="http://www.r-project.org"
   >R</a
-  > 2.10 and <a href="http://www.bioconductor.org"
+  > 2.14 and <a href="http://www.bioconductor.org"
   >Bioconductor</a
   > must be installed along with all <a href="#manually-installing-rbioconductor"
   >packages required by Myrna</a
   >. If you already have <a href="http://www.r-project.org"
   >R</a
-  > v2.10, <a href="http://www.bioconductor.org"
+  > v2.14, <a href="http://www.bioconductor.org"
   >Bioconductor</a
   > and <a href="#manually-installing-rbioconductor"
   >all appropriate packages</a
@@ -739,7 +743,7 @@
 ><p
 >If you do not already have an <a href="http://www.r-project.org"
   >R</a
-  > v2.10.0/<a href="http://www.bioconductor.org"
+  > v2.14/<a href="http://www.bioconductor.org"
   >Bioconductor</a
   > installation, try the instructions in either or both of the following sections, <a href="#building-rbioconductor-automatically"
   >Building R/Bioconductor automatically</a
@@ -753,7 +757,7 @@
 ><p
 >The Myrna package includes a bash script that builds <a href="http://www.r-project.org"
   >R</a
-  > 2.10.1 from sources and installs <a href="http://www.bioconductor.org"
+  > 2.14.2 from sources and installs <a href="http://www.bioconductor.org"
   >Bioconductor</a
   > and all required packages automatically:</p
 ><pre
@@ -767,8 +771,8 @@
 ><li
   >Download <a href="http://www.r-project.org"
     >R</a
-    > v2.10.1 and expand it to subdirectory <code
-    >R-2.10.1</code
+    > v2.14.2 and expand it to subdirectory <code
+    >R-2.14.2</code
     ></li
   ><li
   >Run R's <code
@@ -842,7 +846,7 @@
 ><p
 >To install <a href="http://www.r-project.org"
   >R</a
-  > version 2.10, follow the instructions in the <a href="http://cran.r-project.org/doc/manuals/R-admin.html"
+  > version 2.14, follow the instructions in the <a href="http://cran.r-project.org/doc/manuals/R-admin.html"
   >R Installation and Administration</a
   > guide. If you plan to run in <a href="http://hadoop.apache.org/"
   >Hadoop</a
@@ -968,28 +972,28 @@
   >Hadoop</a
   > mode or in single-computer mode, you must first install the <a href="http://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?cmd=show&amp;f=software&amp;m=software&amp;s=software"
   >SRA toolkit</a
-  >'s <code
+  >. Once the toolkit is installed, be aware of where it placed the <code
   >fastq-dump</code
-  > tool appropriately. See the <a href="http://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?cmd=show&amp;f=software&amp;m=software&amp;s=software"
+  > binary program. See the <a href="http://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?cmd=show&amp;f=software&amp;m=software&amp;s=software"
   >SRA toolkit</a
-  > page for details about how to download and install.</p
+  > page for details about how to download and install. We recommend installing the pre-compiled binaries rather than trying to build the SRA toolkit from source.</p
 ><p
 >When searching for the <code
   >fastq-dump</code
   > tool at runtime, Myrna searches the following places in order:</p
 ><ol style="list-style-type: decimal;"
 ><li
-  >The directory specified in the <a href="#myrna-local-sra-toolkit"
+  >The path specified in the <a href="#myrna-local-fastq-dump"
     ><code
-      >--sra-toolkit</code
+      >--fastq-dump</code
       ></a
     > option</li
   ><li
   >The directory specified in the <code
-    >$MYRNA_SRATOOLKIT_HOME</code
-    > environment variable.</li
+    >MYRNA_FASTQ_DUMP_HOME</code
+    > environment variable</li
   ><li
-  >In the system <code
+  >The system <code
     >PATH</code
     ></li
   ></ol
@@ -1170,7 +1174,7 @@
     ></li
   ><li
   ><p
-    >Fill in the form according to your job's parameters. We recommend filling in and validating the &quot;AWS ID&quot; and &quot;AWS Secret Key&quot; fields first. Also, when entering S3 URLs (e.g. &quot;Input URL&quot; and &quot;Output URL&quot;), we recommend that users validate the entered URLs by clicking the link below it. This avoids failed jobs due to simple URL issues (e.g. non-existence of the &quot;Input URL&quot;). For examples of how to fill in this form, see the <a href="#myrna-example-yeast-emr"
+    >Fill in the form according to your job's parameters. We recommend filling in and validating the &quot;AWS ID&quot; and &quot;AWS Secret Key&quot; fields first. Also, when entering S3 URLs (e.g. &quot;Input URL&quot; and &quot;Output URL&quot;), we recommend validating the entered URLs by clicking the link below it. This avoids failed jobs due to simple URL issues (e.g. non-existence of the &quot;Input URL&quot;). For examples of how to fill in this form, see the <a href="#myrna-example-yeast-emr"
       >Yeast EMR</a
       > and <a href="#myrna-example-human-emr"
       >Human EMR</a
@@ -1645,7 +1649,7 @@
   ><p
     >Working installation of <a href="http://hadoop.apache.org/"
       >Hadoop</a
-      > v0.18.3. Versions more recent than v0.18.3 may also work, but haven't been tested.</p
+      > v0.20.2 or v0.20.205. Other versions newer than 0.20 might also work, but haven't been tested.</p
     ></li
   ><li
   ><p
@@ -1653,7 +1657,7 @@
       ><code
 	>bowtie</code
 	></a
-      > v0.12.5 executable must exist at the same path on all cluster nodes (including the master). That path must be specified via the <a href="#myrna-hadoop-bowtie"
+      > v0.12.8 executable must exist at the same path on all cluster nodes (including the master). That path must be specified via the <a href="#myrna-hadoop-bowtie"
       ><code
 	>--bowtie</code
 	></a
@@ -1665,7 +1669,7 @@
       >PATH</code
       > (Myrna looks in that order). <code
       >$MYRNA_HOME/bin</code
-      > comes with pre-built Bowtie binaries for Linux and Mac OS X 10.5 or later; an executable from that directory is used automatically unless the platform is not Mac or Linux or unless overridden by <a href="#myrna-hadoop-bowtie"
+      > comes with pre-built Bowtie binaries for Linux and Mac OS X 10.6 or later; an executable from that directory is used automatically unless the platform is not Mac or Linux or unless overridden by <a href="#myrna-hadoop-bowtie"
       ><code
 	>--bowtie</code
 	></a
@@ -1679,7 +1683,7 @@
       >R</a
       >/<a href="http://www.bioconductor.org"
       >Bioconductor</a
-      > v2.10.0 or later must be installed at the same path on all cluster nodes (including the master). The R home directory (containing <code
+      > v2.14.2 or later must be installed at the same path on all cluster nodes (including the master). The R home directory (containing <code
       >bin/R</code
       > and <code
       >bin/Rscript</code
@@ -1712,6 +1716,30 @@
       > and <a href="#manually-installing-rbioconductor"
       >packages required by Myrna</a
       >.</p
+    ></li
+  ><li
+  ><p
+    >If any of your inputs are in <a href="http://www.ncbi.nlm.nih.gov/books/NBK47533/"
+      >Sequence Read Archive</a
+      > format (i.e. end in <code
+      >.sra</code
+      >), then the <code
+      >fastq-dump</code
+      > tool from the [SRA Toolkit] must be installed at the same path on all cluster nodes. The path to the <code
+      >fastq-dump</code
+      > tool must be specified via the (<a href="#myrna-fastq-dump"
+      ><code
+	>--fastq-dump</code
+	></a
+      >) option OR <code
+      >fastq-dump</code
+      > must be located in the directory specified in the <code
+      >MYRNA_FASTQ_DUMP_HOME</code
+      > environment variable, OR <code
+      >fastq-dump</code
+      > must be found in the <code
+      >PATH</code
+      > (Myrna searches in that order).</p
     ></li
   ><li
   ><p
@@ -1862,27 +1890,23 @@
   > directory, and the <code
   >PATH</code
   >.</p
-></td></tr><tr><td id="myrna-hadoop-sra-toolkit">
+></td></tr><tr><td id="myrna-hadoop-fastq-dump">
 
 
 <pre
 ><code
-  >--sra-toolkit &lt;path&gt;
+  >--fastq-dump &lt;path&gt;
 </code
   ></pre
 ></td><td>
 <p
->Path to the directory containing the programs in the <a href="http://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?cmd=show&amp;f=software&amp;m=software&amp;s=software"
+>Path to the <code
+  >fastq-dump</code
+  > binary from the <a href="http://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?cmd=show&amp;f=software&amp;m=software&amp;s=software"
   >SRA toolkit</a
-  >, including <code
+  >. If this option is not specified, Myrna also looks for <code
   >fastq-dump</code
-  >. This overrides all other ways that Myrna searches for <code
-  >fastq-dump</code
-  >, including the <code
-  >MYRNA_SRATOOLKIT_HOME</code
-  > environment variable, the subdirectories of the <code
-  >$MYRNA_HOME/bin</code
-  > directory, and the <code
+  > in the <code
   >PATH</code
   >.</p
 ></td></tr><tr><td id="myrna-hadoop-rhome">
@@ -1909,8 +1933,7 @@
   >R</a
   > installation must (a) be runnable, (b) have all <a href="#manually-installing-rbioconductor"
   >required packages</a
-  > installed, and (c) be located at the same path<br
-   />on all <a href="http://hadoop.apache.org/"
+  > installed, and (c) be located at the same path on all <a href="http://hadoop.apache.org/"
   >Hadoop</a
   > nodes, or the job will fail. This overrides all other ways that Myrna searches for <a href="http://www.r-project.org"
   >R</a
@@ -1938,7 +1961,7 @@
       ><code
 	>bowtie</code
 	></a
-      > v0.12.5 executable must exist on the local computer. The path to <code
+      > v0.12.8 executable must exist on the local computer. The path to <code
       >bowtie</code
       > must be specified via the <a href="#myrna-local-bowtie"
       ><code
@@ -1952,7 +1975,7 @@
       >PATH</code
       > (search proceeds in that order). <code
       >$MYTNA_HOME/bin</code
-      > comes with pre-built Bowtie binaries for Linux and Mac OS X 10.5 or later, so most Mac and Linux users do not need to install either tool.</p
+      > comes with pre-built Bowtie binaries for Linux and Mac OS X 10.6 or later, so most Mac and Linux users do not need to install either tool.</p
     ></li
   ><li
   ><p
@@ -1960,7 +1983,7 @@
       >R</a
       >/<a href="http://www.bioconductor.org"
       >Bioconductor</a
-      > v2.10.0 or later must exist on the local computer, with all required packages installed. The R home directory (containing <code
+      > v2.14.2 or later must exist on the local computer, with all required packages installed. The R home directory (containing <code
       >bin/R</code
       > and <code
       >bin/Rscript</code
@@ -2206,27 +2229,23 @@
   > directory, and the <code
   >PATH</code
   >.</p
-></td></tr><tr><td id="myrna-local-sra-toolkit">
+></td></tr><tr><td id="myrna-local-fastq-dump">
 
 
 <pre
 ><code
-  >--sra-toolkit &lt;path&gt;
+  >--fastq-dump &lt;path&gt;
 </code
   ></pre
 ></td><td>
 <p
->Path to the directory containing the programs in the <a href="http://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?cmd=show&amp;f=software&amp;m=software&amp;s=software"
+>Path to the <code
+  >fastq-dump</code
+  > binary from the <a href="http://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?cmd=show&amp;f=software&amp;m=software&amp;s=software"
   >SRA toolkit</a
-  >, including <code
+  >. If this option is not specified, Myrna also looks for <code
   >fastq-dump</code
-  >. This overrides all other ways that Myrna searches for <code
-  >fastq-dump</code
-  >, including the <code
-  >MYRNA_SRATOOLKIT_HOME</code
-  > environment variable, the subdirectories of the <code
-  >$MYRNA_HOME/bin</code
-  > directory, and the <code
+  > in the <code
   >PATH</code
   >.</p
 ></td></tr><tr><td id="myrna-local-rhome">
@@ -2730,7 +2749,7 @@
 <p
 >Add <code
   >&lt;int&gt;</code
-  > to all counts and normalization factors prior to caluclating statistics.</p
+  > to all counts and normalization factors prior to calculating statistics.</p
 ></td></tr><tr><td id="myrna-test">
 
 
@@ -2743,10 +2762,14 @@
 <p
 >Instead of running Myrna, just search for the supporting tools (<a href="http://bowtie-bio.sf.net"
   >Bowtie</a
-  > and <a href="http://www.r-project.org"
+  >, <a href="http://www.r-project.org"
   >R</a
   >/<a href="http://www.bioconductor.org"
   >Bioconductor</a
+  >, and <a href="#myrna-local-fastq-dump"
+  ><code
+    >--fastq-dump</code
+    ></a
   >), report whether and how they were found, and whether all necessary <a href="http://www.r-project.org"
   >R</a
   >/<a href="http://www.bioconductor.org"
@@ -3140,7 +3163,7 @@ hadoop dfs -put $MYRNA_HOME/example/yeast/small.manifest /myrna/example/yeast/sm
 ><p
 >This will warn you if any supporting tools (<code
   >bowtie</code
-  > and <code
+  >, <code
   >R</code
   > in this case) cannot be located or run.</p
 ><p
@@ -3821,9 +3844,9 @@ $MYRNA_HOME/myrna_local \
   >Hadoop</a
   > modes, then the <code
   >fastq-dump</code
-  > tool must be installed and Myrna must be able to locate it. See the <a href="#myrna-local-sra-toolkit"
+  > tool must be installed and Myrna must be able to locate it. See the <a href="#myrna-local-fastq-dump"
   ><code
-    >--sra-toolkit</code
+    >--fastq-dump</code
     ></a
   > option and the <a href="#the-sra-toolkit"
   >SRA Toolkit section of the manual</a
