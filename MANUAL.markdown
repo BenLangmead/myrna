@@ -4,15 +4,14 @@
 
 # What is Myrna?
 
-[Myrna] is a scalable, portable, automatic tool for calculating
-differential gene expression in large RNA-seq datasets.  Myrna employs
-[Bowtie] for alignment and [R]/[Bioconductor] for assigning alignments
-to genes, normalizing gene counts, calculating differential-expression
-statistics, and plotting the results.  Myrna is designed to be easy to
-run (a) in "the cloud" (in this case, Amazon's [Elastic MapReduce]
-service), (b) on any [Hadoop] cluster, or (c) on any single computer,
-without needing [Hadoop].  Myrna exploits the availability of multiple
-computers and processors where possible.
+[Myrna] is a scalable, portable, automatic tool for calculating differential
+gene expression in large RNA-seq datasets.  Myrna employs [Bowtie] for alignment
+and [R]/[Bioconductor] for assigning alignments to genes, normalizing gene
+counts, calculating differential-expression statistics, and plotting the
+results.  Myrna is designed to be easy to run (a) in "the cloud" (in this case,
+Amazon's [Elastic MapReduce] service), (b) on any [Hadoop] cluster, or (c) on
+any single computer, without needing [Hadoop].  Myrna exploits the availability
+of multiple computers and processors where possible.
 
 [Myrna]:        http://bowtie-bio.sf.net/myrna
 [Bowtie]:       http://bowtie-bio.sf.net
@@ -21,13 +20,12 @@ computers and processors where possible.
 
 # A word of caution
 
-Renting resources from [Amazon Web Services] (AKA [AWS]), costs
-money, regardless of whether your experiment ultimately succeeds or
-fails.  In some cases, Myrna or its documentation may be partially to
-blame for a failed experiment.  While we are happy to accept bug
-reports, we do not accept responsibility for financial damage caused by
-these errors.  Myrna is provided "as is" with no warranty.  See
-`LICENSE` file.
+Renting resources from [Amazon Web Services] (AKA [AWS]), costs money,
+regardless of whether your experiment ultimately succeeds or fails.  In some
+cases, Myrna or its documentation may be partially to blame for a failed
+experiment.  While we are happy to accept bug reports, we do not accept
+responsibility for financial damage caused by these errors.  Myrna is provided
+"as is" with no warranty.  See `LICENSE` file.
 
 [Amazon Web Services]: http://aws.amazon.com
 [Amazon EC2]: http://aws.amazon.com/ec2
@@ -42,46 +40,43 @@ Myrna can be run in four different ways.
 
 1. **Via the [Myrna web interface]**
 
-   In this case, the [Myrna] code and the user interface are installed
-   on EC2 web servers.  Also, the computers running the Myrna
-   computation are rented from Amazon, and the user must have [EC2],
-   [EMR], [S3] and [SimpleDB] accounts and must pay the [going rate] for
-   the resources used.  The user does not need any special software
-   besides a web browser and, in most cases, an [S3 tool].
+   In this case, the [Myrna] code and the user interface are installed on EC2
+   web servers.  Also, the computers running the Myrna computation are rented
+   from Amazon, and the user must have [EC2], [EMR], [S3] and [SimpleDB]
+   accounts and must pay the [going rate] for the resources used.  The user does
+   not need any special software besides a web browser and, in most cases, an
+   [S3 tool].
 
 [S3 tool]: #s3-tools
 [Myrna web interface]: http://bowtie-bio.sf.net/myrna/ui.html
 
 2. **On Amazon [Elastic MapReduce] via the command-line**
    
-   In this case, the Myrna code is hosted by Amazon and the
-   computers running the Myrna computation are rented from Amazon.
-   However, the user must install and run (a) the Myrna scripts,
-   which require [Perl] 5.6 or later, (b) Amazon's
-   [`elastic-mapreduce`] script, which requires Ruby 1.8 or later, and
-   (c) an [S3 tool].  The user must have [EC2], [EMR], [S3] and
-   [SimpleDB] accounts and must pay the [going rate] for the resources
-   used.
+   In this case, the Myrna code is hosted by Amazon and the computers running
+   the Myrna computation are rented from Amazon. However, the user must install
+   and run (a) the Myrna scripts, which require [Perl] 5.6 or later, (b)
+   Amazon's [`elastic-mapreduce`] script, which requires Ruby 1.8 or later, and
+   (c) an [S3 tool].  The user must have [EC2], [EMR], [S3] and [SimpleDB]
+   accounts and must pay the [going rate] for the resources used.
 
 [S3 tool]: #s3-tools
 
 3. **On a [Hadoop] cluster via the command-line**
    
-   In this case, the Myrna code is hosted on your [Hadoop] cluster, as
-   are the supporting tools: [Bowtie] and [R]/[Bioconductor].
-   Supporting tools must be installed on all cluster nodes, but the
-   Myrna scripts need only be installed on the master.  Myrna was
-   tested with [Hadoop] v0.18.3, but should also be compatible with
-   more recent versions.  Myrna scripts require [Perl] 5.6 or later.
+   In this case, the Myrna code is hosted on your [Hadoop] cluster, as are the
+   supporting tools: [Bowtie], [R]/[Bioconductor] and possibly the [SRA
+   Toolkit]. Supporting tools must be installed on all cluster nodes, but the
+   Myrna scripts need only be installed on the master.  Myrna was tested with
+   [Hadoop] versions 0.20 and 0.20.205, and might also be compatible with other
+   versions newer than 0.20. Myrna scripts require [Perl] 5.6 or later.
    
 4. **On any computer via the command-line**
    
-   In this case, the Myrna code and all supporting tools
-   ([Bowtie] and [R]/[Bioconductor]) must be installed on the computer
-   running Myrna.  The Myrna scripts require [Perl] 5.6 or
-   later to run.  The user specifies the maximum number of CPUs that
-   Myrna should use at a time.  This mode does *not* require [Java]
-   or [Hadoop].
+   In this case, the Myrna code and all supporting tools ([Bowtie] and
+   [R]/[Bioconductor], and possibly the [SRA Toolkit]) must be installed on the
+   computer running Myrna.  The Myrna scripts require [Perl] 5.6 or later to
+   run.  The user specifies the maximum number of CPUs that Myrna should use at
+   a time.  This mode does *not* require [Java] or [Hadoop].
 
 [Amazon EMR]: http://aws.amazon.com/elasticmapreduce
 [Elastic MapReduce]: http://aws.amazon.com/elasticmapreduce
@@ -100,53 +95,51 @@ Myrna can be run in four different ways.
 
 # Preparing to run on Amazon Elastic MapReduce
 
-Before running Myrna on [EMR], you must have an [AWS] account with
-the appropriate features enabled.  You may also need to [install
-Amazon's `elastic-mapreduce` tool].  In addition, you may want to
-install an [S3 tool], though most users can simply use [Amazon's web
-interface for S3], which requires no installation.
+Before running Myrna on [EMR], you must have an [AWS] account with the
+appropriate features enabled.  You may also need to [install Amazon's
+`elastic-mapreduce` tool].  In addition, you may want to install an [S3 tool],
+though most users can simply use [Amazon's web interface for S3], which requires
+no installation.
 
-If you plan to run Myrna exclusively on a single computer or on a
-[Hadoop] cluster, you can skip this section.
+If you plan to run Myrna exclusively on a single computer or on a [Hadoop]
+cluster, you can skip this section.
 
 [Amazon's web interface for S3]: https://console.aws.amazon.com/s3/home
 [Installing Amazon's `elastic-mapreduce` tool]: #installing-amazons-elastic-mapreduce-tool
 
-1. Create an AWS account by navigating to the [AWS page].  Click "Sign
-   Up Now" in the upper right-hand corner and follow the instructions.
-   You will be asked to accept the [AWS Customer Agreement].
+1. Create an AWS account by navigating to the [AWS page].  Click "Sign Up Now"
+   in the upper right-hand corner and follow the instructions. You will be asked
+   to accept the [AWS Customer Agreement].
 
-2. Sign up for [EC2] and [S3].  Navigate to the [Amazon EC2] page,
-   click on "Sign Up For Amazon EC2" and follow the instructions.  This
-   step requires you to enter credit card information.  Once this is
-   complete, your AWS account will be permitted to use [EC2] and [S3],
-   which are required.
+2. Sign up for [EC2] and [S3].  Navigate to the [Amazon EC2] page, click on
+   "Sign Up For Amazon EC2" and follow the instructions.  This step requires you
+   to enter credit card information.  Once this is complete, your AWS account
+   will be permitted to use [EC2] and [S3], which are required.
 
-3. Sign up for [EMR].  Navigate to the [Elastic MapReduce] page, click
-   on "Sign up for Elastic MapReduce" and follow the instructions.
-   Once this is complete, your AWS account will be permitted to use
-   [EMR], which is required.
+3. Sign up for [EMR].  Navigate to the [Elastic MapReduce] page, click on "Sign
+   up for Elastic MapReduce" and follow the instructions. Once this is complete,
+   your AWS account will be permitted to use [EMR], which is required.
 
-4. Sign up for [SimpleDB].  With [SimpleDB] enabled, you have the option
-   of using the [AWS Console]'s [Job Flow Debugging] feature.  This is a
-   convenient way to monitor your job's progress and diagnose errors.
+4. Sign up for [SimpleDB].  With [SimpleDB] enabled, you have the option of
+   using the [AWS Console]'s [Job Flow Debugging] feature.  This is a convenient
+   way to monitor your job's progress and diagnose errors.
 
-5. *Optional*: Request an increase to your instance limit.  By default,
-   Amazon allows you to allocate EC2 clusters with up to 20 instances
-   (virtual computers).  To be permitted to work with more instances,
-   fill in the form on the [Request to Increase] page.  You may have
-   to speak to an Amazon representative and/or wait several business
-   days before your request is granted.
+5. *Optional*: Request an increase to your instance limit.  By default, Amazon
+   allows you to allocate EC2 clusters with up to 20 instances (virtual
+   computers). To be permitted to work with more instances, fill in the form on
+   the [Request to Increase] page.  You may have to speak to an Amazon
+   representative and/or wait several business days before your request is
+   granted.
 
-To see a list of AWS services you've already signed up for, see your
-[Account Activity] page.  If "Amazon Elastic Compute Cloud", "Amazon
-Simple Storage Service", "Amazon Elastic MapReduce" and "Amazon
-SimpleDB" all appear there, you are ready to proceed.
+To see a list of AWS services you've already signed up for, see your [Account
+Activity] page.  If "Amazon Elastic Compute Cloud", "Amazon Simple Storage
+Service", "Amazon Elastic MapReduce" and "Amazon SimpleDB" all appear there, you
+are ready to proceed.
 
-Be sure to make a note of the various numbers and names associated with
-your accounts, especially your Access Key ID, Secret Access Key, and
-your EC2 key pair name.  You will have to refer to these and other
-account details in the future.
+Be sure to make a note of the various numbers and names associated with your
+accounts, especially your Access Key ID, Secret Access Key, and your EC2 key
+pair name.  You will have to refer to these and other account details in the
+future.
 
 [install Amazon's `elastic-mapreduce` tool]: #installing-amazons-elastic-mapreduce-tool
 [AWS Customer Agreement]: http://aws.amazon.com/agreement/
@@ -157,13 +150,13 @@ account details in the future.
 
 ## Installing Amazon's `elastic-mapreduce` tool
 
-Read this section if you plan to run on [Elastic MapReduce] via the
-command-line tool.  Skip this section if you are not using [EMR] or if
-you plan to run exclusively via the [Myrna web interface].
+Read this section if you plan to run on [Elastic MapReduce] via the command-line
+tool.  Skip this section if you are not using [EMR] or if you plan to run
+exclusively via the [Myrna web interface].
 
-To install Amazon's `elastic-mapreduce` tool, follow the instructions
-in Amazon Elastic MapReduce developer's guide for [How to Download and
-Install Ruby and the Command Line Interface].  That document describes:
+To install Amazon's `elastic-mapreduce` tool, follow the instructions in Amazon
+Elastic MapReduce developer's guide for [How to Download and Install Ruby and
+the Command Line Interface].  That document describes:
 
 [How to Download and Install Ruby and the Command Line Interface]: http://aws.amazon.com/developertools/2264?_encoding=UTF8&jiveRedirect=1
 
@@ -171,26 +164,24 @@ Install Ruby and the Command Line Interface].  That document describes:
 
 2. Setting up an EC2 keypair, if necessary.
 
-3. Setting up a credentials file, which is used by the
-   `elastic-mapreduce` tool for authentication.
+3. Setting up a credentials file, which is used by the `elastic-mapreduce` tool
+   for authentication.
    
-   For convenience, we suggest you name the credentials file
-   `credentials.json` and place it in the same directory with the
-   `elastic-mapreduce` script.  Otherwise you will have to specify the
-   credential file path with the [`--credentials`] option each time you
-   run `myrna_emr`.
+   For convenience, we suggest you name the credentials file `credentials.json`
+   and place it in the same directory with the `elastic-mapreduce` script. 
+   Otherwise you will have to specify the credential file path with the
+   [`--credentials`] option each time you run `myrna_emr`.
 
 We strongly recommend using a version of the `elastic-mapreduce` Ruby script
-released on or after June 2, 2010.  This is when the script switched to using
-Hadoop 0.20.2 by default, which is the preferred way of running Myrna.
+released on or after December 8, 2011.  This is when the script switched to
+using Hadoop v0.20.205 by default, which is the preferred way of running Myrna.
 
 [Ruby]: http://www.ruby-lang.org/
 
-We also recommend that you add the directory containing the
-`elastic-mapreduce` tool to your `PATH`.  This allows Myrna to locate
-it automatically.  Alternately, you can specify the path to the
-`elastic-mapreduce` tool via the [`--emr-script`] option when running
-`myrna_emr`.
+We also recommend that you add the directory containing the `elastic-mapreduce`
+tool to your `PATH`.  This allows Myrna to locate it automatically. 
+Alternately, you can specify the path to the `elastic-mapreduce` tool via the
+[`--emr-script`] option when running `myrna_emr`.
 
 [AWS]: http://aws.amazon.com/ "Amazon Web Services"
 [AWS page]: http://aws.amazon.com/ "Amazon Web Services"
@@ -198,20 +189,18 @@ it automatically.  Alternately, you can specify the path to the
 
 ## S3 tools
 
-Running on [EMR] requires exchanging files via the cloud-based [S3]
-filesystem.  [S3] is organized as a collection of [S3 buckets] in a
-global namespace.  [S3 charges] are incurred when transferring data
-to and from [S3] (but transfers between [EC2] and [S3] are free), and
-a per-GB-per-month charge applies when data is stored in [S3] over
-time.
+Running on [EMR] requires exchanging files via the cloud-based [S3] filesystem. 
+[S3] is organized as a collection of [S3 buckets] in a global namespace.  [S3
+charges] are incurred when transferring data to and from [S3] (but transfers
+between [EC2] and [S3] are free), and a per-GB-per-month charge applies when
+data is stored in [S3] over time.
 
-To transfer files to and from [S3], use an S3 tool.  Amazon's [AWS
-Console] has an [S3 tab] that provides a friendly web-based interface
-to [S3], and doesn't require any software installation.  [s3cmd] is a
-very good command-line tool that requires [Python] 2.4 or later.
-[S3Fox Organizer] is another GUI tool that works as a [Firefox]
-extension.  Other tools include [Cyberduck] (for Mac OS 10.5 or later)
-and [Bucket Explorer] (for Mac, Windows or Linux, but commercial
+To transfer files to and from [S3], use an S3 tool.  Amazon's [AWS Console] has
+an [S3 tab] that provides a friendly web-based interface to [S3], and doesn't
+require any software installation.  [s3cmd] is a very good command-line tool
+that requires [Python] 2.4 or later. [S3Fox Organizer] is another GUI tool that
+works as a [Firefox] extension.  Other tools include [Cyberduck] (for Mac OS
+10.6 or later) and [Bucket Explorer] (for Mac, Windows or Linux, but commercial
 software).
 
 [S3]: http://aws.amazon.com/s3/
@@ -228,10 +217,9 @@ software).
 
 # Installing Myrna
 
-Myrna consists of a set of [Perl] and shell scripts, plus supporting
-tools: [Bowtie] and [R]/[Bioconductor] .  If you plan to run Myrna via
-the [Myrna web interface] exclusively, there is nothing to install.
-Otherwise:
+Myrna consists of a set of [Perl] and shell scripts, plus supporting tools:
+[Bowtie] and [R]/[Bioconductor] .  If you plan to run Myrna via the [Myrna web
+interface] exclusively, there is nothing to install. Otherwise:
 
 1. Download the desired version of Myrna, from the [sourceforge site]
 
@@ -242,37 +230,36 @@ Otherwise:
 
 4.  *If you plan to run on a local computer or [Hadoop] cluster*:
 
-    If using Linux or Mac OS 10.5 or later, you likely don't have to
-    install [Bowtie] as Myrna comes with pre-built versions for those
-    platforms.  Test this by running:
+    If using Linux or Mac OS 10.6 or later, you likely don't have to install
+    [Bowtie] as Myrna comes with pre-built versions for those platforms.  Test
+    this by running:
 
            $MYRNA_HOME/myrna_local --test
 
     If the `Summary:` section contains `bowtie: INSTALLED at
     /some/path`, [Bowtie] installation is complete.  Otherwise, obtain
-    or build a `bowtie` binary v0.12.5 or higher from the [Bowtie web
-    site] and install it by setting the `MYRNA_BOWTIE_HOME` environment
-    variable to the directory containing the `bowtie` executable.
-    Alternately, add the enclosing directory to your `PATH` or specify
-    its location via the `--bowtie` option when running Myrna scripts.
+    or build a `bowtie` binary v0.12.8 or higher from the [Bowtie web site] and
+    install it by setting the `MYRNA_BOWTIE_HOME` environment variable to the
+    directory containing the `bowtie` executable. Alternately, add the enclosing
+    directory to your `PATH` or specify its location via the `--bowtie` option
+    when running Myrna scripts.
 
-    If the install test indicates that [R] is not installed, see
-    [Installing R and Bioconductor].  To confirm your installation is
-    complete, re-run:
+    If the install test indicates that [R] is not installed, see [Installing R
+    and Bioconductor].  To confirm your installation is complete, re-run:
 
 [Bowtie web site]: http://bowtie-bio.sourceforge.net/index.shtml
 [Installing R and Bioconductor]: #installing-r-and-bioconductor
 
            $MYRNA_HOME/myrna_local --test
 
-5.  *If you plan to run on a [Hadoop] cluster*, you may need to
-    manually copy the `bowtie` executable and R install directory to
-    the same path on each [Hadoop] cluster node.  You can avoid this
-    step by installing `bowtie` and [R]/[Bioconductor] on a filesystem
-    shared by all [Hadoop] nodes (e.g. an [NFS share]).  You can also
-    skip this step if [Hadoop] is installed in [pseudo distributed]
-    mode, meaning that the cluster really consists of one node whose
-    CPUs are treated as distinct slaves.
+5.  *If you plan to run on a [Hadoop] cluster*, you may need to manually copy
+    the `bowtie` executable, the R install directory, and the `fastq-dump` tool
+    to the same path on each [Hadoop] cluster node.  You can avoid this step by
+    installing `bowtie`, [R]/[Bioconductor], and `fastq-dump` on a filesystem
+    shared by all [Hadoop] nodes (e.g. an [NFS share]).  You can also skip this
+    step if [Hadoop] is installed in [pseudo distributed] mode, meaning that the
+    cluster really consists of one node whose CPUs are treated as distinct
+    slaves.
 
 [NFS share]: http://en.wikipedia.org/wiki/Network_File_System_(protocol)
 [pseudo distributed]: http://hadoop.apache.org/common/docs/current/single_node_setup.html#PseudoDistributed
@@ -280,30 +267,27 @@ Otherwise:
 ## Installing R and Bioconductor
 
 To run Myrna on a [Hadoop] cluster or local computer, [R] 2.14 and
-[Bioconductor] must be installed along with all [packages required by
-Myrna].  If you already have [R] v2.14, [Bioconductor] and [all
-appropriate packages] but Myrna can't find where they're installed, set
-the `MYRNA_RHOME` environment variable to point the appropriate R home
-directory, i.e., the directory containing `bin/R` and `bin/Rscript`
-executables for the proper installation.
+[Bioconductor] must be installed along with all [packages required by Myrna]. 
+If you already have [R] v2.14, [Bioconductor] and [all appropriate packages] but
+Myrna can't find where they're installed, set the `MYRNA_RHOME` environment
+variable to point the appropriate R home directory, i.e., the directory
+containing `bin/R` and `bin/Rscript` executables for the proper installation.
 
 [packages required by Myrna]: #manually-installing-rbioconductor
 [all appropriate packages]: #manually-installing-rbioconductor
 [required packages]: #manually-installing-rbioconductor
 
-If you do not already have an [R] v2.14/[Bioconductor] installation,
-try the instructions in either or both of the following sections,
-[Building R/Bioconductor automatically] or [Manually installing
-R/Bioconductor].
+If you do not already have an [R] v2.14/[Bioconductor] installation, try the
+instructions in either or both of the following sections, [Building
+R/Bioconductor automatically] or [Manually installing R/Bioconductor].
 
 [Building R/Bioconductor automatically]: #building-rbioconductor-automatically
 [Manually installing R/Bioconductor]: #manually-installing-rbioconductor
 
 ### Building R/Bioconductor automatically
 
-The Myrna package includes a bash script that builds [R] 2.14.2 from
-sources and installs [Bioconductor] and all required packages
-automatically:
+The Myrna package includes a bash script that builds [R] 2.14.2 from sources and
+installs [Bioconductor] and all required packages automatically:
 
     cd $MYRNA_HOME/R ; ./build_r
 
@@ -336,11 +320,11 @@ Note: you can override Myrna's default of using the installation in
 
 ### Manually installing R/Bioconductor
 
-To install [R] version 2.14, follow the instructions in the [R
-Installation and Administration] guide.  If you plan to run in [Hadoop]
-mode, make sure that [R] is installed on all nodes, including the
-master.  To avoid copying, you might wish to install [R] on a shared
-filesystem visible to all [Hadoop] nodes, such as an [NFS share].
+To install [R] version 2.14, follow the instructions in the [R Installation and
+Administration] guide.  If you plan to run in [Hadoop] mode, make sure that [R]
+is installed on all nodes, including the master.  To avoid copying, you might
+wish to install [R] on a shared filesystem visible to all [Hadoop] nodes, such
+as an [NFS share].
 
 [R Installation and Administration]: http://cran.r-project.org/doc/manuals/R-admin.html
 
@@ -386,28 +370,28 @@ The following [Bioconductor] packages are also required:
 
 ## The SRA toolkit
 
-The [Sequence Read Archive] (SRA) is a resource at the [National Center
-for Biotechnology Information] (NCBI) for storing sequence data from
-modern sequencing instruments.  Sequence data underlying many studies,
-including very large studies, can often be downloaded from this
-archive.
+The [Sequence Read Archive] (SRA) is a resource at the [National Center for
+Biotechnology Information] (NCBI) for storing sequence data from modern
+sequencing instruments.  Sequence data underlying many studies, including very
+large studies, can often be downloaded from this archive.
 
-The SRA uses a special file format to store archived read data.  These
-files end in extensions [`.sra`], and they can be specified as inputs
-to Myrna's preprocessing step in exactly the same way as [FASTQ] files.
+The SRA uses a special file format to store archived read data.  These files end
+in extensions [`.sra`], and they can be specified as inputs to Myrna's
+preprocessing step in exactly the same way as [FASTQ] files.
 
 However, if you plan to use [`.sra`] files as input to Myrna in either [Hadoop]
 mode or in single-computer mode, you must first install the [SRA toolkit].  Once
-the toolkit is installed, be aware of where it placed the `sra-dump` binary
+the toolkit is installed, be aware of where it placed the `fastq-dump` binary
 program. See the [SRA toolkit] page for details about how to download and
-install. We highly recommend installing the pre-compiled binaries rather than
-trying to build the SRA toolkit from source.
+install. We recommend installing the pre-compiled binaries rather than trying to
+build the SRA toolkit from source.
 
 When searching for the `fastq-dump` tool at runtime, Myrna searches the
 following places in order:
 
 1. The path specified in the [`--fastq-dump`] option
-2. The system `PATH`
+2. The directory specified in the `MYRNA_FASTQ_DUMP_HOME` environment variable
+3. The system `PATH`
 
 [Sequence Read Archive]: http://www.ncbi.nlm.nih.gov/books/NBK47533/
 [National Center for Biotechnology Information]: http://www.ncbi.nlm.nih.gov/
@@ -417,17 +401,17 @@ following places in order:
 
 The commands for invoking Myrna from the command line are:
 
-`$MYRNA_HOME/myrna_emr` (or just `myrna_emr` if `$MYRNA_HOME` is in the
-`PATH`) for running on [EMR].  See [Running Myrna on EMR via the
+`$MYRNA_HOME/myrna_emr` (or just `myrna_emr` if `$MYRNA_HOME` is in the `PATH`)
+for running on [EMR].  See [Running Myrna on EMR via the command line] for
+details.
+
+`$MYRNA_HOME/myrna_hadoop` (or just `myrna_hadoop` if `$MYRNA_HOME` is in the
+`PATH`) for running on [Hadoop].  See [Running Myrna on a Hadoop cluster via the
 command line] for details.
 
-`$MYRNA_HOME/myrna_hadoop` (or just `myrna_hadoop` if `$MYRNA_HOME` is
-in the `PATH`) for running on [Hadoop].  See [Running Myrna on a Hadoop
-cluster via the command line] for details.
-
-`$MYRNA_HOME/myrna_local` (or just `myrna_local` if `$MYRNA_HOME` is in
-the `PATH`) for running locally on a single computer, .  See [Running
-Myrna on a single computer via the command line] for details.
+`$MYRNA_HOME/myrna_local` (or just `myrna_local` if `$MYRNA_HOME` is in the
+`PATH`) for running locally on a single computer, .  See [Running Myrna on a
+single computer via the command line] for details.
 
 [sourceforge site]: http://bowtie-bio.sf.net/myrna
 [Extract the zip archive]: http://en.wikipedia.org/wiki/ZIP_(file_format)
@@ -443,8 +427,8 @@ Myrna on a single computer via the command line] for details.
 2. [EC2], [S3], [EMR], and [SimpleDB] accounts.  To check which ones you've
    already enabled, visit your [Account Activity] page.
 3. A tool for browsing and exchanging files with [S3]
-    a. The [AWS Console]'s [S3 tab] is a good web-based tool that does
-       not require software installation
+    a. The [AWS Console]'s [S3 tab] is a good web-based tool that does not
+       require software installation
     b. A good command line tool is [s3cmd]
     c. A good GUI tool is [S3Fox Organizer], which is a Firefox Plugin
     d. Others include [Cyberduck], [Bucket Explorer]
@@ -465,28 +449,25 @@ Myrna on a single computer via the command line] for details.
 
 ## To run
 
-1.  *If the input reads have not yet been preprocessed by Myrna* (i.e.
-    input is [FASTQ] or [`.sra`]), then first (a) prepare a [labeled
-    manifest file] with URLs pointing to the read files, and (b) upload
-    it to an [S3] bucket that you own.  See your [S3] tool's
-    documentation for how to create a bucket and upload a file to it.
-    The URL for the [labeled manifest file] will be the input URL for
-    your [EMR] job.
+1.  *If the input reads have not yet been preprocessed by Myrna* (i.e. input is
+    [FASTQ] or [`.sra`]), then first (a) prepare a [labeled manifest file] with
+    URLs pointing to the read files, and (b) upload it to an [S3] bucket that
+    you own. See your [S3] tool's documentation for how to create a bucket and
+    upload a file to it. The URL for the [labeled manifest file] will be the
+    input URL for your [EMR] job.
     
-    *If the input reads have already been preprocessed by Myrna*,
-    make a note of the [S3] URL where they're located.  This will be
-    the input URL for your [EMR] job.
+    *If the input reads have already been preprocessed by Myrna*, make a note of
+    the [S3] URL where they're located.  This will be the input URL for your
+    [EMR] job.
 
-2.  *If you are using a pre-built reference jar*, make a note of its
-    [S3] URL.  This will be the reference URL for your [EMR] job.  See
-    the [Myrna website] for a list of pre-built reference jars and
-    their URLs.
+2.  *If you are using a pre-built reference jar*, make a note of its [S3] URL. 
+    This will be the reference URL for your [EMR] job.  See the [Myrna website]
+    for a list of pre-built reference jars and their URLs.
    
-    *If you are not using a pre-built reference jar*, you may need to
-    [build the reference jars] and/or upload them to an [S3] bucket you
-    own.  See your [S3 tool]'s documentation for how to create a bucket
-    and upload to it.  The URL for the main reference jar will be the
-    reference URL for your [EMR] job.
+    *If you are not using a pre-built reference jar*, you may need to [build the
+    reference jars] and/or upload them to an [S3] bucket you own.  See your [S3
+    tool]'s documentation for how to create a bucket and upload to it.  The URL
+    for the main reference jar will be the reference URL for your [EMR] job.
 
 [Myrna website]: http://bowtie-bio.sf.net/myrna
 [build the reference jars]: #reference-jars
@@ -495,13 +476,12 @@ Myrna on a single computer via the command line] for details.
 
 3. In a web browser, go to the [Myrna web interface]
 
-4. Fill in the form according to your job's parameters.  We recommend filling
-   in and validating the "AWS ID" and "AWS Secret Key" fields first.  Also,
-   when entering S3 URLs (e.g. "Input URL" and "Output URL"), we recommend that
-   users validate the entered URLs by clicking the link below it.  This avoids
-   failed jobs due to simple URL issues (e.g. non-existence of the "Input
-   URL").  For examples of how to fill in this form, see the [Yeast EMR] and
-   [Human EMR] examples.
+4. Fill in the form according to your job's parameters.  We recommend filling in
+   and validating the "AWS ID" and "AWS Secret Key" fields first.  Also, when
+   entering S3 URLs (e.g. "Input URL" and "Output URL"), we recommend validating
+   the entered URLs by clicking the link below it.  This avoids failed jobs due
+   to simple URL issues (e.g. non-existence of the "Input URL").  For examples
+   of how to fill in this form, see the [Yeast EMR] and [Human EMR] examples.
 
 [Monitoring your EMR jobs]: #monitoring-your-emr-jobs
 
@@ -512,14 +492,15 @@ Myrna on a single computer via the command line] for details.
 1. [EC2], [S3], [EMR], and [SimpleDB] accounts.  To check which ones you've
    already enabled, visit your [Account Activity] page.
 2. A tool for browsing and exchanging files with [S3]
-    a. The [AWS Console]'s [S3 tab] is a good web-based tool that does
-       not require software installation
+    a. The [AWS Console]'s [S3 tab] is a good web-based tool that does not
+       require software installation
     b. A good command line tool is [s3cmd]
     c. A good GUI tool is [S3Fox Organizer], which is a Firefox Plugin
     d. Others include [Cyberduck], [Bucket Explorer]
 3. Basic knowledge regarding:
-    a. [What S3 is], [what an S3 bucket is], how to create one, how to upload a file to
-       an S3 bucket from your computer (see your S3 tool's documentation).
+    a. [What S3 is], [what an S3 bucket is], how to create one, how to upload a
+       file to an S3 bucket from your computer (see your S3 tool's
+       documentation).
     b. How much AWS resources [will cost you]
 
 [Account Activity]: http://aws-portal.amazon.com/gp/aws/developer/account/index.html?ie=UTF8&action=activity-summary
@@ -533,39 +514,35 @@ Myrna on a single computer via the command line] for details.
 
 ## To run
 
-1.  *If the input reads have not yet been preprocessed by Myrna* (i.e.
-    input is [FASTQ] or [`.sra`]), then first (a) prepare a [labeled
-    manifest file] with URLs pointing to the read files, and (b) upload
-    it to an [S3] bucket that you own.  See your [S3] tool's
-    documentation for how to create a bucket and upload a file to it.
-    The URL for the [labeled manifest file] will be the input URL for
-    your [EMR] job.
+1.  *If the input reads have not yet been preprocessed by Myrna* (i.e. input is
+    [FASTQ] or [`.sra`]), then first (a) prepare a [labeled manifest file] with
+    URLs pointing to the read files, and (b) upload it to an [S3] bucket that
+    you own. See your [S3] tool's documentation for how to create a bucket and
+    upload a file to it. The URL for the [labeled manifest file] will be the
+    input URL for your [EMR] job.
     
-    *If the input reads have already been preprocessed by Myrna*,
-    make a note of the [S3] URL where they're located.  This will be
-    the input URL for your [EMR] job.
+    *If the input reads have already been preprocessed by Myrna*, make a note of
+    the [S3] URL where they're located.  This will be the input URL for your
+    [EMR] job.
 
-2.  *If you are using a pre-built reference jar*, make a note of its
-    [S3] URL.  This will be the reference URL for your [EMR] job.  See
-    the [Myrna website] for a list of pre-built reference jars and
-    their URLs.
+2.  *If you are using a pre-built reference jar*, make a note of its [S3] URL. 
+    This will be the reference URL for your [EMR] job.  See the [Myrna website]
+    for a list of pre-built reference jars and their URLs.
    
-    *If you are not using a pre-built reference jar*, you may need to
-    [build the reference jars] and/or upload them to an [S3] bucket you
-    own.  See your [S3 tool]'s documentation for how to create a bucket
-    and upload to it.  The URL for the main reference jar will be the
-    reference URL for your [EMR] job.
+    *If you are not using a pre-built reference jar*, you may need to [build the
+    reference jars] and/or upload them to an [S3] bucket you own.  See your [S3
+    tool]'s documentation for how to create a bucket and upload to it.  The URL
+    for the main reference jar will be the reference URL for your [EMR] job.
 
 [Myrna website]: http://bowtie-bio.sf.net/myrna
 [build the reference jars]: #reference-jars
 [S3 tool]: #s3-tools
 
-3. Run `$MYRNA_HOME/myrna_emr` with the desired options.  Options that
-   are unique to [EMR] jobs are described in the following section.
-   Options that apply to all running modes are described in the
-   [General Myrna options] section.  For examples of how to run
-   `$MYRNA_HOME/myrna_emr` see the [Yeast EMR] and [Human EMR]
-   examples.
+3. Run `$MYRNA_HOME/myrna_emr` with the desired options.  Options that are
+   unique to [EMR] jobs are described in the following section. Options that
+   apply to all running modes are described in the [General Myrna options]
+   section.  For examples of how to run `$MYRNA_HOME/myrna_emr` see the [Yeast
+   EMR] and [Human EMR] examples.
 
 [General Myrna options]: #general-myrna-options
 [Yeast EMR]: #myrna-example-yeast-emr
@@ -583,14 +560,13 @@ Myrna on a single computer via the command line] for details.
 
 </td><td>
 
-[S3] URL where the Myrna reference jar is located.  URLs for pre-built
-reference jars for some commonly studied species (including human,
-chimpanzee, rhesus monkey, mouse, rat and yeast) are available from the
-[Myrna web site].  Note that a [Myrna] reference jar is not the same as
-a [Crossbow] reference jar.  If your desired genome and/or gene
-annotations are not available in pre-built form, you will have to make
-your own reference jar and upload it to one of your own S3 buckets (see
-[Reference jars]).  This option must be specified.
+[S3] URL where the Myrna reference jar is located.  URLs for pre-built reference
+jars for some commonly studied species (including human, chimpanzee, rhesus
+monkey, mouse, rat and yeast) are available from the [Myrna web site].  Note
+that a [Myrna] reference jar is not the same as a [Crossbow] reference jar.  If
+your desired genome and/or gene annotations are not available in pre-built form,
+you will have to make your own reference jar and upload it to one of your own S3
+buckets (see [Reference jars]).  This option must be specified.
 
 [Crossbow]: http://bowtie-bio.sf.net/crossbow
 [Reference jars]: #reference-jars
@@ -605,9 +581,9 @@ your own reference jar and upload it to one of your own S3 buckets (see
 </td><td>
 
 [S3] URL where the input is located.  If [`--preprocess`] or
-[`--just-preprocess`] are specified, `<URL>` sould point to a [labeled
-manifest file].  Otherwise, `<URL>` should point to a directory
-containing preprocessed reads.  This option must be specified.
+[`--just-preprocess`] are specified, `<URL>` sould point to a [labeled manifest
+file].  Otherwise, `<URL>` should point to a directory containing preprocessed
+reads.  This option must be specified.
 
 </td></tr><tr><td id="myrna-emr-output">
 
@@ -617,10 +593,10 @@ containing preprocessed reads.  This option must be specified.
 
 </td><td>
 
-[S3] URL where the output is to be deposited.  If [`--just-preprocess`]
-is specified, the output consists of the preprocessed reads.
-Otherwise, the output consists of a collection of tables, plots, and
-alignment files in the [Myrna output format].  This option must be specified.
+[S3] URL where the output is to be deposited.  If [`--just-preprocess`] is
+specified, the output consists of the preprocessed reads. Otherwise, the output
+consists of a collection of tables, plots, and alignment files in the [Myrna
+output format].  This option must be specified.
 
 [Myrna output format]: #myrna-output
 
@@ -632,9 +608,9 @@ alignment files in the [Myrna output format].  This option must be specified.
 
 </td><td>
 
-[S3] URL where all intermediate results should be be deposited.  By
-default, intermediate results are stored in [HDFS] and disappear once
-the cluster is terminated.
+[S3] URL where all intermediate results should be be deposited.  By default,
+intermediate results are stored in [HDFS] and disappear once the cluster is
+terminated.
 
 </td></tr><tr><td id="myrna-emr-preprocess-output">
 
@@ -644,10 +620,9 @@ the cluster is terminated.
 
 </td><td>
 
-[S3] URL where the preprocessed reads should be stored.  This can be
-useful if you later want to run Myrna on the same input reads
-without having to re-run the preprocessing step (i.e. leaving
-[`--preprocess`] unspecified).
+[S3] URL where the preprocessed reads should be stored.  This can be useful if
+you later want to run Myrna on the same input reads without having to re-run the
+preprocessing step (i.e. leaving [`--preprocess`] unspecified).
 
 </td></tr><tr><td id="myrna-emr-credentials">
 
@@ -659,11 +634,10 @@ without having to re-run the preprocessing step (i.e. leaving
 
 Local path to the credentials file set up by the user when the
 [`elastic-mapreduce`] script was installed (see [Installing Amazon's
-`elastic-mapreduce` tool]).  Default: use `elastic-mapreduce`'s default
-(i.e. the `credentials.json` file in the same directory as the
-`elastic-mapreduce` script).  If `--credentials` is not specified and
-the default `credentials.json` file doesn't exist, `elastic-mapreduce`
-will abort with an error message.
+`elastic-mapreduce` tool]).  Default: use `elastic-mapreduce`'s default (i.e.
+the `credentials.json` file in the same directory as the `elastic-mapreduce`
+script).  If `--credentials` is not specified and the default `credentials.json`
+file doesn't exist, `elastic-mapreduce` will abort with an error message.
 
 [Installing Amazon's `elastic-mapreduce` tool]: #installing-amazons-elastic-mapreduce-tool
 
@@ -675,8 +649,8 @@ will abort with an error message.
 
 </td><td>
 
-Local path to the `elastic-mapreduce` script.  By default, Myrna
-looks first in the `$MYRNA_EMR_HOME` directory, then in the `PATH`.
+Local path to the `elastic-mapreduce` script.  By default, Myrna looks first in
+the `$MYRNA_EMR_HOME` directory, then in the `PATH`.
 
 </td></tr><tr><td id="myrna-emr-name">
 
@@ -696,9 +670,9 @@ Specify the name by which the job will be identified in the [AWS Console].
 
 </td><td>
 
-By default, [EMR] will terminate the cluster as soon as (a) one of the
-stages fails, or (b) the job complete successfully.  Specify this
-option to force [EMR] to keep the cluster alive in either case.
+By default, [EMR] will terminate the cluster as soon as (a) one of the stages
+fails, or (b) the job complete successfully.  Specify this option to force [EMR]
+to keep the cluster alive in either case.
 
 </td></tr><tr><td id="myrna-emr-instances">
 
@@ -708,14 +682,13 @@ option to force [EMR] to keep the cluster alive in either case.
 
 </td><td>
 
-Specify the number of instances (i.e. virtual computers, also called
-nodes) to be allocated to your cluster.  If set to 1, the 1 instance
-will funcion as both [Hadoop] master and slave node.  If set greater
-than 1, one instance will function as a [Hadoop] master and the rest
-will function as [Hadoop] slaves.  In general, the greater the value of
-`<int>`, the faster the Myrna computation will complete.  Consider
-the desired speed as well as the [going rate] when choosing a value for
-`<int>`.  Default: 1.
+Specify the number of instances (i.e. virtual computers, also called nodes) to
+be allocated to your cluster.  If set to 1, the 1 instance will funcion as both
+[Hadoop] master and slave node.  If set greater than 1, one instance will
+function as a [Hadoop] master and the rest will function as [Hadoop] slaves.  In
+general, the greater the value of `<int>`, the faster the Myrna computation will
+complete.  Consider the desired speed as well as the [going rate] when choosing
+a value for `<int>`.  Default: 1.
 
 </td></tr><tr><td id="myrna-emr-instance-type">
 
@@ -725,15 +698,14 @@ the desired speed as well as the [going rate] when choosing a value for
 
 </td><td>
 
-Specify the type of [EC2] instance to use for the computation.  See
-Amazon's [list of available instance types] and be sure to specify the
-"API name" of the desired type (e.g. `m1.small` or `c1.xlarge`).  **The
-default of `c1.xlarge` is strongly recommended** because it has an
-appropriate mix of computing power and memory for a large breadth of
-problems.  Choosing an instance type with less than 5GB of physical RAM
-can cause problems when the reference is as large (e.g. a mammalian
-genome).  Stick to the default unless you're pretty sure the specified
-instance type can handle your problem size.
+Specify the type of [EC2] instance to use for the computation.  See Amazon's
+[list of available instance types] and be sure to specify the "API name" of the
+desired type (e.g. `m1.small` or `c1.xlarge`).  **The default of `c1.xlarge` is
+strongly recommended** because it has an appropriate mix of computing power and
+memory for a large breadth of problems.  Choosing an instance type with less
+than 5GB of physical RAM can cause problems when the reference is as large (e.g.
+a mammalian genome).  Stick to the default unless you're pretty sure the
+specified instance type can handle your problem size.
 
 [list of available instance types]: http://aws.amazon.com/ec2/instance-types/
 [`<instance-type>`]: http://aws.amazon.com/ec2/instance-types/
@@ -746,8 +718,8 @@ instance type can handle your problem size.
 
 </td><td>
 
-Pass the specified extra arguments to the `elastic-mapreduce` script.
-See documentation for the `elastic-mapreduce` script for details.
+Pass the specified extra arguments to the `elastic-mapreduce` script. See
+documentation for the `elastic-mapreduce` script for details.
 
 </td></tr><tr><td id="myrna-logs">
 
@@ -757,9 +729,8 @@ See documentation for the `elastic-mapreduce` script for details.
 
 </td><td>
 
-Causes [EMR] to copy the log files to `<URL>`.  Default: [EMR] writes
-logs to the `logs` subdirectory of the [`--output`] URL.  See also
-[`--no-logs`].
+Causes [EMR] to copy the log files to `<URL>`.  Default: [EMR] writes logs to
+the `logs` subdirectory of the [`--output`] URL.  See also [`--no-logs`].
 
 </td></tr><tr><td id="myrna-no-logs">
 
@@ -769,10 +740,9 @@ logs to the `logs` subdirectory of the [`--output`] URL.  See also
 
 </td><td>
 
-By default, Myrna causes [EMR] to copy all cluster log files to the
-`log` subdirectory of the [`--output`] URL (or another destination, if
-[`--logs`] is specified).  Specifying this option disables all copying
-of logs.
+By default, Myrna causes [EMR] to copy all cluster log files to the `log`
+subdirectory of the [`--output`] URL (or another destination, if [`--logs`] is
+specified).  Specifying this option disables all copying of logs.
 
 </td></tr><tr><td id="myrna-no-emr-debug">
 
@@ -782,10 +752,10 @@ of logs.
 
 </td><td>
 
-Disables [Job Flow Debugging].  If this is *not* specified, you must
-have a [SimpleDB] account for [Job Flow Debugging] to work and you will
-be subject to additional [SimpleDB-related charges]; those fees are
-typically small or zero (depending on your account's [SimpleDB tier]).
+Disables [Job Flow Debugging].  If this is *not* specified, you must have a
+[SimpleDB] account for [Job Flow Debugging] to work and you will be subject to
+additional [SimpleDB-related charges]; those fees are typically small or zero
+(depending on your account's [SimpleDB tier]).
 
 [Job Flow Debugging]: http://docs.amazonwebservices.com/ElasticMapReduce/latest/DeveloperGuide/DebuggingJobFlows.html
 [SimpleDB]: http://aws.amazon.com/simpledb/
@@ -799,49 +769,55 @@ typically small or zero (depending on your account's [SimpleDB tier]).
 
 ## Prerequisites
 
-1. Working installation of [Hadoop] v0.18.3.  Versions more recent than
-   v0.18.3 may also work, but haven't been tested.
+1. Working installation of [Hadoop] v0.20.2 or v0.20.205.  Other versions newer
+   than 0.20 might also work, but haven't been tested.
 
-2. A [`bowtie`] v0.12.5 executable must exist at the same path on all
-   cluster nodes (including the master).  That path must be specified
-   via the [`--bowtie`](#myrna-hadoop-bowtie) option OR located in the directory specified in
-   the `MYRNA_BOWTIE_HOME` environment variable, OR in a subdirectory
-   of `$MYRNA_HOME/bin` OR in the `PATH` (Myrna looks in that order).
-   `$MYRNA_HOME/bin` comes with pre-built Bowtie binaries for Linux and
-   Mac OS X 10.5 or later; an executable from that directory is used
-   automatically unless the platform is not Mac or Linux or unless
-   overridden by [`--bowtie`](#myrna-hadoop-bowtie) or by defining `MYRNA_BOWTIE_HOME`.
+2. A [`bowtie`] v0.12.8 executable must exist at the same path on all cluster
+   nodes (including the master).  That path must be specified via the
+   [`--bowtie`](#myrna-hadoop-bowtie) option OR located in the directory
+   specified in the `MYRNA_BOWTIE_HOME` environment variable, OR in a
+   subdirectory of `$MYRNA_HOME/bin` OR in the `PATH` (Myrna looks in that
+   order). `$MYRNA_HOME/bin` comes with pre-built Bowtie binaries for Linux and
+   Mac OS X 10.6 or later; an executable from that directory is used
+   automatically unless the platform is not Mac or Linux or unless overridden by
+   [`--bowtie`](#myrna-hadoop-bowtie) or by defining `MYRNA_BOWTIE_HOME`.
 
-3. [R]/[Bioconductor] v2.14.2 or later must be installed at the same
-   path on all cluster nodes (including the master).  The R home
-   directory (containing `bin/R` and `bin/Rscript`) must be
-   specified via the [`--Rhome`](#myrna-hadoop-rhome) option OR specified in the `MYRNA_RHOME`
-   environment variable, OR must exist in the `$MYRNA_HOME/R` directory
-   OR `Rscript` must be found in the `PATH` (Myrna searches in that order).
-   The `$MYRNA_HOME/R` directory contains a script ([`build_r`])
-   that can be used to build an appropriate [R]/[Bioconductor]
-   installation in the `$MYRNA_HOME/R` directory.  See sections on
-   [automatically building R/Bioconductor] and [packages required by
-   Myrna].
+3. [R]/[Bioconductor] v2.14.2 or later must be installed at the same path on all
+   cluster nodes (including the master).  The R home directory (containing
+   `bin/R` and `bin/Rscript`) must be specified via the
+   [`--Rhome`](#myrna-hadoop-rhome) option OR specified in the `MYRNA_RHOME`
+   environment variable, OR must exist in the `$MYRNA_HOME/R` directory OR
+   `Rscript` must be found in the `PATH` (Myrna searches in that order). The
+   `$MYRNA_HOME/R` directory contains a script ([`build_r`]) that can be used to
+   build an appropriate [R]/[Bioconductor] installation in the `$MYRNA_HOME/R`
+   directory.  See sections on [automatically building R/Bioconductor] and
+   [packages required by Myrna].
 
 [packages required by Myrna]: #manually-installing-rbioconductor
 [`build_r`]: #building-rbioconductor-automatically
 [automatically building R/Bioconductor]: #automatically-building-r-and-bioconductor
 
-4. Sufficient memory must be available on all [Hadoop] slave nodes to
-   hold the Bowtie index for the desired organism in addition to any
-   other loads placed on those nodes by [Hadoop] or other programs.
-   For mammalian genomes such as the human genome, this typically means
-   that slave nodes must have at least 5-6 GB of RAM.
+4. If any of your inputs are in [Sequence Read Archive] format (i.e. end in
+   `.sra`), then the `fastq-dump` tool from the [SRA Toolkit] must be installed
+   at the same path on all cluster nodes.  The path to the `fastq-dump` tool
+   must be specified via the ([`--fastq-dump`](#myrna-fastq-dump)) option OR
+   `fastq-dump` must be located in the directory specified in the
+   `MYRNA_FASTQ_DUMP_HOME` environment variable, OR `fastq-dump` must be found
+   in the `PATH` (Myrna searches in that order).
+
+5. Sufficient memory must be available on all [Hadoop] slave nodes to hold the
+   Bowtie index for the desired organism in addition to any other loads placed
+   on those nodes by [Hadoop] or other programs. For mammalian genomes such as
+   the human genome, this typically means that slave nodes must have at least
+   5-6 GB of RAM.
 
 ## To run
 
-Run `$MYRNA_HOME/myrna_hadoop` with the desired options.  Options that
-are unique to [Hadoop] jobs are described in the following subsection.
-Options that apply to all running modes are described in the [General
-Myrna options] subsection.  To see example invocations of
-`$MYRNA_HOME/myrna_hadoop` see the [Yeast Hadoop] and [Human Hadoop]
-examples.
+Run `$MYRNA_HOME/myrna_hadoop` with the desired options.  Options that are
+unique to [Hadoop] jobs are described in the following subsection. Options that
+apply to all running modes are described in the [General Myrna options]
+subsection.  To see example invocations of `$MYRNA_HOME/myrna_hadoop` see the
+[Yeast Hadoop] and [Human Hadoop] examples.
 
 [General Myrna options]: #general-myrna-options
 [Yeast Hadoop]: #myrna-example-yeast-hadoop
@@ -859,13 +835,12 @@ examples.
 
 </td><td>
 
-[HDFS] URL where the reference jar is located.  Pre-built reference
-jars for some commonly studied species (including human and mouse) are
-available from the [Myrna web site]; these can be downloaded and
-installed in HDFS using `hadoop dfs` commands.  If your desired genome
-and/or SNP annotations are not available in pre-built form, you will
-have to make your own reference jars, install them in HDFS, and specify
-their HDFS path here.  This option must be specified.
+[HDFS] URL where the reference jar is located.  Pre-built reference jars for
+some commonly studied species (including human and mouse) are available from the
+[Myrna web site]; these can be downloaded and installed in HDFS using `hadoop
+dfs` commands.  If your desired genome and/or SNP annotations are not available
+in pre-built form, you will have to make your own reference jars, install them
+in HDFS, and specify their HDFS path here.  This option must be specified.
 
 [Myrna web site]: http://bowtie-bio.sf.net/myrna
 [HDFS]: http://hadoop.apache.org/hdfs/docs/current/hdfs_design.html
@@ -879,9 +854,9 @@ their HDFS path here.  This option must be specified.
 </td><td>
 
 [HDFS] URL where the input is located.  If [`--preprocess`] or
-[`--just-preprocess`] are specified, `<URL>` sould point to a [labeled
-manifest file].  Otherwise, `<URL>` should point to a directory
-containing preprocessed reads.  This option must be specified.
+[`--just-preprocess`] are specified, `<URL>` sould point to a [labeled manifest
+file].  Otherwise, `<URL>` should point to a directory containing preprocessed
+reads.  This option must be specified.
 
 </td></tr><tr><td id="myrna-hadoop-output">
 
@@ -891,10 +866,10 @@ containing preprocessed reads.  This option must be specified.
 
 </td><td>
 
-[HDFS] URL where the output is to be deposited.  If [`--just-preprocess`]
-is specified, the output consists of the preprocessed reads.
-Otherwise, the output consists of a collection of tables, plots, and
-alignment files in the [Myrna output format].  This option must be specified.
+[HDFS] URL where the output is to be deposited.  If [`--just-preprocess`] is
+specified, the output consists of the preprocessed reads. Otherwise, the output
+consists of a collection of tables, plots, and alignment files in the [Myrna
+output format].  This option must be specified.
 
 </td></tr><tr><td id="myrna-hadoop-intermediate">
 
@@ -904,8 +879,8 @@ alignment files in the [Myrna output format].  This option must be specified.
 
 </td><td>
 
-[HDFS] URL where all intermediate results should be be deposited.
-Default: `hdfs:///myrna/intermediate/<PID>`.
+[HDFS] URL where all intermediate results should be be deposited. Default:
+`hdfs:///myrna/intermediate/<PID>`.
 
 </td></tr><tr><td id="myrna-hadoop-preprocess-output">
 
@@ -915,10 +890,9 @@ Default: `hdfs:///myrna/intermediate/<PID>`.
 
 </td><td>
 
-[HDFS] URL where the preprocessed reads should be stored.  This can be
-useful if you later want to run Myrna on the same input reads
-without having to re-run the preprocessing step (i.e. leaving
-[`--preprocess`] unspecified).
+[HDFS] URL where the preprocessed reads should be stored.  This can be useful if
+you later want to run Myrna on the same input reads without having to re-run the
+preprocessing step (i.e. leaving [`--preprocess`] unspecified).
 
 </td></tr><tr><td id="myrna-hadoop-bowtie">
 
@@ -929,11 +903,10 @@ without having to re-run the preprocessing step (i.e. leaving
 </td><td>
 
 Path to the Bowtie executable to use when running the Align step.  The
-executable must be (a) runnable, and (b) located at the same path on
-all [Hadoop] nodes, or the job will fail.  This overrides all other
-ways that Myrna searches for `bowtie`, including the
-`MYRNA_BOWTIE_HOME` environment variable, the subdirectories of the
-`$MYRNA_HOME/bin` directory, and the `PATH`.
+executable must be (a) runnable, and (b) located at the same path on all
+[Hadoop] nodes, or the job will fail.  This overrides all other ways that Myrna
+searches for `bowtie`, including the `MYRNA_BOWTIE_HOME` environment variable,
+the subdirectories of the `$MYRNA_HOME/bin` directory, and the `PATH`.
 
 </td></tr><tr><td id="myrna-hadoop-fastq-dump">
 
@@ -954,14 +927,13 @@ specified, Myrna also looks for `fastq-dump` in the `PATH`.
 
 </td><td>
 
-Path to the [R] home directory for the [R]/[Bioconductor] installation
-to be used by Myrna.  The home directory is the one containing `bin/R`
-and `bin/Rscript`.  The [R] installation must (a) be runnable, (b) have
-all [required packages] installed, and (c) be located at the same path\
-on all [Hadoop] nodes, or the job will fail.  This overrides all other
-ways that Myrna searches for [R], including the `MYRNA_RHOME`
-environment variable, the subdirectories of the `$MYRNA_HOME/bin`
-directory, and the `PATH`.
+Path to the [R] home directory for the [R]/[Bioconductor] installation to be
+used by Myrna.  The home directory is the one containing `bin/R` and
+`bin/Rscript`.  The [R] installation must (a) be runnable, (b) have all
+[required packages] installed, and (c) be located at the same path on all
+[Hadoop] nodes, or the job will fail.  This overrides all other ways that Myrna
+searches for [R], including the `MYRNA_RHOME` environment variable, the
+subdirectories of the `$MYRNA_HOME/bin` directory, and the `PATH`.
 
 </td></tr>
 </table>
@@ -970,35 +942,33 @@ directory, and the `PATH`.
 
 ## Prerequisites
 
-1. A [`bowtie`] v0.12.5 executable must exist on the local computer.
-   The path to `bowtie` must be specified via the [`--bowtie`](#myrna-local-bowtie) option OR
-   be located in the directory specified in the `$MYRNA_BOWTIE_HOME`
-   environment variable, OR in a subdirectory of `$MYRNA_HOME/bin` OR
-   in the `PATH` (search proceeds in that order).  `$MYTNA_HOME/bin`
-   comes with pre-built Bowtie binaries for Linux and Mac OS X 10.5 or
-   later, so most Mac and Linux users do not need to install either
-   tool.
+1. A [`bowtie`] v0.12.8 executable must exist on the local computer. The path to
+   `bowtie` must be specified via the [`--bowtie`](#myrna-local-bowtie) option
+   OR be located in the directory specified in the `$MYRNA_BOWTIE_HOME`
+   environment variable, OR in a subdirectory of `$MYRNA_HOME/bin` OR in the
+   `PATH` (search proceeds in that order).  `$MYTNA_HOME/bin` comes with
+   pre-built Bowtie binaries for Linux and Mac OS X 10.6 or later, so most Mac
+   and Linux users do not need to install either tool.
 
-2. An installation of [R]/[Bioconductor] v2.14.2 or later must exist on
-   the local computer, with all required packages installed.  The R home
-   directory (containing `bin/R` and `bin/Rscript`) must be specified via
-   the [`--Rhome`](#myrna-local-rhome) option OR specified in the `$MYRNA_RHOME` environment
-   variable, OR must exist in the `$MYRNA_HOME/R` directory OR `Rscript`
-   must be found in the `PATH` (Myrna searches in that order). The
-   `$MYRNA_HOME/R` directory contains a script ([`build_r`]) that can
-   be used to build an appropriate [R]/[Bioconductor] installation in the
-   `$MYRNA_HOME/R` directory.  See sections on [automatically building
-   R/Bioconductor] and [packages required by Myrna].
+2. An installation of [R]/[Bioconductor] v2.14.2 or later must exist on the
+   local computer, with all required packages installed.  The R home directory
+   (containing `bin/R` and `bin/Rscript`) must be specified via the
+   [`--Rhome`](#myrna-local-rhome) option OR specified in the `$MYRNA_RHOME`
+   environment variable, OR must exist in the `$MYRNA_HOME/R` directory OR
+   `Rscript` must be found in the `PATH` (Myrna searches in that order). The
+   `$MYRNA_HOME/R` directory contains a script ([`build_r`]) that can be used to
+   build an appropriate [R]/[Bioconductor] installation in the `$MYRNA_HOME/R`
+   directory.  See sections on [automatically building R/Bioconductor] and
+   [packages required by Myrna].
 
 [packages required by Myrna]: #manually-installing-rbioconductor
 [`build_r`]: #building-rbioconductor-automatically
 [automatically building R/Bioconductor]: #building-rbioconductor-automatically
 
-3. Sufficient memory must be available on the local computer to hold
-   one copy of the Bowtie index for the desired organism *in addition*
-   to all other running workloads.  For mammalian genomes such as the
-   human genome, this typically means that the local computer must have
-   at least 5-6 GB of RAM.
+3. Sufficient memory must be available on the local computer to hold one copy of
+   the Bowtie index for the desired organism *in addition* to all other running
+   workloads.  For mammalian genomes such as the human genome, this typically
+   means that the local computer must have at least 5-6 GB of RAM.
 
 ## To run
 
@@ -1024,17 +994,16 @@ see the [Yeast local] and [Human local] examples.
 
 </td><td>
 
-Local path where expanded reference jar is located.  Specified path
-should have a `index` subdirectory with a set of Bowtie index files, a
-`sequences` subdirectory with a set of FASTA files, a `snps`
-subdirectory with 0 or more per-chromosome SNP description files, and
-a `cmap.txt` file.  Pre-built reference jars for some commonly studied
-species (including human and mouse) are available from the [Myrna
-web site]; these can be downloaded and expanded into a directory with
-the appropriate structure using an [`unzip`] utility.  If your desired
-genome and/or SNP annotations are not available in pre-built form, you
-will have to make your own reference jars and specify the appropriate
-path.  This option must be specified.
+Local path where expanded reference jar is located.  Specified path should have
+a `index` subdirectory with a set of Bowtie index files, a `sequences`
+subdirectory with a set of FASTA files, a `snps` subdirectory with 0 or more
+per-chromosome SNP description files, and a `cmap.txt` file.  Pre-built
+reference jars for some commonly studied species (including human and mouse) are
+available from the [Myrna web site]; these can be downloaded and expanded into a
+directory with the appropriate structure using an [`unzip`] utility.  If your
+desired genome and/or SNP annotations are not available in pre-built form, you
+will have to make your own reference jars and specify the appropriate path. 
+This option must be specified.
 
 [Myrna web site]: http://bowtie-bio.sf.net/myrna
 [HDFS]: http://hadoop.apache.org/hdfs/docs/current/hdfs_design.html
@@ -1049,9 +1018,9 @@ path.  This option must be specified.
 </td><td>
 
 Local path where the input is located.  If [`--preprocess`] or
-[`--just-preprocess`] are specified, this sould point to a [labeled
-manifest file].  Otherwise, this should point to a directory containing
-preprocessed reads.  This option must be specified.
+[`--just-preprocess`] are specified, this sould point to a [labeled manifest
+file].  Otherwise, this should point to a directory containing preprocessed
+reads.  This option must be specified.
 
 </td></tr><tr><td id="myrna-local-output">
 
@@ -1061,10 +1030,9 @@ preprocessed reads.  This option must be specified.
 
 </td><td>
 
-Local path where the output is to be deposited.  If
-[`--just-preprocess`] is specified, the output consists of the
-preprocessed reads.  Otherwise, the output consists of a
-collection of tables, plots, and alignment files in the [Myrna
+Local path where the output is to be deposited.  If [`--just-preprocess`] is
+specified, the output consists of the preprocessed reads.  Otherwise, the output
+consists of a collection of tables, plots, and alignment files in the [Myrna
 output format].  This option must be specified.
 
 </td></tr><tr><td id="myrna-local-intermediate">
@@ -1075,9 +1043,9 @@ output format].  This option must be specified.
 
 </td><td>
 
-Local path where all intermediate results should be kept temporarily
-(or permanently, if [`--keep-intermediates`] or [`--keep-all`] are
-specified).  Default: `/tmp/myrna/intermediate/<PID>`.
+Local path where all intermediate results should be kept temporarily (or
+permanently, if [`--keep-intermediates`] or [`--keep-all`] are specified). 
+Default: `/tmp/myrna/intermediate/<PID>`.
 
 </td></tr><tr><td id="myrna-local-preprocess-output">
 
@@ -1087,9 +1055,9 @@ specified).  Default: `/tmp/myrna/intermediate/<PID>`.
 
 </td><td>
 
-Local path to the [Bowtie] binary Myrna should use.  By default,
-Myrna searches the `PATH` and in the directory pointed to by the
-`MYRNA_HOME` environment variable.
+Local path to the [Bowtie] binary Myrna should use.  By default, Myrna searches
+the `PATH` and in the directory pointed to by the `MYRNA_HOME` environment
+variable.
 
 </td></tr><tr><td id="myrna-local-keep-intermediates">
 
@@ -1099,9 +1067,8 @@ Myrna searches the `PATH` and in the directory pointed to by the
 
 </td><td>
 
-Keep intermediate directories and files, i.e. the output from all
-stages prior to the final stage.  By default these files are deleted
-as soon as possible.
+Keep intermediate directories and files, i.e. the output from all stages prior
+to the final stage.  By default these files are deleted as soon as possible.
 
 </td></tr><tr><td id="myrna-local-keep-all">
 
@@ -1111,10 +1078,9 @@ as soon as possible.
 
 </td><td>
 
-Keep all temporary files generated during the process of binning and
-sorting data records and moving them from stage to stage, as well as
-all intermediate results.  By default these files are deleted as soon
-as possible.
+Keep all temporary files generated during the process of binning and sorting
+data records and moving them from stage to stage, as well as all intermediate
+results.  By default these files are deleted as soon as possible.
 
 </td></tr><tr><td id="myrna-local-cpus">
 
@@ -1124,9 +1090,8 @@ as possible.
 
 </td><td>
 
-The maximum number of processors to use at any given time during the
-job.  Crossbow will try to make maximal use of the processors
-allocated.  Default: 1.
+The maximum number of processors to use at any given time during the job. 
+Crossbow will try to make maximal use of the processors allocated.  Default: 1.
 
 </td></tr><tr><td id="myrna-local-max-sort-records">
 
@@ -1136,10 +1101,10 @@ allocated.  Default: 1.
 
 </td><td>
 
-Maximum number of records to be dispatched to the sort routine at one
-time when sorting bins before each reduce step.  For each child
-process, this number is effectively divided by the number of CPUs used
-([`--cpus`]).  The default is 200000.
+Maximum number of records to be dispatched to the sort routine at one time when
+sorting bins before each reduce step.  For each child process, this number is
+effectively divided by the number of CPUs used ([`--cpus`]).  The default is
+200000.
 
 </td></tr><tr><td id="myrna-local-max-sort-files">
 
@@ -1149,10 +1114,9 @@ process, this number is effectively divided by the number of CPUs used
 
 </td><td>
 
-Maximum number of files that can be opened at once by the sort routine
-when sorting bins before each reduce step.  For each child process,
-this number is effectively divided by the number of CPUs used
-([`--cpus`]).  The default is 40.
+Maximum number of files that can be opened at once by the sort routine when
+sorting bins before each reduce step.  For each child process, this number is
+effectively divided by the number of CPUs used ([`--cpus`]).  The default is 40.
 
 </td></tr><tr><td id="myrna-local-bowtie">
 
@@ -1163,8 +1127,8 @@ this number is effectively divided by the number of CPUs used
 </td><td>
 
 Path to the Bowtie executable to use when running the Align step.  This
-overrides all other ways that Myrna searches for `bowtie`, including
-the `MYRNA_BOWTIE_HOME` environment variable, the subdirectories of the
+overrides all other ways that Myrna searches for `bowtie`, including the
+`MYRNA_BOWTIE_HOME` environment variable, the subdirectories of the
 `$MYRNA_HOME/bin` directory, and the `PATH`.
 
 </td></tr><tr><td id="myrna-local-fastq-dump">
@@ -1186,13 +1150,12 @@ specified, Myrna also looks for `fastq-dump` in the `PATH`.
 
 </td><td>
 
-Path to the [R] home directory for the [R]/[Bioconductor] installation
-to be used by Myrna.  The home directory is the one containing `bin/R`
-and `bin/Rscript`.  The [R] installation must have all [required
-packages] installed or the job will fail.  This overrides all other
-ways that Myrna searches for [R], including the `MYRNA_RHOME`
-environment variable, the subdirectories of the `$MYRNA_HOME/bin`
-directory, and the `PATH`.
+Path to the [R] home directory for the [R]/[Bioconductor] installation to be
+used by Myrna.  The home directory is the one containing `bin/R` and
+`bin/Rscript`.  The [R] installation must have all [required packages] installed
+or the job will fail.  This overrides all other ways that Myrna searches for
+[R], including the `MYRNA_RHOME` environment variable, the subdirectories of the
+`$MYRNA_HOME/bin` directory, and the `PATH`.
 
 </td></tr>
 
@@ -1200,8 +1163,8 @@ directory, and the `PATH`.
 
 # General Myrna options
 
-The following options can be specified regardless of what mode ([EMR],
-[Hadoop] or single-computer) Myrna is run in.
+The following options can be specified regardless of what mode ([EMR], [Hadoop]
+or single-computer) Myrna is run in.
 
 <table>
 
@@ -1213,14 +1176,13 @@ The following options can be specified regardless of what mode ([EMR],
 
 </td><td>
 
-Treat all input reads as having the specified quality encoding.
-`phred33` denotes the [Phred+33] or "Sanger" format whereby ASCII
-values 33-126 are used to encode qualities on the [Phred scale].
-`phred64` denotes the [Phred+64] or "Illumina 1.3+" format whereby
-ASCII values 64-126 are used to encode qualities on the [Phred scale].
-`solexa64` denotes the [Solexa+64] or "Solexa/Illumina 1.0" format
-whereby ASCII values 59-126 are used to encode qualities on a [log-odds
-scale] that includes values as low as -5.  Default: `phred33`.
+Treat all input reads as having the specified quality encoding. `phred33`
+denotes the [Phred+33] or "Sanger" format whereby ASCII values 33-126 are used
+to encode qualities on the [Phred scale]. `phred64` denotes the [Phred+64] or
+"Illumina 1.3+" format whereby ASCII values 64-126 are used to encode qualities
+on the [Phred scale]. `solexa64` denotes the [Solexa+64] or "Solexa/Illumina
+1.0" format whereby ASCII values 59-126 are used to encode qualities on a
+[log-odds scale] that includes values as low as -5.  Default: `phred33`.
 
 [Phred scale]: http://en.wikipedia.org/wiki/Phred_quality_score
 [Phred+33]: http://en.wikipedia.org/wiki/FASTQ_format#Encoding
@@ -1237,11 +1199,10 @@ scale] that includes values as low as -5.  Default: `phred33`.
 </td><td>
 
 The input path or URL refers to a [labeled manifest file] rather than a
-directory of preprocessed reads.  The first step in the Myrna
-computation will be to preprocess the reads listed in the [labeled
-manifest file] and store the preprocessed reads in the intermediate
-directory or in the `--preprocess-output` directory if it's specified.
-Default: off.
+directory of preprocessed reads.  The first step in the Myrna computation will
+be to preprocess the reads listed in the [labeled manifest file] and store the
+preprocessed reads in the intermediate directory or in the `--preprocess-output`
+directory if it's specified. Default: off.
 
 [manifest file]: #labeled-manifest-files
 [labeled manifest file]: #labeled-manifest-files
@@ -1255,9 +1216,9 @@ Default: off.
 </td><td>
 
 The input path or URL refers to a [labeled manifest file] rather than a
-directory of preprocessed reads.  Myrna will preprocess the reads
-listed in the [labeled manifest file] and store the preprocessed reads
-in the `--output` directory and quit.  Default: off.
+directory of preprocessed reads.  Myrna will preprocess the reads listed in the
+[labeled manifest file] and store the preprocessed reads in the `--output`
+directory and quit.  Default: off.
 
 [manifest file]: #labeled-manifest-files
 
@@ -1269,10 +1230,9 @@ in the `--output` directory and quit.  Default: off.
 
 </td><td>
 
-Instead of running the Myrna pipeline all the way through to the end,
-run the pipeline up to and including the align stage and store the
-results in the [`--output`] URL.  To resume the run later, use
-[`--resume-align`].
+Instead of running the Myrna pipeline all the way through to the end, run the
+pipeline up to and including the align stage and store the results in the
+[`--output`] URL.  To resume the run later, use [`--resume-align`].
 
 </td></tr><tr><td id="myrna-resume-align">
 
@@ -1282,9 +1242,8 @@ results in the [`--output`] URL.  To resume the run later, use
 
 </td><td>
 
-Resume the Myrna pipeline from just after the alignment stage.  The
-[`--input`] URL must point to an [`--output`] URL from a previous run
-using [`--just-align`].
+Resume the Myrna pipeline from just after the alignment stage.  The [`--input`]
+URL must point to an [`--output`] URL from a previous run using [`--just-align`].
 
 </td></tr><tr><td id="myrna-bowtie-args">
 
@@ -1294,9 +1253,8 @@ using [`--just-align`].
 
 </td><td>
 
-Pass the specified arguments to [Bowtie] for the Align stage.  Default:
-[`-m 1`].  See the [Bowtie manual] for details on what options are
-available.
+Pass the specified arguments to [Bowtie] for the Align stage.  Default: [`-m
+1`].  See the [Bowtie manual] for details on what options are available.
 
 [`-m 1`]: http://bowtie-bio.sf.net/manual.shtml#bowtie-options-m
 [Bowtie manual]: http://bowtie-bio.sf.net/manual.shtml
@@ -1309,10 +1267,9 @@ available.
 
 </td><td>
 
-Randomly discard a fraction of the input reads.  E.g. specify `0.5` to
-discard 50%.  This applies to all input reads regardless of type
-(paired vs. unpaired), length or label.  This can be useful for
-debugging.  Default: 0.0.
+Randomly discard a fraction of the input reads.  E.g. specify `0.5` to discard
+50%.  This applies to all input reads regardless of type (paired vs. unpaired),
+length or label.  This can be useful for debugging.  Default: 0.0.
 
 </td></tr><tr><td id="myrna-influence">
 
@@ -1322,11 +1279,10 @@ debugging.  Default: 0.0.
 
 </td><td>
 
-A read's "influence" is the number of bases from the 3' end (or the 5'
-end if [`--from5prime`] is specified, or the middle if
-[`--from-middle`] is specified) that should be considered when
-overlapping its alignment with a gene footprint. Default: 1.  See also:
-[`--gene-footprint`], [`--from3prime`], [`--from5prime`],
+A read's "influence" is the number of bases from the 3' end (or the 5' end if
+[`--from5prime`] is specified, or the middle if [`--from-middle`] is specified)
+that should be considered when overlapping its alignment with a gene footprint.
+Default: 1.  See also: [`--gene-footprint`], [`--from3prime`], [`--from5prime`],
 [`--from-middle`].
 
 </td></tr><tr><td id="myrna-from3prime">
@@ -1337,8 +1293,8 @@ overlapping its alignment with a gene footprint. Default: 1.  See also:
 
 </td><td>
 
-If specified, a read's "influence" is measured from its 3' end after
-all trimming.  This is the default.  See also: [`--gene-footprint`],
+If specified, a read's "influence" is measured from its 3' end after all
+trimming.  This is the default.  See also: [`--gene-footprint`],
 [`--influence`], [`--from5prime`], [`--from-middle`].
 
 </td></tr><tr><td id="myrna-from5prime">
@@ -1349,10 +1305,9 @@ all trimming.  This is the default.  See also: [`--gene-footprint`],
 
 </td><td>
 
-If specified, a read's "influence" is measured from its 5' end after
-all trimming.  Default: influence is measured from the 3' end.  See
-also: [`--gene-footprint`], [`--influence`], [`--from3prime`],
-[`--from-middle`].
+If specified, a read's "influence" is measured from its 5' end after all
+trimming.  Default: influence is measured from the 3' end.  See also:
+[`--gene-footprint`], [`--influence`], [`--from3prime`], [`--from-middle`].
 
 </td></tr><tr><td id="myrna-from-middle">
 
@@ -1362,10 +1317,9 @@ also: [`--gene-footprint`], [`--influence`], [`--from3prime`],
 
 </td><td>
 
-If specified, a read's "influence" is measured from the middle of the
-read, after all trimming.  Default: influence is measured from 3' end.
-See also: [`--gene-footprint`], [`--influence`], [`--from3prime`],
-[`--from5prime`].
+If specified, a read's "influence" is measured from the middle of the read,
+after all trimming.  Default: influence is measured from 3' end. See also:
+[`--gene-footprint`], [`--influence`], [`--from3prime`], [`--from5prime`].
 
 </td></tr><tr><td id="myrna-top">
 
@@ -1375,8 +1329,8 @@ See also: [`--gene-footprint`], [`--influence`], [`--from3prime`],
 
 </td><td>
 
-Myrna will report alignments and coverage plots for the "top" `<int>`.
-The "top" genes are those with the lowest p-values.  Default: 50.
+Myrna will report alignments and coverage plots for the "top" `<int>`. The "top"
+genes are those with the lowest p-values.  Default: 50.
 
 </td></tr><tr><td id="myrna-family">
 
@@ -1386,14 +1340,13 @@ The "top" genes are those with the lowest p-values.  Default: 50.
 
 </td><td>
 
-Type of statistical test used to determine a measure of differential
-expression for a gene.  If [`--nulls`] is 0 or unspecified, then the
-p-value is determined parametrically from this model.  If [`--nulls`] is
-greater than 0, then a permutation test is used to determine p-values.
-Gaussian is recommended for datasets with many (greater than 10)
-samples, whereas poisson is recommended for datasets with fewer (less
-than or equal to 10) samples.  However, this is not a hard-and-fast
-rule; experimentation is encouraged.
+Type of statistical test used to determine a measure of differential expression
+for a gene.  If [`--nulls`] is 0 or unspecified, then the p-value is determined
+parametrically from this model.  If [`--nulls`] is greater than 0, then a
+permutation test is used to determine p-values. Gaussian is recommended for
+datasets with many (greater than 10) samples, whereas poisson is recommended for
+datasets with fewer (less than or equal to 10) samples.  However, this is not a
+hard-and-fast rule; experimentation is encouraged.
 
 </td></tr><tr><td id="myrna-normalize">
 
@@ -1403,13 +1356,12 @@ rule; experimentation is encouraged.
 
 </td><td>
 
-Each count (or pooled count) is "normalized" according to a per-label
-baseline normalization factor.  If `--normalize total` is specified, the
-normalization factor is simply the total for the label.  If `--normalize
-median` is specified, the normalization factor is the median among
-non-zero counts for that label.  If `--normalize upper-quartile` is
-specified, the normalization factor is the upper-quartile (75th
-percentile) value among non-zero counts for that label.
+Each count (or pooled count) is "normalized" according to a per-label baseline
+normalization factor.  If `--normalize total` is specified, the normalization
+factor is simply the total for the label.  If `--normalize median` is specified,
+the normalization factor is the median among non-zero counts for that label.  If
+`--normalize upper-quartile` is specified, the normalization factor is the
+upper-quartile (75th percentile) value among non-zero counts for that label.
 
 Default: `upper-quartile`.
 
@@ -1421,17 +1373,16 @@ Default: `upper-quartile`.
 
 </td><td>
 
-Set the gene footprint used when calculating overlaps between
-alignments and genes.  `union`: an alignment counts toward a gene if
-its "influence" (by default, its 3'-most base) overlaps a base that
-appears in *any* of the gene's annotated transcripts.  `intersect`: an
-alignment counts toward a gene if its influence overlaps a base that
-appears in *all* of the gene's annotated transcripts.  Genomic
-positions appearing in transcripts for more than one gene are excluded
-from all footprints.  Default: `intersect`.
+Set the gene footprint used when calculating overlaps between alignments and
+genes.  `union`: an alignment counts toward a gene if its "influence" (by
+default, its 3'-most base) overlaps a base that appears in *any* of the gene's
+annotated transcripts.  `intersect`: an alignment counts toward a gene if its
+influence overlaps a base that appears in *all* of the gene's annotated
+transcripts.  Genomic positions appearing in transcripts for more than one gene
+are excluded from all footprints.  Default: `intersect`.
 
-See [`--influence`] and [`--from5prime`] options for details on how
-influence can be configured.
+See [`--influence`] and [`--from5prime`] options for details on how influence
+can be configured.
 
 [Ensembl]: http://www.ensembl.org/
 
@@ -1443,10 +1394,10 @@ influence can be configured.
 
 </td><td>
 
-If specified, it is assumed that (a) the user's input labels must be
-divided into two groups, and (b) biological replicates must be
-"matched" between the groups.  When this option is used, the
-statistical test used will take the pairing into account.
+If specified, it is assumed that (a) the user's input labels must be divided
+into two groups, and (b) biological replicates must be "matched" between the
+groups.  When this option is used, the statistical test used will take the
+pairing into account.
 
 </td></tr><tr><td id="myrna-nulls">
 
@@ -1456,12 +1407,12 @@ statistical test used will take the pairing into account.
 
 </td><td>
 
-Set the number of null statistics generated per gene to `<int>`.  A
-null statistic for a gene is calculated by permuting the sample labels
-for the counts and normalization factors, then re-calculating the
-statistical test.  If `<int>` is non-zero, then the reported p-values
-will be the result of a permutation test.  Otherwise, the p-values are
-calculated directly from the parametric statistical model.
+Set the number of null statistics generated per gene to `<int>`.  A null
+statistic for a gene is calculated by permuting the sample labels for the counts
+and normalization factors, then re-calculating the statistical test.  If `<int>`
+is non-zero, then the reported p-values will be the result of a permutation
+test.  Otherwise, the p-values are calculated directly from the parametric
+statistical model.
 
 </td></tr><tr><td id="myrna-truncate">
 
@@ -1471,9 +1422,8 @@ calculated directly from the parametric statistical model.
 
 </td><td>
 
-Truncate all reads down to a length of `<int>` bases by removing bases
-from the 3' end if necessary.  Reads shorter than `<int>` bases are
-left alone.
+Truncate all reads down to a length of `<int>` bases by removing bases from the
+3' end if necessary.  Reads shorter than `<int>` bases are left alone.
 
 </td></tr><tr><td id="myrna-truncate-discard">
 
@@ -1483,9 +1433,8 @@ left alone.
 
 </td><td>
 
-Truncate all reads down to a length of `<int>` bases by removing bases
-from the 3' end if necessary.  Reads shorter than `<int>` bases are
-skipped entirely.
+Truncate all reads down to a length of `<int>` bases by removing bases from the
+3' end if necessary.  Reads shorter than `<int>` bases are skipped entirely.
 
 </td></tr><tr><td id="myrna-ditch-alignments">
 
@@ -1496,8 +1445,7 @@ skipped entirely.
 </td><td>
 
 Suppress alignments and pileup plots from Myrna output.  Differentially
-expressed genes, their p-values, and associated plots are still
-reported.
+expressed genes, their p-values, and associated plots are still reported.
 
 </td></tr><tr><td id="myrna-discard-mate">
 
@@ -1507,9 +1455,9 @@ reported.
 
 </td><td>
 
-For paired-end reads, discard mate `<int>` (either 1 or 2) prior to
-alignment.  This can be helpful if you'd like to compare datasets where
-some reads are paired and others are unpaired.
+For paired-end reads, discard mate `<int>` (either 1 or 2) prior to alignment. 
+This can be helpful if you'd like to compare datasets where some reads are
+paired and others are unpaired.
 
 </td></tr><tr><td id="myrna-pool-reps">
 
@@ -1519,12 +1467,11 @@ some reads are paired and others are unpaired.
 
 </td><td>
 
-Pool all replicates before calculating statistics.  E.g. if the initial
-labels are A-1-1, A-1-2, A-2-1, A-2-2, B-1-1, B-1-2, B-2-1, B-2-2 (i.e.
-two groups, each with two biological replicates, each with two
-technical replicates), specifying this option will cause them to be
-pooled (gene counts are totaled) into A and B prior to calculation of
-normalization factors and statistics.
+Pool all replicates before calculating statistics.  E.g. if the initial labels
+are A-1-1, A-1-2, A-2-1, A-2-2, B-1-1, B-1-2, B-2-1, B-2-2 (i.e. two groups,
+each with two biological replicates, each with two technical replicates),
+specifying this option will cause them to be pooled (gene counts are totaled)
+into A and B prior to calculation of normalization factors and statistics.
 
 </td></tr><tr><td id="myrna-pool-tech-reps">
 
@@ -1534,12 +1481,12 @@ normalization factors and statistics.
 
 </td><td>
 
-Pool all technical replicates before calculating statistics.  E.g. if
-the initial labels are A-1-1, A-1-2, A-2-1, A-2-2, B-1-1, B-1-2, B-2-1,
-B-2-2 (i.e. two groups, each with two biological replicates, each with
-two technical replicates), specifying this option will cause them to be
-pooled (gene counts are totaled) into A-1, A-2, B-1, and B-2 prior to
-calculation of normalization factors and statistics.
+Pool all technical replicates before calculating statistics.  E.g. if the
+initial labels are A-1-1, A-1-2, A-2-1, A-2-2, B-1-1, B-1-2, B-2-1, B-2-2 (i.e.
+two groups, each with two biological replicates, each with two technical
+replicates), specifying this option will cause them to be pooled (gene counts
+are totaled) into A-1, A-2, B-1, and B-2 prior to calculation of normalization
+factors and statistics.
 
 </td></tr><tr><td id="myrna-add-fudge">
 
@@ -1549,8 +1496,8 @@ calculation of normalization factors and statistics.
 
 </td></tr>
 
-Add `<int>` to all counts and normalization factors prior to
-caluclating statistics.
+Add `<int>` to all counts and normalization factors prior to calculating
+statistics.
 
 </td></tr><tr><td id="myrna-test">
 
@@ -1560,12 +1507,11 @@ caluclating statistics.
 
 </td><td>
 
-Instead of running Myrna, just search for the supporting tools
-([Bowtie] and [R]/[Bioconductor]), report whether and how they were
-found, and whether all necessary [R]/[Bioconductor] packages are
-installed.  If running in Cloud Mode, this just tests whether the
-`elastic-mapreduce` script is locatable and runnable.  Use this
-option to debug your Myrna installation.
+Instead of running Myrna, just search for the supporting tools ([Bowtie],
+[R]/[Bioconductor], and [`--fastq-dump`]), report whether and how they were
+found, and whether all necessary [R]/[Bioconductor] packages are installed.  If
+running in Cloud Mode, this just tests whether the `elastic-mapreduce` script is
+locatable and runnable.  Use this option to debug your Myrna installation.
 
 </td></tr><tr><td id="myrna-tempdir">
 
@@ -1575,22 +1521,21 @@ option to debug your Myrna installation.
 
 </td><td>
 
-Local directory where temporary files (e.g. dynamically generated
-scripts) should be deposited.  Default: `/tmp/Myrna/invoke.scripts`.
+Local directory where temporary files (e.g. dynamically generated scripts)
+should be deposited.  Default: `/tmp/Myrna/invoke.scripts`.
 
 </table>
 
 # Myrna examples
 
-The following subsections guide you step-by-step through examples
-included with the Myrna package.  Because reads (and sometimes
-reference jars) must be obtained over the Internet, running these
-examples requires an active Internet connection.
+The following subsections guide you step-by-step through examples included with
+the Myrna package.  Because reads (and sometimes reference jars) must be
+obtained over the Internet, running these examples requires an active Internet
+connection.
 
 ## Yeast (small)
 
-Data for this example is taken from the study by [Lee, Hansen, Bullard
-et al].
+Data for this example is taken from the study by [Lee, Hansen, Bullard et al].
 
 [Lee, Hansen, Bullard et al]: http://www.plosgenetics.org/article/info%3Adoi%2F10.1371%2Fjournal.pgen.1000299
 
@@ -1600,21 +1545,20 @@ et al].
 
 #### Via web interface
 
-Identify an [S3] bucket to hold the job's input and output.  You may
-need to create an [S3 bucket] for this purpose.  See your [S3 tool]'s
-documentation.
+Identify an [S3] bucket to hold the job's input and output.  You may need to
+create an [S3 bucket] for this purpose.  See your [S3 tool]'s documentation.
 
 [S3 tool]: #s3-tools
 [S3 bucket]: http://docs.amazonwebservices.com/AmazonS3/latest/gsg/
 
-Use an [S3 tool] to upload `$MYRNA_HOME/example/yeast/small.manifest`
-to the `example/yeast` subdirectory in your bucket.  You can do so with
-this [s3cmd] command:
+Use an [S3 tool] to upload `$MYRNA_HOME/example/yeast/small.manifest` to the
+`example/yeast` subdirectory in your bucket.  You can do so with this [s3cmd]
+command:
 
     s3cmd put $MYRNA_HOME/example/yeast/small.manifest s3://<YOUR-BUCKET>/example/yeast/
 
-To start the [EMR] job, start a new Myrna job via the [AWS console]
-and fill in the form as follows:
+To start the [EMR] job, start a new Myrna job via the [AWS console] and fill in
+the form as follows:
 
 <div>
 <img src="images/AWS_myrna_yeast_fillin.png" alt="" />
@@ -1646,11 +1590,10 @@ and fill in the form as follows:
 14. For **# EC2 instances**, enter 5
 15. Click Submit
 
-This job typically takes about 45 minutes on 5 `c1.xlarge` [EC2] nodes.
-See [Monitoring your EMR jobs] for information on how to track job
-progress.  To download the results, use an [S3 tool] to retrieve the
-contents of the `s3n://<YOUR-BUCKET>/example/yeast/output_small`
-directory.
+This job typically takes about 45 minutes on 5 `c1.xlarge` [EC2] nodes. See
+[Monitoring your EMR jobs] for information on how to track job progress.  To
+download the results, use an [S3 tool] to retrieve the contents of the
+`s3n://<YOUR-BUCKET>/example/yeast/output_small` directory.
 
 [ssh]: http://en.wikipedia.org/wiki/Secure_Shell
 
@@ -1660,18 +1603,17 @@ Test your Myrna installation by running:
 
     $MYRNA_HOME/myrna_emr --test
 
-This will warn you if any supporting tools (`elastic-mapreduce` in this
-case) cannot be located or run.
+This will warn you if any supporting tools (`elastic-mapreduce` in this case)
+cannot be located or run.
 
-Identify an [S3] bucket to hold the job's input and output.  You may
-need to create an [S3 bucket] for this purpose.  See your [S3 tool]'s
-documentation.
+Identify an [S3] bucket to hold the job's input and output.  You may need to
+create an [S3 bucket] for this purpose.  See your [S3 tool]'s documentation.
 
 [S3 tool]: #s3-tools
 
-Use your [S3 tool] to upload `$MYRNA_HOME/example/yeast/small.manifest`
-to the `example/yeast` subdirectory in your bucket.  You can do so with
-this [s3cmd] command:
+Use your [S3 tool] to upload `$MYRNA_HOME/example/yeast/small.manifest` to the
+`example/yeast` subdirectory in your bucket.  You can do so with this [s3cmd]
+command:
 
     s3cmd put $MYRNA_HOME/example/yeast/small.manifest s3://<YOUR-BUCKET>/example/yeast/
 
@@ -1687,19 +1629,17 @@ Start the [EMR] job with the following command (substituting for
         --quality solexa64 \
         --instances 5
 
-The `--reference` option instructs Myrna to use a pre-built reference
-jar at URL `s3n://myrna-refs/yeast_ensembl_67.jar`.  The
-[`--preprocess`] option instructs Myrna to treat the input as a
-[manifest file], rather than a directory of already-preprocessed reads.
-As the first stage of the pipeline, Myrna downloads files specified in
-the manifest file and preprocesses them into Myrna's read format.
-[`--output`] specifies where the final output is placed.
+The `--reference` option instructs Myrna to use a pre-built reference jar at URL
+`s3n://myrna-refs/yeast_ensembl_67.jar`.  The [`--preprocess`] option instructs
+Myrna to treat the input as a [manifest file], rather than a directory of
+already-preprocessed reads. As the first stage of the pipeline, Myrna downloads
+files specified in the manifest file and preprocesses them into Myrna's read
+format. [`--output`] specifies where the final output is placed.
 
-This job typically takes about 45 minutes on 5 `c1.xlarge` [EC2] nodes.
-See [Monitoring your EMR jobs] for information on how to track job
-progress.  To download the results, use an [S3 tool] to retrieve the
-contents of the `s3n://<YOUR-BUCKET>/example/yeast/output_small`
-directory.
+This job typically takes about 45 minutes on 5 `c1.xlarge` [EC2] nodes. See
+[Monitoring your EMR jobs] for information on how to track job progress.  To
+download the results, use an [S3 tool] to retrieve the contents of the
+`s3n://<YOUR-BUCKET>/example/yeast/output_small` directory.
 
 [Monitoring your EMR jobs]: #monitoring-your-emr-jobs
 
@@ -1712,10 +1652,9 @@ running:
 
     $MYRNA_HOME/myrna_hadoop --test
 
-This will warn you if any of the supporting tools or packages are
-missing on the master.  *You must also ensure* that the same tools are
-installed in the same paths on all slave nodes, and are runnable by
-the slaves.
+This will warn you if any of the supporting tools or packages are missing on the
+master.  *You must also ensure* that the same tools are installed in the same
+paths on all slave nodes, and are runnable by the slaves.
 
 Download `yeast_ensembl_67.jar` from the following URL:
 
@@ -1741,10 +1680,10 @@ either add it to your `PATH` (recommended) or specify the full path to the
     hadoop dfs -mkdir /myrna-refs
     hadoop dfs -put yeast_ensembl_67.jar /myrna-refs/yeast_ensembl_67.jar
 
-The first creates a directory in [HDFS] (you will see a warning message
-if the directory already exists) and the second copies the local jar
-files into that directory.  In this example, we deposit the jars in the
-`/myrna-refs` directory, but any [HDFS] directory is fine.
+The first creates a directory in [HDFS] (you will see a warning message if the
+directory already exists) and the second copies the local jar files into that
+directory.  In this example, we deposit the jars in the `/myrna-refs` directory,
+but any [HDFS] directory is fine.
 
 Remove the local `yeast_ensembl_67.jar` file to save space.  E.g.:
 
@@ -1766,12 +1705,12 @@ Now start the job by running:
         --reference=hdfs:///myrna-refs/yeast_ensembl_67.jar \
         --quality solexa64
 
-The [`--preprocess`] option instructs Myrna to treat the input as a
-[manifest file].  As the first stage of the pipeline, Myrna will
-download the files specified on each line of the manifest file and
-preprocess them into Myrna's read format.  The [`--reference`] option
-specifies the location of the reference jar contents.  The [`--output`]
-option specifies where the final output is placed.
+The [`--preprocess`] option instructs Myrna to treat the input as a [manifest
+file].  As the first stage of the pipeline, Myrna will download the files
+specified on each line of the manifest file and preprocess them into Myrna's
+read format.  The [`--reference`] option specifies the location of the reference
+jar contents.  The [`--output`] option specifies where the final output is
+placed.
 
 ### Single computer
 
@@ -1781,13 +1720,12 @@ Test your Myrna installation by running:
 
     $MYRNA_HOME/myrna_local --test
 
-This will warn you if any supporting tools (`bowtie` and `R` in this
-case) cannot be located or run.
+This will warn you if any supporting tools (`bowtie`, `R` in this case) cannot
+be located or run.
 
-If you don't already have a `MYRNA_REFS` directory, choose one; it
-will be the default path Myrna searches for reference jars.
-Permanently set the `MYRNA_REFS` environment variable to the
-selected directory.
+If you don't already have a `MYRNA_REFS` directory, choose one; it will be the
+default path Myrna searches for reference jars. Permanently set the `MYRNA_REFS`
+environment variable to the selected directory.
 
 Create a subdirectory called `$MYRNA_REFS/yeast_ensembl_67`:
 
@@ -1813,8 +1751,8 @@ Now you may remove `yeast_ensembl_67.jar` to save space:
 
     rm -f $MYRNA_REFS/yeast_ensembl_67/yeast_ensembl_67.jar
 
-Now run Myrna.  Change to the `$MYRNA_HOME/example/yeast` directory and
-start the job via the `myrna_local` script:
+Now run Myrna.  Change to the `$MYRNA_HOME/example/yeast` directory and start
+the job via the `myrna_local` script:
 
     cd $MYRNA_HOME/example/yeast
     $MYRNA_HOME/myrna_local \
@@ -1827,14 +1765,13 @@ start the job via the `myrna_local` script:
 
 Substitute the number of CPUs you'd like to use for `<CPUS>`.
 
-The [`--preprocess`] option instructs Myrna to treat the input as a
-[manifest file].  As the first stage of the pipeline, Myrna will
-download the files specified on each line of the manifest file and
-"preprocess" them into a format understood by Myrna.  The
-[`--reference`] option specifies the location of the reference jar
-contents.  The [`--output`] option specifies where the final output is
-placed.  The [`--cpus`] option enabled Myrna to use up to the specified
-number of CPUs at any given time.
+The [`--preprocess`] option instructs Myrna to treat the input as a [manifest
+file].  As the first stage of the pipeline, Myrna will download the files
+specified on each line of the manifest file and "preprocess" them into a format
+understood by Myrna.  The [`--reference`] option specifies the location of the
+reference jar contents.  The [`--output`] option specifies where the final
+output is placed.  The [`--cpus`] option enabled Myrna to use up to the
+specified number of CPUs at any given time.
 
 [manifest file]: #labeled-manifest-files
 
@@ -1851,13 +1788,12 @@ al].
 
 #### Via web interface
 
-First we build a reference jar for a human assembly and annotations
-using scripts included with Myrna.  The script searches for a
-`bowtie-build` executable with the same rules Myrna uses to search for
-`bowtie`.  See [Installing Myrna] for details.  Because one of the
-steps executed by the script builds an index of the human genome, it
-should be run on a computer with plenty of memory (at least 4
-gigabytes, preferably 6 or more).
+First we build a reference jar for a human assembly and annotations using
+scripts included with Myrna.  The script searches for a `bowtie-build`
+executable with the same rules Myrna uses to search for `bowtie`.  See
+[Installing Myrna] for details.  Because one of the steps executed by the script
+builds an index of the human genome, it should be run on a computer with plenty
+of memory (at least 4 gigabytes, preferably 6 or more).
 
 Run the following commands:
 
@@ -1869,22 +1805,22 @@ Run the following commands:
 
 The `human_ensembl.sh` script will automatically:
 
-1. Download the FASTA sequence for human; the particular assembly and
-   build downloaded depends on the current [Ensembl] version.
+1. Download the FASTA sequence for human; the particular assembly and build
+   downloaded depends on the current [Ensembl] version.
 2. Build an index from the sequence downloaded in step 1.
 3. Download gene annotations from [Ensembl] via [`biomaRt`].
 4. Package the information in a `.jar` file
    `$MYRNA_HOME/reftools/human/human_ensembl_67.jar`
 
-At the time of this writing, the scripts in the `$MYRNA_HOME/reftools`
-directory will only work if the current version of [Ensembl] is v67.
-If the [Ensembl] version changes, the user must edit the `ENSEMBL_VER`
-and `ENSEMBL_PREFIX` variables (at the top of the script) accordingly.
-This will be fixed in a future version.
+At the time of this writing, the scripts in the `$MYRNA_HOME/reftools` directory
+will only work if the current version of [Ensembl] is v67. If the [Ensembl]
+version changes, the user must edit the `ENSEMBL_VER` and `ENSEMBL_PREFIX`
+variables (at the top of the script) accordingly. This will be fixed in a future
+version.
 
 Next, use an [S3 tool] to upload the `human_ensembl_67.jar` file to the
-`myrna-refs` subdirectory in your bucket.  E.g. with this [s3cmd]
-command (substituting for `<YOUR-BUCKET>`):
+`myrna-refs` subdirectory in your bucket.  E.g. with this [s3cmd] command
+(substituting for `<YOUR-BUCKET>`):
 
     s3cmd put $MYRNA_HOME/reftools/human/human_ensembl_67.jar s3://<YOUR-BUCKET>/myrna-refs/
 
@@ -1934,23 +1870,21 @@ form as below (substituting for `<YOUR-BUCKET>`):
 14. For **# EC2 instances**, enter 9
 15. Click Submit
 
-This job typically takes about 55 minutes on 9 `c1.xlarge` [EC2] nodes.
-See [Monitoring your EMR jobs] for information on how to track job
-progress.  To download the results, use an [S3 tool] to retrieve the
-contents of the `s3n://<YOUR-BUCKET>/example/human/output_full`
-directory.
+This job typically takes about 55 minutes on 9 `c1.xlarge` [EC2] nodes. See
+[Monitoring your EMR jobs] for information on how to track job progress.  To
+download the results, use an [S3 tool] to retrieve the contents of the
+`s3n://<YOUR-BUCKET>/example/human/output_full` directory.
 
 [ssh]: http://en.wikipedia.org/wiki/Secure_Shell
 
 #### Via command line
 
-First we build a reference jar for a human assembly and annotations
-using scripts included with Myrna.  The script searches for a
-`bowtie-build` executable with the same rules Myrna uses to search for
-`bowtie`.  See [Installing Myrna] for details.  Because one of the
-steps executed by the script builds an index of the human genome, it
-should be run on a computer with plenty of memory (at least 4
-gigabytes, preferably 6 or more).
+First we build a reference jar for a human assembly and annotations using
+scripts included with Myrna.  The script searches for a `bowtie-build`
+executable with the same rules Myrna uses to search for `bowtie`.  See
+[Installing Myrna] for details.  Because one of the steps executed by the script
+builds an index of the human genome, it should be run on a computer with plenty
+of memory (at least 4 gigabytes, preferably 6 or more).
 
 Run the following commands:
 
@@ -1962,35 +1896,34 @@ Run the following commands:
 
 The `human_ensembl.sh` script will automatically:
 
-1. Download the FASTA sequence for human; the particular assembly and
-   build downloaded depends on the current [Ensembl] version.
+1. Download the FASTA sequence for human; the particular assembly and build
+   downloaded depends on the current [Ensembl] version.
 2. Build an index from the sequence downloaded in step 1.
 3. Download gene annotations from [Ensembl] via [`biomaRt`].
 4. Package the information in a `.jar` file
    `$MYRNA_HOME/reftools/human/human_ensembl_67.jar`
 
-At the time of this writing, the scripts in the `$MYRNA_HOME/reftools`
-directory will only work if the current version of [Ensembl] is v67.
-If the [Ensembl] version changes, the user must edit the `ENSEMBL_VER`
-and `ENSEMBL_PREFIX` variables (at the top of the script) accordingly.
-This will be fixed in a future version.
+At the time of this writing, the scripts in the `$MYRNA_HOME/reftools` directory
+will only work if the current version of [Ensembl] is v67. If the [Ensembl]
+version changes, the user must edit the `ENSEMBL_VER` and `ENSEMBL_PREFIX`
+variables (at the top of the script) accordingly. This will be fixed in a future
+version.
 
 Next, use an [S3 tool] to upload the `human_ensembl_67.jar` file to the
-`myrna-refs` subdirectory in your bucket.  E.g. with this [s3cmd]
-command (substituting for `<YOUR-BUCKET>`):
+`myrna-refs` subdirectory in your bucket.  E.g. with this [s3cmd] command
+(substituting for `<YOUR-BUCKET>`):
 
     s3cmd put $MYRNA_HOME/reftools/human/human_ensembl_67.jar s3://<YOUR-BUCKET>/myrna-refs/
 
 [S3 tool]: #s3-tools
 
-You may wish to remove the locally-generated reference jar files to
-save space. E.g.:
+You may wish to remove the locally-generated reference jar files to save space.
+E.g.:
 
     rm -rf $MYRNA_HOME/reftools/human
 
-Use an [S3 tool] to upload `$MYRNA_HOME/example/human/full.manifest`
-to the `example/human` subdirectory in your bucket.  E.g. with this
-[s3cmd] command:
+Use an [S3 tool] to upload `$MYRNA_HOME/example/human/full.manifest` to the
+`example/human` subdirectory in your bucket.  E.g. with this [s3cmd] command:
 
     s3cmd put $MYRNA_HOME/example/human/full.manifest s3://<YOUR-BUCKET>/example/human/
 
@@ -2005,23 +1938,21 @@ To start the [EMR] job, run the following command (substituting for
         --reference=s3n://<YOUR-BUCKET>/myrna-refs/human_ensembl_67.jar \
         --instances 9
 
-This job typically takes about 55 minutes on 9 `c1.xlarge` [EC2] nodes.
-See [Monitoring your EMR jobs] for information on how to track job
-progress.  To download the results, use an [S3 tool] to retrieve the
-contents of the `s3n://<YOUR-BUCKET>/example/human/output_full`
-directory.
+This job typically takes about 55 minutes on 9 `c1.xlarge` [EC2] nodes. See
+[Monitoring your EMR jobs] for information on how to track job progress.  To
+download the results, use an [S3 tool] to retrieve the contents of the
+`s3n://<YOUR-BUCKET>/example/human/output_full` directory.
 
 ### Hadoop
 
 <div id="myrna-example-human-hadoop" />
 
-First we build a reference jar for a human assembly and annotations
-using scripts included with Myrna.  The script searches for a
-`bowtie-build` executable with the same rules Myrna uses to search for
-`bowtie`.  See [Installing Myrna] for details.  Because one of the
-steps executed by the script builds an index of the human genome, it
-should be run on a computer with plenty of memory (at least 4
-gigabytes, preferably 6 or more).
+First we build a reference jar for a human assembly and annotations using
+scripts included with Myrna.  The script searches for a `bowtie-build`
+executable with the same rules Myrna uses to search for `bowtie`.  See
+[Installing Myrna] for details.  Because one of the steps executed by the script
+builds an index of the human genome, it should be run on a computer with plenty
+of memory (at least 4 gigabytes, preferably 6 or more).
 
 Run the following commands:
 
@@ -2033,8 +1964,8 @@ Run the following commands:
 
 The `human_ensembl.sh` script will automatically:
 
-1. Download the FASTA sequence for human; the particular assembly and
-   build downloaded depends on the current [Ensembl] version.
+1. Download the FASTA sequence for human; the particular assembly and build
+   downloaded depends on the current [Ensembl] version.
 2. Build an index from the sequence downloaded in step 1.
 3. Download gene annotations from [Ensembl] via [`biomaRt`].
 4. Package the information in a `.jar` file
@@ -2043,24 +1974,24 @@ The `human_ensembl.sh` script will automatically:
 Note that, due chiefly to the amount of time it takes to build a Bowtie index
 for the human genome, this command usually takes several hours to complete.
 
-At the time of this writing, the scripts in the `$MYRNA_HOME/reftools`
-directory will only work if the current version of [Ensembl] is v67.
-If the [Ensembl] version changes, the user must edit the `ENSEMBL_VER`
-and `ENSEMBL_PREFIX` variables (at the top of the script) accordingly.
-This will be fixed in a future version.
+At the time of this writing, the scripts in the `$MYRNA_HOME/reftools` directory
+will only work if the current version of [Ensembl] is v67. If the [Ensembl]
+version changes, the user must edit the `ENSEMBL_VER` and `ENSEMBL_PREFIX`
+variables (at the top of the script) accordingly. This will be fixed in a future
+version.
 
-Next, use the `hadoop` script to put the `human_ensembl_67.jar` file in
-the `myrna-refs` [HDFS] directory:
+Next, use the `hadoop` script to put the `human_ensembl_67.jar` file in the
+`myrna-refs` [HDFS] directory:
 
     hadoop dfs -mkdir /myrna-refs
     hadoop dfs -put $MYRNA_HOME/reftools/human_ensembl_67/human_ensembl_67.jar /myrna-refs/human_ensembl_67.jar
 
-The first command will yield a warning if the directory already exists;
-ignore this.  In this example, we deposit the jars in the `/myrna-refs`
-directory, but any [HDFS] directory is fine.
+The first command will yield a warning if the directory already exists; ignore
+this.  In this example, we deposit the jars in the `/myrna-refs` directory, but
+any [HDFS] directory is fine.
 
-You may wish to remove the locally-generated reference jar files to
-save space.  E.g.:
+You may wish to remove the locally-generated reference jar files to save space. 
+E.g.:
 
     rm -rf $MYRNA_HOME/reftools/human
 
@@ -2084,13 +2015,12 @@ To start the [Hadoop] job, run the following command (substituting for
 
 <div id="myrna-example-human-hadoop" />
 
-First we build a reference jar for a human assembly and annotations
-using scripts included with Myrna.  The script searches for a
-`bowtie-build` executable with the same rules Myrna uses to search for
-`bowtie`.  See [Installing Myrna] for details.  Because one of the
-steps executed by the script builds an index of the human genome, it
-should be run on a computer with plenty of memory (at least 4
-gigabytes, preferably 6 or more).
+First we build a reference jar for a human assembly and annotations using
+scripts included with Myrna.  The script searches for a `bowtie-build`
+executable with the same rules Myrna uses to search for `bowtie`.  See
+[Installing Myrna] for details.  Because one of the steps executed by the script
+builds an index of the human genome, it should be run on a computer with plenty
+of memory (at least 4 gigabytes, preferably 6 or more).
 
 Run the following commands:
 
@@ -2102,18 +2032,18 @@ Run the following commands:
 
 The `human_ensembl.sh` script will automatically:
 
-1. Download the FASTA sequence for human; the particular assembly and
-   build downloaded depends on the current [Ensembl] version.
+1. Download the FASTA sequence for human; the particular assembly and build
+   downloaded depends on the current [Ensembl] version.
 2. Build an index from the sequence downloaded in step 1.
 3. Download gene annotations from [Ensembl] via [`biomaRt`].
 4. Package the information in a `.jar` file
    `$MYRNA_HOME/reftools/human/human_ensembl_67.jar`
 
-At the time of this writing, the scripts in the `$MYRNA_HOME/reftools`
-directory will only work if the current version of [Ensembl] is v67.
-If the [Ensembl] version changes, the user must edit the `ENSEMBL_VER`
-and `ENSEMBL_PREFIX` variables (at the top of the script) accordingly.
-This will be fixed in a future version.
+At the time of this writing, the scripts in the `$MYRNA_HOME/reftools` directory
+will only work if the current version of [Ensembl] is v67. If the [Ensembl]
+version changes, the user must edit the `ENSEMBL_VER` and `ENSEMBL_PREFIX`
+variables (at the top of the script) accordingly. This will be fixed in a future
+version.
 
 Move the directory containing the new reference jar into the `$MYRNA_REFS`
 directory:
@@ -2135,8 +2065,8 @@ Now change to the `$MYRNA_HOME/example/human` directory and run Myrna
 
 # Labeled manifest files
 
-A manifest file describes a set of [FASTQ] or [`.sra`] formatted input
-files that might be located:
+A manifest file describes a set of [FASTQ] or [`.sra`] formatted input files
+that might be located:
 
 [gzip]: http://en.wikipedia.org/wiki/Gzip
 [bzip2]: http://en.wikipedia.org/wiki/Bzip2
@@ -2148,25 +2078,23 @@ files that might be located:
 
 [FASTQ]: http://en.wikipedia.org/wiki/FASTQ_format
 
-A manifest file can contain any combination of URLs and local paths
-from these various types of sources.
+A manifest file can contain any combination of URLs and local paths from these
+various types of sources.
 
-[FASTQ] files can be gzip or bzip2-compressed (i.e. with `.gz` or
-`.bz2` file extensions).  If [`.sra`] files are specified in the
-manifest and Myrna is being run in single-computer or [Hadoop] modes,
-then the `fastq-dump` tool must be installed and Myrna must be able to
-locate it.  See the [`--fastq-dump`] option and the [SRA Toolkit
-section of the manual].
+[FASTQ] files can be gzip or bzip2-compressed (i.e. with `.gz` or `.bz2` file
+extensions).  If [`.sra`] files are specified in the manifest and Myrna is being
+run in single-computer or [Hadoop] modes, then the `fastq-dump` tool must be
+installed and Myrna must be able to locate it.  See the [`--fastq-dump`] option
+and the [SRA Toolkit section of the manual].
 
 [SRA Toolkit section of the manual]: #the-sra-toolkit
 
-A *labeled* manifest file additionally describes the relationship
-between input files and "samples", i.e. the biological units that were
-sequenced.
+A *labeled* manifest file additionally describes the relationship between input
+files and "samples", i.e. the biological units that were sequenced.
 
-Each line in the manifest file represents either one file, for unpaired
-input reads, or a pair of files, for paired input reads.  For a set of
-unpaired input reads, the line is formatted:
+Each line in the manifest file represents either one file, for unpaired input
+reads, or a pair of files, for paired input reads.  For a set of unpaired input
+reads, the line is formatted:
 
     <URL>(tab)<Optional MD5>(tab)<Sample label>
 
@@ -2174,26 +2102,25 @@ And for paired reads, the line is formatted:
 
     <URL 1>(tab)<Optional MD5 1>(tab)<URL 2>(tab)<Optional MD5 2>(tab)<Sample label>
 
-Specifying an MD5 for an input file is optional.  If it is specified,
-Myrna will attempt to check the integrity of the file after downloading
-by comparing the observed MD5 to the user-provided MD5.  To disable
-this checking, specify `0` in this field.
+Specifying an MD5 for an input file is optional.  If it is specified, Myrna will
+attempt to check the integrity of the file after downloading by comparing the
+observed MD5 to the user-provided MD5.  To disable this checking, specify `0` in
+this field.
 
 `<Sample label>` must be formatted as:
 
     `<Group ID>-<BioRep ID>-<TechRep ID>`.
 
-`<Group ID>` identifies a group; this is the level at which
-differential expression is calculated.  E.g., groups for a cancer
-experiment might be `Tumor` and `Normal` and groups for a tissue
-experiment might be `Liver` and `Blood`.  `<BioRep ID>` identifies
-biological replicates.  E.g., for a cancer experiment with samples from
-two individuals with cancer and two individuals without cancer, the
-`<BioRep ID>`s might be `Subject1` and `Subject2`.  `<TechRep ID>`
-identifies technical replicates.  E.g., if each individual in the
-cancer experiment was sequenced on 3 lanes of a sequencing machine, the
-`<TechRep ID>`s might be `Lane1`, `Lane2`, `Lane3`.  Putting it all
-together, the set of labels for a cancer project might be:
+`<Group ID>` identifies a group; this is the level at which differential
+expression is calculated.  E.g., groups for a cancer experiment might be `Tumor`
+and `Normal` and groups for a tissue experiment might be `Liver` and `Blood`. 
+`<BioRep ID>` identifies biological replicates.  E.g., for a cancer experiment
+with samples from two individuals with cancer and two individuals without
+cancer, the `<BioRep ID>`s might be `Subject1` and `Subject2`.  `<TechRep ID>`
+identifies technical replicates.  E.g., if each individual in the cancer
+experiment was sequenced on 3 lanes of a sequencing machine, the `<TechRep ID>`s
+might be `Lane1`, `Lane2`, `Lane3`.  Putting it all together, the set of labels
+for a cancer project might be:
 
     Tumor-Subject1-Lane1
     Tumor-Subject1-Lane2
@@ -2208,19 +2135,18 @@ together, the set of labels for a cancer project might be:
     Normal-Subject2-Lane2
     Normal-Subject2-Lane3
 
-Manifest files may have comment lines, which must start with the hash
-(`#`) symbol, and blank lines.  All such lines are ignored by Myrna.
+Manifest files may have comment lines, which must start with the hash (`#`)
+symbol, and blank lines.  All such lines are ignored by Myrna.
 
-For examples of manifest files, see the files ending in `.manifest` in
-the `$MYRNA_HOME/example/yeast` and `$MYRNA_HOME/example/human`
-directories.
+For examples of manifest files, see the files ending in `.manifest` in the
+`$MYRNA_HOME/example/yeast` and `$MYRNA_HOME/example/human` directories.
 
 # Reference jars
 
-All information about a reference sequence needed by Myrna is
-encapsulated in a "reference jar" file.  A reference jar includes a
-[Bowtie] index of the reference sequence for the species, and a set of
-files encoding gene annotations for the species.
+All information about a reference sequence needed by Myrna is encapsulated in a
+"reference jar" file.  A reference jar includes a [Bowtie] index of the
+reference sequence for the species, and a set of files encoding gene annotations
+for the species.
 
 ## Reference jar format
 
@@ -2239,9 +2165,9 @@ These two directories must be packaged together into a [jar file]
 
 The interval directory contains subdirectories named `un` and `ui`,
 corresponding to the union and union-intersection gene footprints (see
-[`--gene-footprint`]).  Each contains a separate set of gene footprints
-for the whole genome.  Which set is used at runtime is determined by
-how the user sets the [`--gene-footprint`] option.
+[`--gene-footprint`]).  Each contains a separate set of gene footprints for the
+whole genome.  Which set is used at runtime is determined by how the user sets
+the [`--gene-footprint`] option.
 
 Each interval file is a tab-delimited table with columns for:
 
@@ -2266,9 +2192,9 @@ Example (from the pre-built yeast jar):
     I	YAL009W	135856	136635
 
 The `ivals` directory also contains a pair of files (`genes.txt` and
-`exons.txt`) summarizing all of the genes and exons that were
-considered when building the footprint intervals.  The columns of
-`exons.txt` correspond to the following [Ensembl] database columns:
+`exons.txt`) summarizing all of the genes and exons that were considered when
+building the footprint intervals.  The columns of `exons.txt` correspond to the
+following [Ensembl] database columns:
 
 1. `ensembl_gene_id`
 2. `ensembl_transcript_id`
@@ -2279,8 +2205,8 @@ considered when building the footprint intervals.  The columns of
 7. `is_constitutive`
 8. `gene_biotype`
 
-And there is a header line providing labels for the columns.  Example
-(from the pre-built yeast jar):
+And there is a header line providing labels for the columns.  Example (from the
+pre-built yeast jar):
 
     $ head yeast/ivals/exons.txt 
     ensembl_gene_id	ensembl_transcript_id	ensembl_exon_id	chromosome_name\
@@ -2306,8 +2232,8 @@ database columns:
 6. `strand`
 7. `gene_biotype`
 
-And there is a header line providing labels for the columns.  Example
-(from the pre-built yeast jar):
+And there is a header line providing labels for the columns.  Example (from the
+pre-built yeast jar):
 
     $ head yeast/ivals/genes.txt
     ensembl_gene_id	external_gene_id	chromosome_name	start_position\
@@ -2324,82 +2250,78 @@ And there is a header line providing labels for the columns.  Example
 
 ## Using a pre-built reference jar
 
-The [Myrna] web site lists pre-built reference jars in the right-hand
-sidebar, including for human, mouse, rat, chimpanzee, and rhesus
-macaque genomes.  All use [Ensembl] gene annotations.  To use one of
-these reference jars:
+The [Myrna] web site lists pre-built reference jars in the right-hand sidebar,
+including for human, mouse, rat, chimpanzee, and rhesus macaque genomes.  All
+use [Ensembl] gene annotations.  To use one of these reference jars:
 
-1. If running in [EMR] from the command line: make a note of the
-   desired jar's S3 URL (starting with `s3n://`) and specify that URL
-   using the [`--reference`] option when running Myrna.
-2. If running in [Hadoop] mode: download the desired jars using a tool
-   like [s3cmd] (in which case, use the `s3://` URL) or `wget` (in
-   which case, use the `http://` URL).  Be sure to download all three
+1. If running in [EMR] from the command line: make a note of the desired jar's
+   S3 URL (starting with `s3n://`) and specify that URL using the
+   [`--reference`] option when running Myrna.
+2. If running in [Hadoop] mode: download the desired jars using a tool like
+   [s3cmd] (in which case, use the `s3://` URL) or `wget` (in which case, use
+   the `http://` URL).  Be sure to download all three
 
 ## Building a reference jar using automatic scripts
 
-The Myrna package contains the set of scripts that were used to
-generate pre-built indexes available from the Myrna web site.  The
-scripts are named `$MYRNA_HOME/reftools/*_ensembl.sh`.  The scripts
-automatically obtain reference sequecnes from [Ensembl], build a
-[Bowtie] index using the [`bowtie-build`] tool, and build the
-corresponding set of gene footprint definitions using the
-`reftools/Ensembl.pl` and `reftools/Ensembl.R` scripts also included
-in the Myrna package.
+The Myrna package contains the set of scripts that were used to generate
+pre-built indexes available from the Myrna web site.  The scripts are named
+`$MYRNA_HOME/reftools/*_ensembl.sh`.  The scripts automatically obtain reference
+sequecnes from [Ensembl], build a [Bowtie] index using the [`bowtie-build`]
+tool, and build the corresponding set of gene footprint definitions using the
+`reftools/Ensembl.pl` and `reftools/Ensembl.R` scripts also included in the
+Myrna package.
 
 [`bowtie-build`]: http://bowtie-bio.sf.net/manual.shtml#the-bowtie-build-indexer
 
-At the time of this writing, the scripts in the `$MYRNA_HOME/reftools`
-directory will only work if the current version of [Ensembl] is v67.
-If the [Ensembl] version changes, the user must edit the `ENSEMBL_VER`
-and `ENSEMBL_PREFIX` variables (at the top of the script) accordingly.
-This will be fixed in a future version.
+At the time of this writing, the scripts in the `$MYRNA_HOME/reftools` directory
+will only work if the current version of [Ensembl] is v67. If the [Ensembl]
+version changes, the user must edit the `ENSEMBL_VER` and `ENSEMBL_PREFIX`
+variables (at the top of the script) accordingly. This will be fixed in a future
+version.
 
 # Monitoring, debugging and logging
 
 ## Single computer
 
-Single-computer runs of Myrna are relatively easy to monitor and debug.
-Progress messages are printed to the console as the job runs.  When
-there is a fatal error, Myrna usually indicates exactly which log file
-on the local filesystem contains the relevant error message.
-Additional debugging is possible when intermediate and temporary files
-are kept rather than discarded; see [`--keep-intermediates`] and
-[`--keep-all`].  All output and logs are stored on the local filesystem;
-see [`--intermediate`](#myrna-local-intermediate) and [`--output`](#myrna-local-output) options.
+Single-computer runs of Myrna are relatively easy to monitor and debug. Progress
+messages are printed to the console as the job runs.  When there is a fatal
+error, Myrna usually indicates exactly which log file on the local filesystem
+contains the relevant error message. Additional debugging is possible when
+intermediate and temporary files are kept rather than discarded; see
+[`--keep-intermediates`] and [`--keep-all`].  All output and logs are stored on
+the local filesystem; see [`--intermediate`](#myrna-local-intermediate) and
+[`--output`](#myrna-local-output) options.
 
 ## Hadoop
 
-The simplest way to monitor Myrna [Hadoop] jobs is via the Hadoop
-JobTracker.  The JobTracker is a web server that provides a
-point-and-click interface for monitoring jobs and reading output and
-other log files generated by those jobs, including after they've
-finished.
+The simplest way to monitor Myrna [Hadoop] jobs is via the Hadoop JobTracker. 
+The JobTracker is a web server that provides a point-and-click interface for
+monitoring jobs and reading output and other log files generated by those jobs,
+including after they've finished.
 
-When a job fails, you can often find the relevant error message by
-"drilling down" from the "step" level through the "job" level and
-"task" levels, and finally to the "attempt" level.  To diagnose why an
-attempt failed, click through to the "stderr" ("standard error") log
-and scan for the relevant error message.
+When a job fails, you can often find the relevant error message by "drilling
+down" from the "step" level through the "job" level and "task" levels, and
+finally to the "attempt" level.  To diagnose why an attempt failed, click
+through to the "stderr" ("standard error") log and scan for the relevant error
+message.
 
-See your version of Hadoop's documentation for details on how to use
-the web interface.  Amazon has a brief document describing [How to Use
-the Hadoop User Interface], though some of the instructions are
-specific to clusters rented from Amazon.  [Hadoop, the Definitive
-Guide] is also an excellent reference.
+See your version of Hadoop's documentation for details on how to use the web
+interface.  Amazon has a brief document describing [How to Use the Hadoop User
+Interface], though some of the instructions are specific to clusters rented from
+Amazon.  [Hadoop, the Definitive Guide] is also an excellent reference.
 
 [How to Use the Hadoop User Interface]: http://docs.amazonwebservices.com/ElasticMapReduce/latest/DeveloperGuide/index.html?UsingtheHadoopUserInterface.html
 [Hadoop, the Definitive Guide]: http://oreilly.com/catalog/9780596521981
 
 ## EMR
 
-The recommended way to monitor EMR [Hadoop] jobs is via the [AWS
-Console].  The [AWS Console] allows you to see:
+The recommended way to monitor EMR [Hadoop] jobs is via the [AWS Console].  The
+[AWS Console] allows you to see:
 
 1. The status for job (e.g. "COMPLETED", "RUNNING" or "FAILED")
 2. The status for each step of each job 
-3. How long a job has been running for and how many "compute units"
-   have been utilized so far.
+3. How long a job has been running for and how many "compute units" have been
+   utilized so far.
 4. The exact Hadoop commands used to initiate each job step.
 5. The button for [Debugging Job Flows]
 
@@ -2408,23 +2330,21 @@ Console].  The [AWS Console] allows you to see:
 <p><i>Screen shot of [AWS Console] interface with some relevant interface elements labeled</i></p>
 </div>
 
-The [AWS Console] also has a useful facility for [Debugging Job Flows],
-which is accessible via the "Debug" button on the "Elastic MapReduce"
-tab of the Console (labeled "5").  You must (a) have a [SimpleDB]
-account (b) not have specified [`--no-emr-debug`] in order to use all of
-the [EMR Debug] interface's features:
+The [AWS Console] also has a useful facility for [Debugging Job Flows], which is
+accessible via the "Debug" button on the "Elastic MapReduce" tab of the Console
+(labeled "5").  You must (a) have a [SimpleDB] account (b) not have specified
+[`--no-emr-debug`] in order to use all of the [EMR Debug] interface's features:
 
 <div>
 <img src="images/AWS_console_debug.png" alt="Screen shot of AWS console debug interface" />
 <p><i>Screen shot of [EMR Debug] interface</i></p>
 </div>
 
-The debug interface is similar to Hadoop's JobTracker interface.
-When a job fails, you can often find the relevant error message by
-"drilling down" from the "job" level, through the "task" level, and
-finally to the "attempt" level.  To diagnose why an attempt failed,
-click through to the "stderr" ("standard error") log and scan for the
-relevant error message.
+The debug interface is similar to Hadoop's JobTracker interface. When a job
+fails, you can often find the relevant error message by "drilling down" from the
+"job" level, through the "task" level, and finally to the "attempt" level.  To
+diagnose why an attempt failed, click through to the "stderr" ("standard error")
+log and scan for the relevant error message.
 
 For more information, see Amazon's document on [Debugging Job Flows].
 
@@ -2433,11 +2353,10 @@ For more information, see Amazon's document on [Debugging Job Flows].
 
 ## AWS Management Console
 
-A simple way to monitor your EMR activity is via the [AWS Console].
-The [AWS Console] summarizes current information regarding all your
-running [EC2] nodes and [EMR] jobs.  Each job is listed in the "Amazon
-Elastic MapReduce" tab of the console, whereas individual [EC2] nodes
-are listed in the "Amazon EC2" tab.
+A simple way to monitor your EMR activity is via the [AWS Console]. The [AWS
+Console] summarizes current information regarding all your running [EC2] nodes
+and [EMR] jobs.  Each job is listed in the "Amazon Elastic MapReduce" tab of the
+console, whereas individual [EC2] nodes are listed in the "Amazon EC2" tab.
 
 <div>
 <img src="images/AWS_console_upper_left.png" alt="Screen shot of AWS console tabs" />
@@ -2449,72 +2368,61 @@ are listed in the "Amazon EC2" tab.
 Myrna's output consists of:
 
 1. Annotations used 
-    a. **`exons.txt`**: file containing the exon annotations extracted
-        from [Ensembl] and used by Myrna.  The columns are
-       `ensembl_gene_id`, `ensembl_transcript_id`, `ensembl_exon_id`,
-       `chromosome_name`, `exon_chrom_start`, `exon_chrom_end`,
-       `is_constitutive`, and `gene_biotype`.
-    b. **`genes.txt`**: file containing the gene annotations extracted
-       from [Ensembl] and used by Myrna.  The columns are
-       `ensembl_gene_id`,  `external_gene_id`, `chromosome_name`,
-       `start_position`, `end_position`, `strand`, `gene_biotype`.
-    c. **`gene_lengths.txt`**: a table associating gene names (first
-       column) with the total length of all the intervals eligible for
-       overlapping (configured by the user with the
-       [`--gene-footprint`] option).
+    a. **`exons.txt`**: file containing the exon annotations extracted from
+       [Ensembl] and used by Myrna.  The columns are `ensembl_gene_id`,
+       `ensembl_transcript_id`, `ensembl_exon_id`, `chromosome_name`,
+       `exon_chrom_start`, `exon_chrom_end`, `is_constitutive`, and
+       `gene_biotype`.
+    b. **`genes.txt`**: file containing the gene annotations extracted from
+       [Ensembl] and used by Myrna.  The columns are `ensembl_gene_id`,
+       `external_gene_id`, `chromosome_name`, `start_position`, `end_position`,
+       `strand`, `gene_biotype`.
+    c. **`gene_lengths.txt`**: a table associating gene names (first column)
+       with the total length of all the intervals eligible for overlapping
+       (configured by the user with the [`--gene-footprint`] option).
 2. Per-gene [p-values] and [q-values]
-    a. **`pvals.txt`**: a table of calculated [p-values] for all genes
-       in ascending order by [p-value].  The first line is a header
-       with column labels: `ensembl_gene_id` and `p_value`.
-    b. **`pval_hist.pdf`**: a plot showing the histogram of all gene
-       [p-values].
-    c. **`pval_hist_dense.pdf`**: similar to 1b. but histogram bins are
-       smaller.
-    d. **`pval_scatter.pdf`**: A smooth scatter plot of [p-value] (y
-       axis) against logarithm of 1 plus the total gene count for the
-       gene across all samples (x axis).  This can be helpful for
-       diagnosing unexpected behavior in the distribution of [p-values]
-       by revealing whether the behavior tends toward low- or
-       high-count genes.
-    e. **`qvals.txt`**: a table containing the calculated [q-values]
-       for all genes in ascending order by [q-value].  The [q-value] is
-       the false discovery rate analogue of the [p-value].   The first
-       line is a header with column labels: `ensembl_gene_id` and
-       `q_value`.
-    f. **`qval_hist.pdf`**: a plot showing the histogram of all gene
-       [q-values].
-    g. **`qval_hist_dense.pdf`**: similar to 1f. but histogram bins are
-       smaller.
-3. Gene overlap counts, normalization factors, and normalized
-   expression levels
-    a. **`count_table.txt`**: a table of per-gene overlap counts across
-       all samples (after any user-requested pooling).  Rows are
-       labeled with the gene names (`ensembl_gene_id`) and columns with
-       sample names.
-    b. **`rpkm_table.txt`**: a table of reads per kilobase of exon
-       model per million mapped reads (RPKM) values, as proposed by
-       [Mortazavi et al], calculated by taking the raw count,
-       multiplying by 1 billion, and dividing by the length of the gene
-       footprint (which varies based on the [`--gene-footprint`]
-       setting) times the total sample count over all genes.  Rows are
-       labeled with the gene names (`ensembl_gene_id`) and columns with
-       sample names.
-    c. **`<SAMPLE>.txt`**: a series of files containing the gene
-       overlap counts for each sample (`<SAMPLE>` = the user-assigned
-       sample name).  Genes with zero overlaps are omitted.  The first
-       line is a header with column labels: `gene_id` and `count`.
-    d. **`<SAMPLE>.norms`**: a set of summary staistics for `<SAMPLE>`
-       that could be used as normalization factors.  The summary
-       statistics include the per-sample total, upper quartile, median,
-       lower quartile, and maximum count.  The quartiles and median are
-       taken from the distribution of non-zero gene counts for the
-       sample.  The first row of the file contains labels identifying
-       which factor is which (`tot`, `upper_quart`, `median`,
+    a. **`pvals.txt`**: a table of calculated [p-values] for all genes in
+       ascending order by [p-value].  The first line is a header with column
+       labels: `ensembl_gene_id` and `p_value`.
+    b. **`pval_hist.pdf`**: a plot showing the histogram of all gene [p-values].
+    c. **`pval_hist_dense.pdf`**: similar to 1b. but histogram bins are smaller.
+    d. **`pval_scatter.pdf`**: A smooth scatter plot of [p-value] (y axis)
+       against logarithm of 1 plus the total gene count for the gene across all
+       samples (x axis).  This can be helpful for diagnosing unexpected behavior
+       in the distribution of [p-values] by revealing whether the behavior tends
+       toward low- or high-count genes.
+    e. **`qvals.txt`**: a table containing the calculated [q-values] for all
+       genes in ascending order by [q-value].  The [q-value] is the false
+       discovery rate analogue of the [p-value].   The first line is a header
+       with column labels: `ensembl_gene_id` and `q_value`.
+    f. **`qval_hist.pdf`**: a plot showing the histogram of all gene [q-values].
+    g. **`qval_hist_dense.pdf`**: similar to 1f. but histogram bins are smaller.
+3. Gene overlap counts, normalization factors, and normalized expression levels
+    a. **`count_table.txt`**: a table of per-gene overlap counts across all
+       samples (after any user-requested pooling).  Rows are labeled with the
+       gene names (`ensembl_gene_id`) and columns with sample names.
+    b. **`rpkm_table.txt`**: a table of reads per kilobase of exon model per
+       million mapped reads (RPKM) values, as proposed by [Mortazavi et al],
+       calculated by taking the raw count, multiplying by 1 billion, and
+       dividing by the length of the gene footprint (which varies based on the
+       [`--gene-footprint`] setting) times the total sample count over all
+       genes. Rows are labeled with the gene names (`ensembl_gene_id`) and
+       columns with sample names.
+    c. **`<SAMPLE>.txt`**: a series of files containing the gene overlap counts
+       for each sample (`<SAMPLE>` = the user-assigned sample name).  Genes with
+       zero overlaps are omitted.  The first line is a header with column
+       labels: `gene_id` and `count`.
+    d. **`<SAMPLE>.norms`**: a set of summary staistics for `<SAMPLE>` that
+       could be used as normalization factors.  The summary statistics include
+       the per-sample total, upper quartile, median, lower quartile, and maximum
+       count. The quartiles and median are taken from the distribution of
+       non-zero gene counts for the sample.  The first row of the file contains
+       labels identifying which factor is which (`tot`, `upper_quart`, `median`,
        `lower_quart`, and `max`).
-    e. **`<SAMPLE>.norm`**: contains a single number, which is the
-       normalization factor used for `<SAMPLE>` by Myrna.  This factor
-       controls for variability due to technical effects, e.g., the
-       number of reads yielded per lane.
+    e. **`<SAMPLE>.norm`**: contains a single number, which is the normalization
+       factor used for `<SAMPLE>` by Myrna.  This factor controls for
+       variability due to technical effects, e.g., the number of reads yielded
+       per lane.
 4. [GO] terms for genes:
     a. **`genes_go.txt`**: a table associating genes with GO terms.  A given GO
        term might be from the [Biological Process] ontology, the [Cellular
@@ -2524,20 +2432,17 @@ Myrna's output consists of:
        name appears on a single line with no [GO] term printed in the second
        column.  The first line is a header with column labels: `ensembl_gene_id`
        and `go_id`.
-5. Per-gene alignments and coverage.   These files are generated only
-   for the "top" genes; i.e. those with the `T` lowest [p-values] where
-   `T` is set via [`--top`]:
-    a. **`alignments/<GENE>.txt`**: all alignments overlapping gene
-       `<GENE>`.
-    b. **`alignments/<GENE>_replicates.pdf`**: a coverage plot showing
-       how the overlapping alignments that counted as evidence fell on
-       the gene, where each replicate is shown on a separate row of the
-       plot.
-    c. **`alignments/<GENE>_groups.pdf`**: a coverage plot showing how
-       the overlapping alignments that counted as evidence fell on the
-       gene, where each group is shown on a separate row of the plot.
-       "Group" coverage is simply the combined coverage of all samples
-       in the group.
+5. Per-gene alignments and coverage.   These files are generated only for the
+   "top" genes; i.e. those with the `T` lowest [p-values] where `T` is set via
+   [`--top`]:
+    a. **`alignments/<GENE>.txt`**: all alignments overlapping gene `<GENE>`.
+    b. **`alignments/<GENE>_replicates.pdf`**: a coverage plot showing how the
+       overlapping alignments that counted as evidence fell on the gene, where
+       each replicate is shown on a separate row of the plot.
+    c. **`alignments/<GENE>_groups.pdf`**: a coverage plot showing how the
+       overlapping alignments that counted as evidence fell on the gene, where
+       each group is shown on a separate row of the plot. "Group" coverage is
+       simply the combined coverage of all samples in the group.
 
 [p-values]: http://en.wikipedia.org/wiki/P-value
 [p-value]: http://en.wikipedia.org/wiki/P-value
@@ -2551,26 +2456,25 @@ Myrna's output consists of:
 
 # Other reading
 
-The [Crossbow paper] discusses the broad design philosophy of both
-[Crossbow] and [Myrna] and why cloud computing can be considered a
-useful trend for comparative genomics applications.  The [Bowtie paper]
-discusses the alignment algorithm underlying [Bowtie].
+The [Crossbow paper] discusses the broad design philosophy of both [Crossbow]
+and [Myrna] and why cloud computing can be considered a useful trend for
+comparative genomics applications.  The [Bowtie paper] discusses the alignment
+algorithm underlying [Bowtie].
 
 [Bowtie paper]: http://genomebiology.com/2009/10/3/R25
 [Crossbow]: http://bowtie-bio.sf.net/crossbow
 [Crossbow paper]: http://genomebiology.com/2009/10/11/R134
 
-For additional information regarding Amazon EC2, S3, EMR, and related
-services, see Amazon's [AWS Documentation].  Some helpful screencasts
-are posted on the [AWS Console] home page.
+For additional information regarding Amazon EC2, S3, EMR, and related services,
+see Amazon's [AWS Documentation].  Some helpful screencasts are posted on the
+[AWS Console] home page.
 
 [AWS Documentation]: http://aws.amazon.com/documentation/
 
-For additional information regarding Hadoop, see the [Hadoop web site]
-and [Cloudera's Getting Started with Hadoop] document.  [Cloudera's
-training virtual machine] for [VMWare] is an excellent way to get
-acquainted with Hadoop without having to install it on a production
-cluster.
+For additional information regarding Hadoop, see the [Hadoop web site] and
+[Cloudera's Getting Started with Hadoop] document.  [Cloudera's training virtual
+machine] for [VMWare] is an excellent way to get acquainted with Hadoop without
+having to install it on a production cluster.
 
 [Cloudera's Getting Started with Hadoop]: http://www.cloudera.com/resource/getting_started_with_hadoop
 [Cloudera's training virtual machine]: http://www.cloudera.com/developers/downloads/virtual-machine/
