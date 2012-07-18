@@ -10,7 +10,7 @@
 
 [ -z "$EC2_KEYPAIR" ] && echo "Must set EC2_KEYPAIR" && exit 1
 
-[ ! -d webui ] && echo "Run from CROSSBOW_HOME" && exit 1
+[ ! -d webui ] && echo "Run from MYRNA_HOME" && exit 1
 
 ARGS=$*
 [ -z "$ARGS" ] && ARGS="ec2-75-101-218-11.compute-1.amazonaws.com ec2-184-73-43-172.compute-1.amazonaws.com"
