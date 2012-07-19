@@ -930,6 +930,10 @@ $ref eq "" || $ref =~ /\.jar$/ || dieusage("--reference must end with .jar", $us
 $indexLocal eq "" || -f "$indexLocal.1.ebwt" || dieusage("--index-local \"$indexLocal\" path doesn't point to an index", $usage, 1);
 $ivalLocal eq "" || -d $ivalLocal || dieusage("--ival-local \"$ivalLocal\" path doesn't point to a directory", $usage, 1);
 
+if(!$localJob && !$hadoopJob && defined($ref) && $ref ne "") {
+	parse_url($ref) eq "s3" || die "Error: In cloud mode, --reference path must be an S3 path; was: $ref\n";
+}
+
 # Remove inline credentials from URLs
 $input =~ s/:\/\/[^\/]@//;
 $output =~ s/:\/\/[^\/]@//;
@@ -1943,7 +1947,7 @@ if($dryrun) {
 	$msg->($ms) if $verbose;
 	$msg->("Running...\n");
 	open(CMDP, $pipe) || die "Could not open pipe '$pipe' for reading\n";
-	for my $line (<CMDP>) { $msg->($line); }
+	while(<CMDP>) { $msg->($_); }
 	close(CMDP);
 	$msg->("elastic-mapreduce script completed with exitlevel $?\n");
 }

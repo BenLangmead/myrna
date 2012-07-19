@@ -965,7 +965,15 @@ subdirectories of the `$MYRNA_HOME/bin` directory, and the `PATH`.
 [`build_r`]: #building-rbioconductor-automatically
 [automatically building R/Bioconductor]: #building-rbioconductor-automatically
 
-3. Sufficient memory must be available on the local computer to hold one copy of
+3. If any of your inputs are in [Sequence Read Archive] format (i.e. end in
+   `.sra`), then the `fastq-dump` tool from the [SRA Toolkit] must be installed
+   on the local computer.  The path to the `fastq-dump` tool must be specified
+   via the ([`--fastq-dump`](#myrna-fastq-dump)) option OR `fastq-dump` must be
+   located in the directory specified in the `MYRNA_FASTQ_DUMP_HOME` environment
+   variable, OR `fastq-dump` must be found in the `PATH` (Myrna searches in that
+   order).
+
+4. Sufficient memory must be available on the local computer to hold one copy of
    the Bowtie index for the desired organism *in addition* to all other running
    workloads.  For mammalian genomes such as the human genome, this typically
    means that the local computer must have at least 5-6 GB of RAM.

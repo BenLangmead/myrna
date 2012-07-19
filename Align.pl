@@ -476,6 +476,7 @@ my $first = 1;
 my $lastLine = "";
 while(<STDIN>) {
 	next if /^\s*FAKE\s*$/;
+	next if /^\s*$/;
 	msg("Read first line of stdin:\n$_") if $first;
 	$first = 0;
 	$lastLine = $_;
