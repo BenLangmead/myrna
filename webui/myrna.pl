@@ -317,6 +317,7 @@ sub submitClicked {
 	}
 	push @as, "$clusterWait";
 	push @as, "--instances=$numNodes";
+	push @as, "--verbose";
 	push @as, "--instance-type=$instanceType";
 	
 	my $stdout = "";
@@ -332,6 +333,10 @@ sub submitClicked {
 		my $str = shift @_;
 		$stderr .= sprintf $str, @_;
 	};
+	if(!defined($ENV{HOME})) {
+		$stderr .= "Had to define HOME in myrna.pl\n";
+		$ENV{HOME} = "/var/www/cgi-bin";
+	}
 	MyrnaIface::myrna(\@as, "myrna.pl", "(no usage)", $stdoutf, $stdoutff, $stderrf, $stderrff);
 	
 	my $jobid = "";
@@ -349,13 +354,13 @@ sub submitClicked {
 		$resultHtml .= <<HTML;
 			<font color="red"><b>Error invoking Myrna. Job not submitted.</b></font>
 			
-			<br>Arguments given to Myrna driver script:
+			<br><b>Arguments given to Myrna driver script:</b>
 			<pre>$asStr</pre>
 			
-			Standard output from driver:
+			<b>Standard output from driver:</b>
 			<pre>$stdout</pre>
 			
-			Standard error from driver:
+			<b>Standard error from driver:</b>
 			<pre>$stderr</pre>
 HTML
 	} else {
