@@ -16,6 +16,7 @@ use MyrnaIface;
 use S3Util;
 use CGI::Carp qw(fatalsToBrowser);
 
+my $VERSION = "1.2.0";
 my $debugLev = 0;
 my $cgi  = CGI->new();
 my $ajax = CGI::Ajax->new(submitClicked  => \&submitClicked,
@@ -485,6 +486,11 @@ div.nextButton:active{
 <div id="main"> 
 <div class="pagebreak"> 
 <table width="520" cellpadding="5" cellspacing="0">
+ <tr >
+  <td class="left" colspan=2>
+   <h2>Myrna $VERSION</h2>
+  </td>
+ </tr>
  <tr >
   <td width="165" class="left" >
    <label >AWS ID <span class="required">*</span></label>
