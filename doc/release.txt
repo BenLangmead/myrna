@@ -52,7 +52,7 @@ Update the following files with information about the new Myrna version:
 - webui/myrna.pl (set $VERSION)
 
 Building the package:
-- 'make package'
+- 'make package' from a Mac
 
 Testing the release:
 - Try all the examples in the manual!

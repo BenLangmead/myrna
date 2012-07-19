@@ -1,4 +1,4 @@
-<h2>Version 1.2.0 - Coming soon</h2>
+<h2>Version 1.2.0 - July 19, 2012</h2>
 <ul>
   <li>Added support for Hadoop version 0.20.205.</li>
   <li>Dropped support for Hadoop versions prior to 0.20.</li>
