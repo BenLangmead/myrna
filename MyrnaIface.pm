@@ -1891,23 +1891,22 @@ if(!$localJob && !$hadoopJob) {
 }
 $name =~ s/"//g;
 (defined($emrScript) && $emrScript ne "") || $localJob || $hadoopJob || die;
-my $cmdJson = qq!$emrScript \\
-    $credentials \\
-    --create \\
-    $emrArgs \\
-    --name "$name" \\
-    --num-instances $numNodes \\
-    --instance-type $instType \\
-    --json $jsonFile \\
-    --bootstrap-action s3://elasticmapreduce/bootstrap-actions/configurations/latest/memory-intensive \\
-    --bootstrap-name "Set memory-intensive mode" \\
-    --bootstrap-action s3://elasticmapreduce/bootstrap-actions/configure-hadoop \\
-    --bootstrap-name "Configure Hadoop" \\
-      --args "-s,mapred.job.reuse.jvm.num.tasks=1,-s,mapred.tasktracker.reduce.tasks.maximum=$cores,-s,io.sort.mb=100" \\
-    --bootstrap-action s3://elasticmapreduce/bootstrap-actions/add-swap \\
-    --bootstrap-name "Add Swap" \\
-      --args "$swap"
-!;
+my $cmdJson = "$emrScript ".
+    "--create ".
+    "$credentials ".
+    "$emrArgs ".
+    "--name \"$name\" ".
+    "--num-instances $numNodes ".
+    "--instance-type $instType ".
+    "--json $jsonFile ".
+    "--bootstrap-action s3://elasticmapreduce/bootstrap-actions/configurations/latest/memory-intensive ".
+    "--bootstrap-name \"Set memory-intensive mode\" ".
+    "--bootstrap-action s3://elasticmapreduce/bootstrap-actions/configure-hadoop ".
+    "--bootstrap-name \"Configure Hadoop\" ".
+    "--args \"-s,mapred.job.reuse.jvm.num.tasks=1,-s,mapred.tasktracker.reduce.tasks.maximum=$cores,-s,io.sort.mb=100\" ".
+    "--bootstrap-action s3://elasticmapreduce/bootstrap-actions/add-swap ".
+    "--bootstrap-name \"Add Swap\" ".
+    "--args \"$swap\"";
 
 my $cmdSh = "sh $runLocalFile";
 my $cmdHadoop = "sh $runHadoopFile";
@@ -1929,18 +1928,24 @@ $msg->("Hadoop streaming commands in: $runHadoopFile\n") if $hadoopJob;
 if($dryrun) {
 	$msg->("Exiting without running command because of --dryrun\n");
 } else {
-	$msg->("Running...\n");
+	my $ms = "";
 	my $pipe;
 	if($localJob) {
 		$pipe = "$cmdSh 2>&1 |";
+		$ms .= "$cmdSh\n" if $verbose;
 	} elsif($hadoopJob) {
 		$pipe = "$cmdHadoop 2>&1 |";
+		$ms .= "$cmdHadoop\n" if $verbose;
 	} else {
 		$pipe = "$cmdJson 2>&1 |";
+		$ms .= "$cmdJson\n" if $verbose;
 	}
+	$msg->($ms) if $verbose;
+	$msg->("Running...\n");
 	open(CMDP, $pipe) || die "Could not open pipe '$pipe' for reading\n";
-	while(<CMDP>) { $msg->($_); }
+	for my $line (<CMDP>) { $msg->($line); }
 	close(CMDP);
+	$msg->("elastic-mapreduce script completed with exitlevel $?\n");
 }
 $msg->("$warnings warnings\n") if $warnings > 0;
 
