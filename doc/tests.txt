@@ -20,7 +20,7 @@ for VER in 0.18 0.20 0.20.205 ; do
 	    --quality solexa64 \
 	    --pre-output=s3n://$BUCKET/example/yeast-$HADOOP_VERSION/preproc \
 	    --hadoop-version=$HADOOP_VERSION \
-	    --instances 4
+	    --instances 3
 done
 
  Hadoop:

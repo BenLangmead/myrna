@@ -49,6 +49,7 @@ Update the following files with information about the new Myrna version:
 - NEWS
 - VERSION
 - doc/website/recent_news.ssi
+- webui/myrna.pl (set $VERSION)
 
 Building the package:
 - 'make package'
