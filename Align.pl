@@ -152,7 +152,7 @@ my %labCnts = ();
 sub fs_ensure_dir_weak {
 	my ($paths, $local) = @_;
 	if($local) {
-		for my $pt (@$paths) { mkpath($pt) };
+		mkpath($paths);
 	} else {
 		my $pathstr = join(' ', @$paths);
 		my $hadoop = Tools::hadoop();
