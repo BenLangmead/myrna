@@ -152,7 +152,7 @@ my %labCnts = ();
 sub fs_ensure_dir_weak {
 	my ($paths, $local) = @_;
 	if($local) {
-		mkpath(@$paths);
+		mkpath(@$paths, { verbose => 0 });
 	} else {
 		my $pathstr = join(' ', @$paths);
 		my $hadoop = Tools::hadoop();
@@ -344,7 +344,7 @@ $ref ne "" || $indexLocal ne "" || $test ||
 	die "Neither -ref nor -index-local specified; must specify one\n";
 $dest_dir = "." if $dest_dir eq "";
 
-mkpath($dest_dir);
+mkpath($dest_dir, { verbose => 0 });
 (-d $dest_dir) || die "-destdir $dest_dir does not exist or isn't a directory, and could not be created\n";
 
 my $bowtie = Tools::bowtie();

@@ -129,7 +129,7 @@ $cores > 0 || die "-cores must be > 0 (was $cores)\n";
 
 my $r;
 if($Rfetch ne "") {
-	mkpath($dest_dir);
+	mkpath($dest_dir, { verbose => 0 });
 	(-d $dest_dir) || die "-destdir $dest_dir does not exist or isn't a directory, and could not be created\n";
 	msg("Ensuring R is installed");
 	my $r_dir = "R-2.14.2";
@@ -146,7 +146,7 @@ $output =~ s/^S3/s3/;
 $output =~ s/^HDFS/hdfs/;
 
 if($ivalsjar ne "" && $exons eq "") {
-	mkpath($dest_dir);
+	mkpath($dest_dir, { verbose => 0 });
 	(-d $dest_dir) || die "-destdir $dest_dir does not exist or isn't a directory, and could not be created\n";
 	msg("Ensuring reference jar is installed");
 	Get::ensureFetched($ivalsjar, $dest_dir, \@counterUpdates, undef, undef, \%env);
@@ -233,7 +233,7 @@ my $line;
 
 # Write alignments to their respective files in the 'alignments'
 # subdirectory.
-mkpath("alignments");
+mkpath("alignments", { verbose => 0 });
 while(1) {
 	if($first) {
 		$_ = $firstLine;
@@ -453,7 +453,7 @@ if($output =~ /^s3/i) {
 	Get::do_hdfs_put("results.tar.gz", $output, \@counterUpdates);
 	Get::do_hdfs_put("FAILED", $output, \@counterUpdates) if $ret != 0;
 } else {
-	mkpath($output);
+	mkpath($output, { verbose => 0 });
 	(-d $output) || die "Could not make output directory: $output\n";
 	run("cp results.tar.gz $output") == 0 || die;
 	run("cp FAILED $output") if $ret != 0;

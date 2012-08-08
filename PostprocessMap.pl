@@ -113,7 +113,7 @@ sub parseNormalAlignment() {
 my $chosenDir = $chosenUrl;
 if(!Util::is_local($chosenUrl)) {
 	$dest_dir ne "" || die "-chosen-genes is non-local, but -destdir is not specified\n";
-	mkpath("$dest_dir/chosen");
+	mkpath("$dest_dir/chosen", { verbose => 0 });
 	(-d "$dest_dir/chosen") || die "Could not create directory: $dest_dir/chosen\n";
 	Get::ensureFetched("$chosenUrl/chosen_genes.txt", "$dest_dir/chosen", \@counterUpdates, undef, undef, \%env);
 	$chosenDir = "$dest_dir/chosen";
