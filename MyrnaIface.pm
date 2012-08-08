@@ -641,7 +641,7 @@ $preprocCompress eq "gzip" || $preprocCompress eq "none" ||
 	dieusage("--pre-compress must be \"gzip\" or \"none\"", $usage, 1);
 $tempdir = "/tmp/$app-$randstr" unless $tempdir ne "";
 my $scriptTempdir = "$tempdir/invoke.scripts";
-mkpath($scriptTempdir);
+mkpath($scriptTempdir, { verbose => 0 });
 if(!$hadoopJob && !$localJob) {
 	$slaveTempdir = "/mnt/$$" if $slaveTempdir eq "";
 } else {
