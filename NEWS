@@ -7,7 +7,7 @@ Myrna NEWS
    Myrna is now available for download.  1.0.0-beta2 was the first
 version to be released, and it was released under the OSI Artistic
 License (see LICENSE file) and freely available to the public for
-download.  The current version is 1.2.0.
+download.  The current version is 1.2.1.
 
 Reporting Issues
 ================
@@ -18,6 +18,12 @@ Please report any issues using the Sourceforge bug tracker:
 
 Version Release History
 =======================
+
+Version 1.2.1 - August 9, 2012
+   * Fixed issue where some Perl versions would cause pipeline to crash
+     in Normalize step.
+   * Fixed issue whereby spurious characters could be added to label
+     names, causing a crash in the Normalize step.
 
 Version 1.2.0 - July 19, 2012
    * Added support for Hadoop version 0.20.205.
