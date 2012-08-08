@@ -384,6 +384,9 @@ while(1) {
 		scalar(@s) == 9 || die "Expected 9 tokens in input to Assign.pl, instead saw:\n$l\n";
 		# Final token is label, without LB: prefix and already pooled
 		my $lab = $s[-1];
+        if($lab =~ /\/[12]$/) {
+            $lab = substr($lab, 0, length($lab)-2);
+        }
 		$labCnts{$lab}++;
 	}
 	$bparts < $partbin || die "# partitions, $bparts, exceeded bin size, $partbin\n";

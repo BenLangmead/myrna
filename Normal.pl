@@ -95,6 +95,7 @@ while(<STDIN>) {
 		($q25, $q50, $q75, $mx) = (0, 0, 0, 0);
 		$totlabs++;
 		print STDERR "Processing label $lab\n";
+        index($lab, "/") == -1 || die "One or more slashes present in label: \"$lab\"";
 	}
 	if($typ ne $all9s) {
 		$als == 0 || die "Error: subtotals intermingled with alignments\n";
