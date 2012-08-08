@@ -245,7 +245,7 @@ handleChr <- function(alns) {
 	# keep them positive and pad them with 0s in order for Hadoop to sort
 	# them properly.
 	msg("Outputting overlapping alignments")
-	outdf <- cbind(Lab=alns$Lab[olaps[,2]],
+	outdf <- cbind(Lab=sub("/[12]$", "", alns$Lab[olaps[,2]]),
 	               Part="999999999",
 	               alns[olaps[,2],4:8],
 	               Ival=name[olaps[,1]],
