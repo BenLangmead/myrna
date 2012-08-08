@@ -189,7 +189,7 @@ sub pushBatch($$) {
 		$rmd5 eq "" || $md eq $rmd5 || die "Local MD5 $md does not equal S3 md5 $rmd5 for file $s3cmd_push/$file";
 	} else {
 		$push .= "/" unless $push =~ /\/$/;
-		mkpath($push, { verbose => 0 });
+		mkpath($push);
 		(-d $push) || die "Could not create -push destination directory $push\n";
 		my $cmd = "cp $file $push >&2 2>/dev/null";
 		Util::run($cmd) == 0 || die "Command failed: $cmd";
@@ -268,7 +268,7 @@ sub fetch($$$$) {
 	} elsif($fname =~ /\.sra$/) {
 		my $fastq_dump = Tools::fastq_dump();
 		$newfname =~ s/\.sra$/.fastq/;
-		mkpath("./sra_tmp", { verbose => 0 });
+		mkpath("./sra_tmp");
 		Util::runAndWait("$fastq_dump $fname -O ./sra_tmp > /dev/null", "fastq-dump") == 0 ||
 			die "Error performing SRA-to-FASTQ $fname";
 		Util::runAndWait("cat ./sra_tmp/* > $newfname", "cat") == 0 ||

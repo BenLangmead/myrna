@@ -145,7 +145,7 @@ my %labCnts = ();
 sub fs_ensure_dir_weak {
 	my ($paths, $local) = @_;
 	if($local) {
-		mkpath(@$paths, { verbose => 0 });
+        for my $pt (@$paths) { mkpath($pt); }
 	} else {
 		my $pathstr = join(' ', @$paths);
 		my $hadoop = Tools::hadoop();
@@ -230,7 +230,7 @@ sub finalizeLabCounts($) {
 my $from3prime = $from5prime ? "0" : "1";
 
 if($Rfetch ne "") {
-	mkpath($dest_dir, { verbose => 0 });
+	mkpath($dest_dir);
 	(-d $dest_dir) || die "-destdir $dest_dir does not exist or isn't a directory, and could not be created\n";
 	msg("Ensuring R is installed");
 	my $r_dir = "R-2.14.2";
@@ -265,7 +265,7 @@ sub makeExons {
 		# Assume it was included in the archive
 		return;
 	}
-	mkpath($exonPath, { verbose => 0 });
+	mkpath($exonPath);
 	my $exonFile = "$ivalPath/exons.txt";
 	msg("Reading exon information from '$exonFile'");
 	open (EXONS, $exonFile) || die "Expected a file '$exonFile'";
@@ -338,7 +338,7 @@ sub makeExonsSync($) {
 
 my $ivalPath = "";
 if($ivalsjar ne "") {
-	mkpath($dest_dir, { verbose => 0 });
+	mkpath($dest_dir);
 	(-d $dest_dir) || die "-destdir $dest_dir does not exist or isn't a directory, and could not be created\n";
 	msg("Ensuring reference jar is installed");
 	Get::ensureFetched($ivalsjar, $dest_dir, \@counterUpdates, undef, undef, \%env);
@@ -412,7 +412,7 @@ while(1) {
 			msg("Running: $cmd");
 			# Write the relevant data to an error directory
 			if(defined($errorDir) && $errorDir ne "") {
-				mkpath("$errorDir/Assign.pl.$$", { verbose => 0 });
+				mkpath("$errorDir/Assign.pl.$$");
 				open(ERR, ">$errorDir/Assign.pl.$$/err.sh") || die;
 				print ERR "$cmd\n";
 				close(ERR);

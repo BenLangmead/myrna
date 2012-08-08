@@ -101,7 +101,7 @@ sub checkDir {
 			-d $dir && mydie("Could not remove directory $dir", 30);
 		}
 	}
-	mkpath($dir, { verbose => 0 });
+	mkpath($dir);
 	(-d $dir) || mydie("Could not create new directory $dir", 40);
 }
 checkDir($output);

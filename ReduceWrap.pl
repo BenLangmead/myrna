@@ -147,7 +147,7 @@ sub checkDir($) {
 			-d $dir && mydie("Could not remove directory $dir", 80);
 		}
 	}
-	mkpath($dir, { verbose => 0 });
+	mkpath($dir);
 	(-d $dir) || mydie("Could not create new directory $dir", 90);
 	return abs_path($dir);
 }
@@ -289,7 +289,7 @@ for my $dir (split(/,/, $input)) {
 		$binPids{$pid} = 1;
 		next if $pid;
 		msg("Pid $$ processing input $f [$fi of $ninfiles]...");
-		mkpath("$taskDir/$$", { verbose => 0 });
+		mkpath("$taskDir/$$");
 		for(my $i = 0; $i < $ntasks; $i++) {
 			my $nfn = sprintf "task-%05d", $i;
 			push @taskFns, "$taskDir/$$/$nfn";
@@ -422,7 +422,7 @@ for(my $i = 0; $i < $nonemptyTasks; $i++) {
 	exit 0 if $childFailed;
 	my $nfn = sprintf "task-%05d", $i;
 	my $wd = "$workingDir/$$";
-	mkpath($wd, { verbose => 0 });
+	mkpath($wd);
 	(-d $wd) || mydie("Could not create working directory $wd", 310);
 	chdir($wd) || mydie("Could not change to working directory $wd", 320);
 	my $cmd;

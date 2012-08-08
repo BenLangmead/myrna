@@ -95,7 +95,7 @@ sub pushResult($) {
 	} elsif($output =~ /^hdfs/i) {
 		Get::do_hdfs_put($fn, $output, \@counterUpdates);
 	} else {
-		mkpath($output, { verbose => 0 });
+		mkpath($output);
 		(-d $output) || die "Could not create push directory $output\n";
 		run("cp $fn $output") == 0 || die;
 	}

@@ -81,7 +81,7 @@ sub do_s3_get($$$$$$) {
 	my ($file, $base, $dest_dir, $counters, $retries, $env) = @_;
 	$file = s3cmdify($file, $env);
 	my $file_arg = $file;
-	mkpath($dest_dir, { verbose => 0 });
+	mkpath($dest_dir);
 	my $cmd = "rm -f $dest_dir/$base >&2";
 	print STDERR "Get.pm:do_s3_get: $cmd\n";
 	system($cmd);
@@ -116,7 +116,7 @@ sub do_hdfs_get($$$$) {
 	defined($dest_dir) || croak("Must define dest_dir\n");
 	$file =~ s/^HDFS:/hdfs:/;
 	my $hadoop = Tools::hadoop();
-	mkpath($dest_dir, { verbose => 0 });
+	mkpath($dest_dir);
 	my $cmd = "$hadoop dfs -get $file $dest_dir/$base >&2";
 	print STDERR "Get.pm:do_hdfs_get: $cmd\n";
 	my $ret = Util::runAndWait($cmd, "hadoop dfs -get");
@@ -152,7 +152,7 @@ sub do_hdfs_put($$$) {
 
 sub do_local($$$$) {
 	my ($file, $base, $dest_dir, $counters) = @_;
-	mkpath($dest_dir, { verbose => 0 });
+	mkpath($dest_dir);
 	my $cmd = "cp $file $dest_dir/$base >&2";
 	print STDERR "Get.pm:do_local: $cmd\n";
 	my $ret = Util::run($cmd);
@@ -185,7 +185,7 @@ sub do_wget($$$$) {
 	my ($file, $base, $dest_dir, $counters) = @_;
 	my $url = fix_wget_url($file);
 	my $wget = Tools::wget();
-	mkpath($dest_dir, { verbose => 0 });
+	mkpath($dest_dir);
 	my $cmd = "$wget $url -O $dest_dir/$base >&2";
 	print STDERR "Get.pm:do_wget: $cmd\n";
 	my $ret = Util::run($cmd);
@@ -245,7 +245,7 @@ sub ensureDirFetched($$$$) {
 	$dir =~ s/^HDFS/hdfs/;
 	my $dirDoneFile = $dir;
 	$dirDoneFile =~ s/[\/:]/_/g;
-	mkpath($dest_dir, { verbose => 0 });
+	mkpath($dest_dir);
 	$dirDoneFile = "$dest_dir/.dir.$dirDoneFile";
 	unless(-f $dirDoneFile) {
 		$dir .= "/" unless $dir =~ /\/$/;
@@ -286,7 +286,7 @@ sub ensureFetched($$$$$$) {
 	$file =~ s/^HDFS/hdfs/;
 	my $base = fileparse($file);
 	print STDERR "Get.pm:ensureFetched: base name \"$base\"\n";
-	mkpath($dest_dir, { verbose => 0 });
+	mkpath($dest_dir);
 	my $done_file = "$dest_dir/.$base.done";
 	my $lock_file = "$dest_dir/.$base.lock";
 	print STDERR "ls -al $dest_dir/*$base* $dest_dir/.*$base*\n";
@@ -453,7 +453,7 @@ sub fs_put {
 	}
 	my $rc;
 	if(Util::is_local($src) && Util::is_local($dst)) {
-		mkpath($dst, { verbose => 0 });
+		mkpath($dst);
 		$rc = Util::run("cp $src $dst >&2");
 	} else {
 		my $hadoop = Tools::hadoop();

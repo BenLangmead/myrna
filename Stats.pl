@@ -111,7 +111,7 @@ msg("Samples are paired: $paired");
 
 my $r;
 if($Rfetch ne "") {
-	mkpath($dest_dir, { verbose => 0 });
+	mkpath($dest_dir);
 	(-d $dest_dir) || die "-destdir $dest_dir does not exist or isn't a directory, and could not be created\n";
 	msg("Ensuring R is installed");
 	my $r_dir = "R-2.14.2";
@@ -170,7 +170,7 @@ sub analyzeBatch() {
 	if($ret != 0) {
 		if(defined($errorDir) && $errorDir ne "") {
 			# Write the relevant data to an error directory
-			mkpath("$errorDir/Stats.pl.$$", { verbose => 0 });
+			mkpath("$errorDir/Stats.pl.$$");
 			open ERR, ">$errorDir/Stats.pl.$$/err.sh";
 			print ERR "$cmd\n";
 			close(ERR);

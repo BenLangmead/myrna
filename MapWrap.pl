@@ -128,7 +128,7 @@ sub checkDir($) {
 			-d $dir && mydie("Could not remove directory $dir", 30);
 		}
 	}
-	mkpath($dir, { verbose => 0 });
+	mkpath($dir);
 	(-d $dir) || mydie("Could not create new directory $dir", 40);
 }
 
@@ -239,7 +239,7 @@ for my $f (@inputs) {
 	my $ofn = sprintf "map-%05d", $$;
 	my $redir = ">$output/$ofn 2>$errDir/$ofn";
 	my $wd = "$workingDir/$$";
-	mkpath($wd, { verbose => 0 });
+	mkpath($wd);
 	(-d $wd) || mydie("Could not create working directory $wd", 100);
 	chdir($wd) || mydie("Could not change to working directory $wd", 110);
 	for(my $i = 0; $i <= $retries; $i++) {
