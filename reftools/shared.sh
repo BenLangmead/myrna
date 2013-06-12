@@ -91,12 +91,20 @@ do_index() {
 }
 
 do_ivals() {
+	local cmd;
 	if [ ! -d ivals ] ; then
 		# Create the interval files
+		cmd="perl $SCRIPT_DIR/Ensembl.pl"
 		mkdir -p ivals
 		[ -z "$ENSEMBL_MART" ] && ENSEMBL_MART="ensembl"
+		cmd+=" -mart=$ENSEMBL_MART" 
 		[ -z "$ENSEMBL_DATASET" ] && ENSEMBL_DATASET="${ENSEMBL_ORGANISM}_gene_ensembl"
-		if ! perl $SCRIPT_DIR/Ensembl.pl -mart=$ENSEMBL_MART -dataset=$ENSEMBL_DATASET -organism=$ENSEMBL_ORGANISM ; then
+		cmd+=" -dataset=$ENSEMBL_DATASET"
+		cmd+=" -organism=$ENSEMBL_ORGANISM"
+		if [[ -n "$MYRNA_RHOME" ]]; then
+			cmd+=" -R $MYRNA_RHOME"
+		fi
+		if ! $($cmd); then
 			echo "Error: Ensembl.pl failed; aborting..."
 			exit 1
 		fi

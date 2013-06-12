@@ -16,6 +16,7 @@ use warnings;
 use Getopt::Long;
 use FileHandle;
 use FindBin qw($Bin); 
+use File::Spec;
 
 my $help = 0;
 my $rpath = "";
@@ -92,7 +93,7 @@ print "Mask pseudogenes: $maskFa\n";
 print "Use repeat-masked Ensembl: $repMask\n";
 
 if($help) { print $usage; exit 0 };
-$rcmd = "$rpath/Rscript" if $rpath ne "";
+$rcmd = File::Spec->catfile("$rpath","bin","Rscript") if $rpath ne "";
 system("$rcmd --version > /dev/null 2> /dev/null") &&
 	die "Non-0 exitlevel: $rcmd --version\nSet path to R/Rscript using -R\n";
 $organism ne "" || die "Must specify -organism\n";
