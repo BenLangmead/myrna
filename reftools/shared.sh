@@ -104,7 +104,7 @@ do_ivals() {
 		if [[ -n "$MYRNA_RHOME" ]]; then
 			cmd+=" -R $MYRNA_RHOME"
 		fi
-		if ! $($cmd); then
+		if ! $cmd; then
 			echo "Error: Ensembl.pl failed; aborting..."
 			exit 1
 		fi
