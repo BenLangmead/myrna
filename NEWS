@@ -19,6 +19,13 @@ Please report any issues using the Sourceforge bug tracker:
 Version Release History
 =======================
 
+Version 1.2.1 - June 24, 2013
+   * Upgraded to R v3.0.1 and fix a DBI module incompatibility.
+   * Updated defaults to bowtie v1.0.1.
+   * Updated the examples to work with the newest public database updates.
+   * Updated some script to properly use the local R installation if present.
+   * Fixed fastaq-dump new version incompatibilities.
+
 Version 1.2.1 - August 9, 2012
    * Fixed issue where some Perl versions would cause pipeline to crash
      in Normalize step.

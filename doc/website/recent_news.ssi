@@ -3,6 +3,15 @@
 <li>Myrna source now lives in a <a href="https://github.com/BenLangmead/myrna">public GitHub repository</a>.</li>
 </ul>
 
+<h2>Version 1.2.1 - June 24, 2013</h2>
+<ul>
+  <li>Upgraded to R v3.0.1 and fix a DBI module incompatibility.</li>
+  <li>Updated defaults to bowtie v1.0.1.</li>
+  <li>Updated the examples to work with the newest public database updates.</li>
+  <li>Updated some script to properly use the local R installation if present.</li>
+  <li>Fixed fastaq-dump new version incompatibilities.</li>
+</ul>
+
 <h2>Version 1.2.0 - July 19, 2012</h2>
 <ul>
   <li>Added support for Hadoop version 0.20.205.</li>
