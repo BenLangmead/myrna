@@ -266,9 +266,9 @@ interface] exclusively, there is nothing to install. Otherwise:
 
 ## Installing R and Bioconductor
 
-To run Myrna on a [Hadoop] cluster or local computer, [R] 2.14 and
+To run Myrna on a [Hadoop] cluster or local computer, [R] 3.0.1 and
 [Bioconductor] must be installed along with all [packages required by Myrna]. 
-If you already have [R] v2.14, [Bioconductor] and [all appropriate packages] but
+If you already have [R] v3.0.1, [Bioconductor] and [all appropriate packages] but
 Myrna can't find where they're installed, set the `MYRNA_RHOME` environment
 variable to point the appropriate R home directory, i.e., the directory
 containing `bin/R` and `bin/Rscript` executables for the proper installation.
@@ -277,7 +277,7 @@ containing `bin/R` and `bin/Rscript` executables for the proper installation.
 [all appropriate packages]: #manually-installing-rbioconductor
 [required packages]: #manually-installing-rbioconductor
 
-If you do not already have an [R] v2.14/[Bioconductor] installation, try the
+If you do not already have an [R] v3.0.1/[Bioconductor] installation, try the
 instructions in either or both of the following sections, [Building
 R/Bioconductor automatically] or [Manually installing R/Bioconductor].
 
@@ -286,14 +286,14 @@ R/Bioconductor automatically] or [Manually installing R/Bioconductor].
 
 ### Building R/Bioconductor automatically
 
-The Myrna package includes a bash script that builds [R] 2.14.2 from sources and
+The Myrna package includes a bash script that builds [R] 3.0.1 from sources and
 installs [Bioconductor] and all required packages automatically:
 
     cd $MYRNA_HOME/R ; ./build_r
 
 This script will:
 
-1. Download [R] v2.14.2 and expand it to subdirectory `R-2.14.2`
+1. Download [R] v3.0.1 and expand it to subdirectory `R-3.0.1`
 2. Run R's `./configure` script
 3. Run `make`
 4. Install [R] packages `multicore` and `lmtest`
@@ -320,7 +320,7 @@ Note: you can override Myrna's default of using the installation in
 
 ### Manually installing R/Bioconductor
 
-To install [R] version 2.14, follow the instructions in the [R Installation and
+To install [R] version 3.0.1, follow the instructions in the [R Installation and
 Administration] guide.  If you plan to run in [Hadoop] mode, make sure that [R]
 is installed on all nodes, including the master.  To avoid copying, you might
 wish to install [R] on a shared filesystem visible to all [Hadoop] nodes, such
@@ -782,7 +782,7 @@ additional [SimpleDB-related charges]; those fees are typically small or zero
    automatically unless the platform is not Mac or Linux or unless overridden by
    [`--bowtie`](#myrna-hadoop-bowtie) or by defining `MYRNA_BOWTIE_HOME`.
 
-3. [R]/[Bioconductor] v2.14.2 or later must be installed at the same path on all
+3. [R]/[Bioconductor] v3.0.1 or later must be installed at the same path on all
    cluster nodes (including the master).  The R home directory (containing
    `bin/R` and `bin/Rscript`) must be specified via the
    [`--Rhome`](#myrna-hadoop-rhome) option OR specified in the `MYRNA_RHOME`
@@ -950,7 +950,7 @@ subdirectories of the `$MYRNA_HOME/bin` directory, and the `PATH`.
    pre-built Bowtie binaries for Linux and Mac OS X 10.6 or later, so most Mac
    and Linux users do not need to install either tool.
 
-2. An installation of [R]/[Bioconductor] v2.14.2 or later must exist on the
+2. An installation of [R]/[Bioconductor] v3.0.1 or later must exist on the
    local computer, with all required packages installed.  The R home directory
    (containing `bin/R` and `bin/Rscript`) must be specified via the
    [`--Rhome`](#myrna-local-rhome) option OR specified in the `$MYRNA_RHOME`

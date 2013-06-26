@@ -233,7 +233,7 @@ if($Rfetch ne "") {
 	mkpath($dest_dir);
 	(-d $dest_dir) || die "-destdir $dest_dir does not exist or isn't a directory, and could not be created\n";
 	msg("Ensuring R is installed");
-	my $r_dir = "R-2.14.2";
+	my $r_dir = "R-3.0.1";
 	Get::ensureFetched($Rfetch, $dest_dir, \@counterUpdates, $r_dir, undef, \%env);
 	$ENV{RHOME} = "$dest_dir/$r_dir";
 	$r = "$dest_dir/$r_dir/bin/Rscript";

@@ -7,6 +7,9 @@
 # Build an R installation with all the packages needed by Myrna.
 # Intended to be run from an EC2 EMR node.
 #
+# As of the switch to R-3.0.1 (June 26, 2013), this doesn't work because of
+# some issues with the R packages.
+#
 
 # Install R
 # When building an R install for an Amazon EMR machine, this should all

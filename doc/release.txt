@@ -17,21 +17,29 @@ Changing the Ensembl version used:
 - Update webui/myrna.pl to refer to the new jars and the new Ensembl version.
 - Update MANUAL.markdown to refer to the new jars and the new Ensembl version.
 
+Updating the public scripts for EMR version:
+- Use the emr/pull_push.sh script, giving it the previous Myrna version number
+  and the new Myrna version number as arguments
+
 Changing the R version used:
 - Change R_VER at the top of the R/build_r script
 - Change $R_VER in MyrnaIface.pm
-- Build R using R/build_r, then package it up in a tarball and upload to the
-  s3://myrna-emr/<ver> directory.  Made it world-readable.
+- On an EMR node, build R using R/build_r, then package it up in a tarball and
+  upload to the s3://myrna-emr/<ver> directory.  Made it world-readable.  To
+  launch a temporary EMR node you can use for this purpose, try:
+  # For 64-bit:
+  $ elastic-mapreduce --create --name 'Temp64' --alive \
+                      --num-instances 1 --master-instance-type c1.xlarge
+  # For 32-bit:
+  $ elastic-mapreduce --create --name 'Temp32' --alive \
+                      --num-instances 1 --master-instance-type c1.medium
 - Update the manual to refer to the new R version
 - Update all the 'my $r_dir = "R-XYZ";' statements.  As of this writing, thse
   are at the top of Assign.pl, PostprocessReduce.pl, and Stats.pl
 
 Changing the Bowtie version used:
 - Edit the BOWTIE_VERSION variable in Makefile
-
-Updating the public scripts for EMR version:
-- Use the emr/pull_push.sh script, giving it the previous Myrna version number
-  and the new Myrna version number as arguments
+- Use the makefile to build Bowtie
 
 Updating the manual:
 - 'make doc'

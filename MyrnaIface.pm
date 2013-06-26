@@ -605,7 +605,7 @@ $partitionLen = 1000000 if $partitionLen == 0;
 $bt_args = "-m 1" if $bt_args eq "";
 $ref eq "" || $ref =~ /\.jar$/ || dieusage("--reference must end with .jar", $usage, 1);
 $numNodes = 1 if !$numNodes;
-my $R_VER = "2.14.2";
+my $R_VER = "3.0.1";
 $rUrl = "S3N://$appDir/R-${R_VER}.tar.gz";
 $family = "poisson" if $family eq "";
 validateFamily($family);
@@ -840,7 +840,10 @@ if(!$hadoopJob && !$localJob) {
 		die "Error: Myrna not compatible with Hadoop versions before 0.20";
 	}
 	scalar(@vers) >= 2 && scalar(@vers <= 4) || die "Could not parse Hadoop version: \"$hadoopVersion\"\n";
-	if     ($vers[0] == 0 && $vers[1] == 20 && scalar(@vers) > 2 && $vers[2] == 205) {
+	if     ($vers[0] == 1 && $vers[1] == 0 && scalar(@vers) > 2 && $vers[2] == 3) {
+		$emrArgs .= " " if ($emrArgs ne "" && $emrArgs !~ /\s$/);
+		$emrArgs .= "--hadoop-version=1.0.3 --ami-version 2.3 ";
+	} elsif($vers[0] == 0 && $vers[1] == 20 && scalar(@vers) > 2 && $vers[2] == 205) {
 		$emrArgs .= " " if ($emrArgs ne "" && $emrArgs !~ /\s$/);
 		$emrArgs .= "--hadoop-version=0.20.205 --ami-version 2.0 ";
 	} elsif($vers[0] == 0 && $vers[1] == 20) {
