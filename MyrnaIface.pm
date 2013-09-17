@@ -19,6 +19,7 @@ use Cwd 'abs_path';
 use lib $Bin;
 use Tools;
 use File::Path qw(mkpath);
+use AWS;
 
 ##
 # Function interface for invoking the generic Myrna wrapper.
@@ -82,6 +83,7 @@ our $name = "";
 our $waitJob = 0;
 our $instType = "";
 our $numNodes = 1;
+our $bidPrice = 0.10;
 our $reducersPerNode = 0;
 our $emrArgs = "";
 our $noLogs = 0;
@@ -341,8 +343,9 @@ GetOptions (
 	"instance-type:s"           => \$instType,
 	"stay-alive"                => \$waitJob,
 	"wait-on-fail"              => \$waitJob,
-	"nodes:i"                   => \$numNodes,
-	"instances|num-instances:i" => \$numNodes,
+	"nodes:s"                   => \$numNodes,
+	"bid-price:f"               => \$bidPrice,
+	"instances|num-instances:s" => \$numNodes,
 	"emr-args:s"                => \$emrArgs,
 	"no-logs"                   => \$noLogs,
 	"logs:s"                    => \$logs,
@@ -587,8 +590,12 @@ $hadoopVersion = "0.20.205" if !defined($hadoopVersion) || $hadoopVersion eq "";
 my $appDir = "$app-emr/$VERSION";
 $accessKey = $ENV{AWS_ACCESS_KEY_ID} if
 	$accessKey eq "" && $awsEnv && defined($ENV{AWS_ACCESS_KEY_ID});
+$accessKey = $ENV{AWS_ACCESS_ID} if
+	$accessKey eq "" && $awsEnv && defined($ENV{AWS_ACCESS_ID});
 $secretKey = $ENV{AWS_SECRET_ACCESS_KEY} if
 	$secretKey eq "" && $awsEnv && defined($ENV{AWS_SECRET_ACCESS_KEY});
+$secretKey = $ENV{AWS_ACCESS_KEY} if
+	$secretKey eq "" && $awsEnv && defined($ENV{AWS_ACCESS_KEY});
 $name = "$APP-$VERSION" if $name eq "";
 $qual = "phred33" if $qual eq "";
 ($qual eq "phred33" || $qual eq "phred64" || $qual eq "solexa64") ||
@@ -604,7 +611,14 @@ $reducersPerNode > 0 || die;
 $partitionLen = 1000000 if $partitionLen == 0;
 $bt_args = "-m 1" if $bt_args eq "";
 $ref eq "" || $ref =~ /\.jar$/ || dieusage("--reference must end with .jar", $usage, 1);
-$numNodes = 1 if !$numNodes;
+$numNodes = "1" if !$numNodes;
+my $totalNodes = int($numNodes);
+if(index($numNodes, ',') != -1) {
+	my @nn = split(/,/, $numNodes);
+	for my $i (1..scalar($#nn)) {
+		$totalNodes += int($i);
+	}
+}
 my $R_VER = "3.0.1";
 $rUrl = "S3N://$appDir/R-${R_VER}.tar.gz";
 $family = "poisson" if $family eq "";
@@ -1265,7 +1279,7 @@ phase=`expr \$phase + 1`
 !;
 
 my $binstr = ($bin > 0 ? "--bin" : "");
-my $assignTasks = $numNodes * $reducersPerNode * 4;
+my $assignTasks = $totalNodes * $reducersPerNode * 4;
 my $inputOlap  = (($firstStage eq "overlap") ? $input  : $outputAlign);
 my $outputOlap = (($lastStage  eq "overlap") ? $output : "$intermediate/olaps");
 $profile = $profile ? "--profile" : "";
@@ -1369,7 +1383,7 @@ fi
 phase=`expr \$phase + 1`
 !;
 
-my $normalTasks  = $numNodes * $reducersPerNode * 2;
+my $normalTasks  = $totalNodes * $reducersPerNode * 2;
 my $inputNormal  = (($firstStage eq "normalize") ? $input  : $outputOlap);
 my $outputNormal = (($lastStage  eq "normalize") ? $output : "$intermediate/normal");
 my $outputCount = ($count eq "" ? "$intermediate/count" : $count);
@@ -1462,7 +1476,7 @@ fi
 phase=`expr \$phase + 1`
 !;
 
-my $statsTasks  = $numNodes * $reducersPerNode * 4;
+my $statsTasks  = $totalNodes * $reducersPerNode * 4;
 my $inputStats  = (($firstStage eq "statistics") ? $input  : $outputNormal);
 my $outputStats = (($lastStage  eq "statistics") ? $output : "$intermediate/stats");
 $bypassPvals = $bypassPvals ? "--bypass-pvals" : "";
@@ -1898,13 +1912,23 @@ if(!$localJob && !$hadoopJob) {
 }
 $name =~ s/"//g;
 (defined($emrScript) && $emrScript ne "") || $localJob || $hadoopJob || die;
+my $instTypeStr = "--num-instances $totalNodes --instance-type ";
+if(index($numNodes, ',') != -1) {
+	my @nn = split(',', $numNodes);
+	while(scalar(@nn) < 3) {
+		push @nn, 0;
+	}
+	# TODO: allow different instance type for master / core / task
+	my @instTypes = ($instType) x 3;
+	$instTypeStr = AWS::instanceTypeString(\@instTypes, \@nn, $bidPrice);
+}
+
 my $cmdJson = "$emrScript ".
     "--create ".
     "$credentials ".
     "$emrArgs ".
     "--name \"$name\" ".
-    "--num-instances $numNodes ".
-    "--instance-type $instType ".
+    "$instTypeStr ".
     "--json $jsonFile ".
     "--bootstrap-action s3://elasticmapreduce/bootstrap-actions/configurations/latest/memory-intensive ".
     "--bootstrap-name \"Set memory-intensive mode\" ".
