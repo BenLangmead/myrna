@@ -77,6 +77,7 @@ my $profile = 0;
 my $cntfn = "";
 my $errorDir = "";
 my $globals_dir = "";
+my $verboseCounters = 0;
 
 Tools::initTools();
 my %env = %ENV;
@@ -108,7 +109,8 @@ GetOptions (
 	"globals:s"  => \$globals_dir,
 	"R:s"        => \$Tools::r_arg,
 	"Rfetch:s"   => \$Rfetch,
-	"keep"       => \$keep) || die "Bad option";
+	"keep"       => \$keep,
+	"verbose-counters" => \$verboseCounters) || die "Bad option";
 
 Tools::purgeEnv();
 
@@ -220,7 +222,7 @@ sub get_mset_global($$) {
 sub finalizeLabCounts($) {
 	my ($env) = @_;
 	while(my ($k, $v) = each(%labCnts)) {
-		counter("Bowtie,Label $k aligned reads,$v");
+		counter("Bowtie,Label $k aligned reads,$v") if $verboseCounters;
 	}
 	for my $k (keys %labCnts) { set_mset_global("label", $k); }
 	set_mset_flush();

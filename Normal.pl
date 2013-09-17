@@ -32,6 +32,7 @@ my $normal = "lup";
 my $normal_url = "lup";
 my $output_url = "";
 my $cntfn = "";
+my $verboseCounters = 0;
 
 Tools::initTools();
 my %env = %ENV;
@@ -47,7 +48,8 @@ GetOptions (
 	"normal:s" => \$normal,
 	"normal_url:s" => \$normal_url,
 	"hadoop:s" => \$Tools::hadoop_arg,
-	"output:s" => \$output_url) || die "Bad option\n";
+	"output:s" => \$output_url,
+	"verbose-counters" => \$verboseCounters) || die "Bad option\n";
 
 Tools::purgeEnv();
 
@@ -173,12 +175,14 @@ while(<STDIN>) {
 			print STDERR "$lab: total = $labTot, distinct non-zero counts = $num, maximum = $mx, upper quartile = $q25, median = $q50, lower quartile = $q75\n";
 			# Too many counters; tended to exceed Hadoop's new upper limit of
 			# 120 counters per job.
-			#print STDERR "reporter:counter:Normal,Label $lab total,$labTot\n";
-			#print STDERR "reporter:counter:Normal,Label $lab distinct non-zero counts,$num\n";
-			#print STDERR "reporter:counter:Normal,Label $lab maximum,$mx\n";
-			#print STDERR "reporter:counter:Normal,Label $lab upper quartile,$q25\n";
-			#print STDERR "reporter:counter:Normal,Label $lab median,$q50\n";
-			#print STDERR "reporter:counter:Normal,Label $lab lower quartile,$q75\n";
+			if($verboseCounters) {
+				print STDERR "reporter:counter:Normal,Label $lab total,$labTot\n";
+				print STDERR "reporter:counter:Normal,Label $lab distinct non-zero counts,$num\n";
+				print STDERR "reporter:counter:Normal,Label $lab maximum,$mx\n";
+				print STDERR "reporter:counter:Normal,Label $lab upper quartile,$q25\n";
+				print STDERR "reporter:counter:Normal,Label $lab median,$q50\n";
+				print STDERR "reporter:counter:Normal,Label $lab lower quartile,$q75\n";
+			}
 		}
 		# Output line represents an alignment, annotated with
 		# normalization constants:

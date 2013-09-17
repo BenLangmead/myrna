@@ -63,6 +63,7 @@ my $poolReplicates = 0;
 my $poolTechReplicates = 0;
 my $test = 0;
 my $cntfn = "";
+my $verboseCounters = 0;
 
 sub dieusage {
 	my $msg = shift;
@@ -107,7 +108,8 @@ GetOptions (
 	"pool-replicates" => \$poolReplicates,
 	"pool-tech-replicates" => \$poolTechReplicates,
 	"destdir:s"       => \$dest_dir,
-	"test"            => \$test) || dieusage("Bad option", 1);
+	"test"             => \$test,
+	"verbose-counters" => \$verboseCounters) || dieusage("Bad option", 1);
 
 Tools::purgeEnv();
 
@@ -227,7 +229,7 @@ sub get_mset_global($$) {
 sub finalizeLabCounts($) {
 	my ($env) = @_;
 	while(my ($k, $v) = each(%labCnts)) {
-		counter("Bowtie,Label $k input reads,$v");
+		counter("Bowtie,Label $k input reads,$v") if $verboseCounters;
 	}
 	for my $k (keys %labCnts) { set_mset_global("label", $k); }
 	set_mset_flush();
@@ -564,14 +566,16 @@ counter("Bowtie,Reads skipped due to -truncate-discard,$truncSkipped");
 counter("Bowtie,Mates skipped due to -discard-mate,$matesSkipped");
 counter("Bowtie,Reads (mates) truncated due to -truncate*,$truncated");
 for my $lab (keys %outfhs) { $outfhs{$lab}->close() };
-for my $len (keys %lens) {
-	counter("Bowtie,Reads of length $len,$lens{$len}");
-}
-for my $qual (keys %rawQualCnts) {
-	counter("Bowtie,Occurrences of raw quality value [".($qual*10).":".($qual*10+10)."),$rawQualCnts{$qual}");
-}
-for my $qual (keys %qualCnts) {
-	counter("Bowtie,Occurrences of phred-33 quality value [".($qual*10).":".($qual*10+10)."),$qualCnts{$qual}");
+if($verboseCounters) {
+	for my $len (keys %lens) {
+		counter("Bowtie,Reads of length $len,$lens{$len}");
+	}
+	for my $qual (keys %rawQualCnts) {
+		counter("Bowtie,Occurrences of raw quality value [".($qual*10).":".($qual*10+10)."),$rawQualCnts{$qual}");
+	}
+	for my $qual (keys %qualCnts) {
+		counter("Bowtie,Occurrences of phred-33 quality value [".($qual*10).":".($qual*10+10)."),$qualCnts{$qual}");
+	}
 }
 msg("$downloaded reads downloaded");
 
@@ -611,25 +615,25 @@ for my $lab (keys %outfhs) {
 			my $num = $1;
 			$num == int($num) || die "Expected number: $num\n$_";
 			counter("Bowtie,Reads with at least 1 reported alignment,$num");
-			counter("Bowtie,Label $lab reads with at least 1 reported alignment,$num");
+			counter("Bowtie,Label $lab reads with at least 1 reported alignment,$num") if $verboseCounters;
 		} elsif(/reads that failed to align/) {
 			/: ([0-9]+)/;
 			my $num = $1;
 			$num == int($num) || die "Expected number: $num\n$_";
 			counter("Bowtie,Reads that failed to align,$num");
-			counter("Bowtie,Label $lab reads that failed to align,$num");
+			counter("Bowtie,Label $lab reads that failed to align,$num") if $verboseCounters;
 		} elsif(/reads with alignments suppressed due to -m/) {
 			/: ([0-9]+)/;
 			my $num = $1;
 			$num == int($num) || die "Expected number: $num\n$_";
 			counter("Bowtie,Reads with alignments suppressed due to -m,$num");
-			counter("Bowtie,Label $lab reads with alignments suppressed due to -m,$num");
+			counter("Bowtie,Label $lab reads with alignments suppressed due to -m,$num") if $verboseCounters;
 		} elsif(/reads with alignments sampled due to -M/) {
 			/: ([0-9]+)/;
 			my $num = $1;
 			$num == int($num) || die "Expected number: $num\n$_";
 			counter("Bowtie,Reads with alignments sampled due to -M,$num");
-			counter("Bowtie,Label $lab reads with alignments sampled due to -M,$num");
+			counter("Bowtie,Label $lab reads with alignments sampled due to -M,$num") if $verboseCounters;
 		}
 	}
 	close(SUMM);

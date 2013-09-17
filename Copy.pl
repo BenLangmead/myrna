@@ -55,6 +55,7 @@ my $stopAfter = 0;
 my $maxPerFile = 0;
 my $keep = 0;
 my $verbose = 0;
+my $verboseCounters = 0;
 my $labReadGroup = 0;
 my $cntfn = "";
 
@@ -69,25 +70,26 @@ Tools::initTools();
 my %env = %ENV;
 
 GetOptions(
-	"compress:s"   => \$compress,
-	"push:s"       => \$push,
-	"samtools:s"   => \$Tools::samtools_arg,
-	"fastq-dump:s" => \$Tools::fastq_dump_arg,
-	"s3cmd:s"      => \$Tools::s3cmd_arg,
-	"s3cfg:s"      => \$Tools::s3cfg,
-	"md5:s"        => \$Tools::md5_arg,
-	"accessid:s"   => \$AWS::accessKey,
-	"secretid:s"   => \$AWS::secretKey,
-	"hadoop:s"     => \$Tools::hadoop_arg,
-	"stop:i"       => \$stopAfter,
-	"maxperfile:i" => \$maxPerFile,
-	"keep"         => \$keep,
-	"h"            => \$helpflag,
-	"s"            => \$skipfirst,
-	"owner:s"      => \$owner,
-	"label-rg"     => \$labReadGroup,
-	"counters:s"   => \$cntfn,
-	"verbose"      => \$verbose)
+	"compress:s"       => \$compress,
+	"push:s"           => \$push,
+	"samtools:s"       => \$Tools::samtools_arg,
+	"fastq-dump:s"     => \$Tools::fastq_dump_arg,
+	"s3cmd:s"          => \$Tools::s3cmd_arg,
+	"s3cfg:s"          => \$Tools::s3cfg,
+	"md5:s"            => \$Tools::md5_arg,
+	"accessid:s"       => \$AWS::accessKey,
+	"secretid:s"       => \$AWS::secretKey,
+	"hadoop:s"         => \$Tools::hadoop_arg,
+	"stop:i"           => \$stopAfter,
+	"maxperfile:i"     => \$maxPerFile,
+	"keep"             => \$keep,
+	"h"                => \$helpflag,
+	"s"                => \$skipfirst,
+	"owner:s"          => \$owner,
+	"label-rg"         => \$labReadGroup,
+	"counters:s"       => \$cntfn,
+	"verbose"          => \$verbose,
+	"verbose-counters" => \$verboseCounters)
 	|| die "GetOptions failed\n";
 
 Tools::purgeEnv();
@@ -252,20 +254,26 @@ sub fetch($$$$) {
 	if($fname =~ /\.gz$/ || $fname =~ /\.gzip$/) {
 		$newfname =~ s/\.gzi?p?$//;
 		Util::runAndWait("gzip -dc $fname > $newfname", "gzip -dc") == 0 || die "Error while gunzipping $fname";
-		counter("Short read preprocessor,Read data fetched (uncompressed),".(-s $newfname));
-		counter("Short read preprocessor,Read data fetched (un-gzipped),".(-s $newfname));
+		if($verboseCounters) {
+			counter("Short read preprocessor,Read data fetched (uncompressed),".(-s $newfname));
+			counter("Short read preprocessor,Read data fetched (un-gzipped),".(-s $newfname));
+		}
 	} elsif($fname =~ /\.bz2$/ || $fname =~ /\.bzip2$/)  {
 		$newfname =~ s/\.bzi?p?2$//;
 		Util::runAndWait("bzip2 -dc $fname > $newfname", "bzip2 -dc") == 0 || die "Error while bzip2 decompressing $fname";
-		counter("Short read preprocessor,Read data fetched (uncompressed),".(-s $newfname));
-		counter("Short read preprocessor,Read data fetched (un-bzip2ed),".(-s $newfname));
+		if($verboseCounters) {
+			counter("Short read preprocessor,Read data fetched (uncompressed),".(-s $newfname));
+			counter("Short read preprocessor,Read data fetched (un-bzip2ed),".(-s $newfname));
+		}
 	} elsif($fname =~ /\.bam$/) {
 		my $samtools = Tools::samtools();
 		$newfname =~ s/\.bam$/.sam/;
 		Util::runAndWait("$samtools view $fname > $newfname", "samtools") == 0 ||
 			die "Error performing BAM-to-SAM $fname";
-		counter("Short read preprocessor,Read data fetched (uncompressed),".(-s $newfname));
-		counter("Short read preprocessor,Read data fetched (BAM-to-SAM),".(-s $newfname));
+		if($verboseCounters) {
+			counter("Short read preprocessor,Read data fetched (uncompressed),".(-s $newfname));
+			counter("Short read preprocessor,Read data fetched (BAM-to-SAM),".(-s $newfname));
+		}
 	} elsif($fname =~ /\.sra$/) {
 		my $fastq_dump = Tools::fastq_dump();
 		$newfname =~ s/\.sra$/.fastq/;
@@ -274,8 +282,10 @@ sub fetch($$$$) {
 			die "Error performing SRA-to-FASTQ $fname";
 		Util::runAndWait("cat ./sra_tmp/* > $newfname", "cat") == 0 ||
 			die "Error copying resuld of SRA-to-FASTQ $fname";
-		counter("Short read preprocessor,Read data fetched (uncompressed),".(-s $newfname));
-		counter("Short read preprocessor,Read data fetched (un-SRAed),".(-s $newfname));
+		if($verboseCounters) {
+			counter("Short read preprocessor,Read data fetched (uncompressed),".(-s $newfname));
+			counter("Short read preprocessor,Read data fetched (un-SRAed),".(-s $newfname));
+		}
 		rmtree("./sra_tmp");
 	}
 	return $newfname;
@@ -420,10 +430,14 @@ sub doUnpairedUrl($$$$$$) {
 		if($labReadGroup) {
 			defined($readGroup) || die;
 			$fullname .= ";LB:$readGroup";
-			$delayedCounters{"Unpaired reads with label $readGroup"}++;
+			if($verboseCounters) {
+				$delayedCounters{"Unpaired reads with label $readGroup"}++;
+			}
 		} elsif(defined($lab)) {
 			$fullname .= ";LB:$lab";
-			$delayedCounters{"Unpaired reads with label $lab"}++;
+			if($verboseCounters) {
+				$delayedCounters{"Unpaired reads with label $lab"}++;
+			}
 		}
 		$fullname .= ";$name";
 		print $of "$fullname\t$seq\t$qual\n";
@@ -499,10 +513,14 @@ sub doPairedUrl($$$$$$$$) {
 		if($labReadGroup) {
 			defined($readGroup) || die;
 			$fullname .= ";LB:$readGroup";
-			$delayedCounters{"Pairs with label $readGroup"}++;
+			if($verboseCounters) {
+				$delayedCounters{"Pairs with label $readGroup"}++;
+			}
 		} elsif(defined($lab)) {
 			$fullname .= ";LB:$lab";
-			$delayedCounters{"Pairs with label $lab"}++;
+			if($verboseCounters) {
+				$delayedCounters{"Pairs with label $lab"}++;
+			}
 		}
 		$fullname .= ";$name";
 		print $of "$fullname\t$seq1\t$qual1\t$seq\t$qual\n";
