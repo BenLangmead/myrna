@@ -63,4 +63,18 @@ sub ensureKeys($$$) {
 	}
 }
 
+sub instanceTypeString($$$) {
+	my ($types, $counts, $bid) = @_;
+	my $ret = "";
+	$ret .= "--instance-group master --instance-type ".$types->[0]." --instance-count ".$counts->[0]." ";
+	if($counts->[1] > 0) {
+		$ret .= "--instance-group core --instance-type ".$types->[1]." --instance-count ".$counts->[1]." ";
+	}
+	if($counts->[2] > 0) {
+		$ret .= "--instance-group task --instance-type ".$types->[2]." --instance-count ".$counts->[2]." ";
+		$ret .= sprintf "--bid-price %0.3f ", $bid;
+	}
+	return $ret;
+}
+
 1;
