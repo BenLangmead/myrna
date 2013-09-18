@@ -1912,7 +1912,7 @@ if(!$localJob && !$hadoopJob) {
 }
 $name =~ s/"//g;
 (defined($emrScript) && $emrScript ne "") || $localJob || $hadoopJob || die;
-my $instTypeStr = "--num-instances $totalNodes --instance-type ";
+my $instTypeStr = "--num-instances $totalNodes --instance-type $instType ";
 if(index($numNodes, ',') != -1) {
 	my @nn = split(',', $numNodes);
 	while(scalar(@nn) < 3) {
