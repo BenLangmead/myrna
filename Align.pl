@@ -159,7 +159,7 @@ sub fs_ensure_dir_weak {
 		my $pathstr = join(' ', @$paths);
 		my $hadoop = Tools::hadoop();
 		$hadoop ne "" || die "Empty hadoop path: '$hadoop'";
-		system("($hadoop fs -mkdir $pathstr) >& /dev/null");
+		system("($hadoop fs -mkdir $pathstr) >/dev/null 2>&1");
 	}
 }
 

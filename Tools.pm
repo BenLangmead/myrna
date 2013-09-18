@@ -44,7 +44,7 @@ my $hadoopEnsured = 0;
 sub ensureHadoop() {
 	return if $hadoopEnsured;
 	$hadoop = $hadoop_arg if $hadoop_arg ne "";
-	if(system("$hadoop -version >&2") != 0) {
+	if(system("$hadoop -version >/dev/null 2>&1") != 0) {
 		if($hadoop_arg ne "") {
 			die "--hadoop argument \"$hadoop\" doesn't exist or isn't executable\n";
 		} else {
@@ -108,7 +108,7 @@ sub ensureFastqDump() {
 	$fastq_dump = $fastq_dump_arg if $fastq_dump_arg ne "";
 	my $ret = 0;
 	if($fastq_dump ne "") {
-		$ret = system("$fastq_dump -h >&2 >/dev/null") >> 8;
+		$ret = system("$fastq_dump -h >/dev/null 2>&1") >> 8;
 	}
 	if($ret != 0) {
 		if($fastq_dump_arg ne "") {
@@ -166,7 +166,7 @@ sub ensureS3cmd($) {
 	my ($env) = @_;
 	return if $s3cmdEnsured;
 	$s3cmd = $s3cmd_arg if $s3cmd_arg ne "";
-	if(system("$s3cmd --version >&2") != 0) {
+	if(system("$s3cmd --version >/dev/null 2>&1") != 0) {
 		if($s3cmd_arg ne "") {
 			die "-s3cmd argument \"$s3cmd\" doesn't exist or isn't executable\n";
 		} else {

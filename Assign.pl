@@ -147,12 +147,12 @@ my %labCnts = ();
 sub fs_ensure_dir_weak {
 	my ($paths, $local) = @_;
 	if($local) {
-        mkpath($paths);
+		mkpath($paths);
 	} else {
 		my $pathstr = join(' ', @$paths);
 		my $hadoop = Tools::hadoop();
 		$hadoop ne "" || die "Empty hadoop path: '$hadoop'";
-		system("($hadoop fs -mkdir $pathstr) >& /dev/null");
+		system("($hadoop fs -mkdir $pathstr) >/dev/null 2>&1");
 	}
 }
 
