@@ -67,7 +67,7 @@ counter <- function(names, amts) {
 # Calculate overlaps given arbitrary intervals of interest.
 #
 calcOlap <- function(ranges1, ranges2) {
-	matchMatrix(findOverlaps(ranges2, ranges1))
+	as.matrix(findOverlaps(ranges2, ranges1))
 }
 
 ##
