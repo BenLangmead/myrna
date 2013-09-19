@@ -612,12 +612,14 @@ $partitionLen = 1000000 if $partitionLen == 0;
 $bt_args = "-m 1" if $bt_args eq "";
 $ref eq "" || $ref =~ /\.jar$/ || dieusage("--reference must end with .jar", $usage, 1);
 $numNodes = "1" if !$numNodes;
-my $totalNodes = int($numNodes);
+my $totalNodes = 1;
 if(index($numNodes, ',') != -1) {
 	my @nn = split(/,/, $numNodes);
 	for my $i (1..scalar($#nn)) {
 		$totalNodes += int($i);
 	}
+} else {
+	$totalNodes = int($numNodes);
 }
 my $R_VER = "3.0.1";
 $rUrl = "S3N://$appDir/R-${R_VER}.tar.gz";
