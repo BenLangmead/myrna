@@ -278,7 +278,10 @@ handleChr <- function(alns) {
 	msg("Finished outputting per-label subtotals")
 
 	# Also update global counters
-	counter(paste("Overlaps for label ", labtab[,1], sep=""), labtab[,2])
+	if(F) {
+		# This is potentially too many counters!
+		counter(paste("Overlaps for label ", labtab[,1], sep=""), labtab[,2])
+	}
 	
 	# Print Hadoop counter updates
 	counter("Overlaps output by Assign.R", nrow(olaps))
