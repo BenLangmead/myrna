@@ -360,7 +360,7 @@ sub ensureFetched($$$$$$) {
 				croak("Return value from extract task was $ret\n");
 			}
 			my $size = -s "$dest_dir/$base";
-			push @{$counters}, "Fetcher,File and size $base and $size,1";
+			#push @{$counters}, "Fetcher,File and size $base and $size,1";
 			push @{$counters}, "Fetcher,Bytes obtained,$size";
 			push @{$counters}, "Fetcher,Files obtained,1";
 			if(defined($doRfixup)) {
