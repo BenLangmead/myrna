@@ -39,7 +39,7 @@ sub parse_url($) {
 		$type = "hdfs";
 	} else {
 		$type = "local";
-		(-f $ref || -d $ref) || croak("URL referring to local file $ref doesn't exist or cannot be read\n");
+		(-e $ref) || croak("URL referring to local file $ref doesn't exist or cannot be read\n");
 		return ("", $type);
 	}
 	return ($proto, $type);
@@ -88,13 +88,13 @@ sub do_s3_get($$$$$$) {
 	my $ret;
 	while($retries >= 0) {
 		my $out;
-		($ret, $out) = do_s3cmd("get --force $file_arg $dest_dir/$base >&2", $env);
-		(-f "$dest_dir/$base") || croak("Did not create $dest_dir/$base - wrong URL?\n");
+		($ret, $out) = do_s3cmd("get --force --recursive $file_arg $dest_dir/$base >&2", $env);
+		(-e "$dest_dir/$base") || croak("Did not create $dest_dir/$base - wrong URL?\n");
 		push @{$counters}, "Fetcher,s3cmd return $ret,1";
 		push @{$counters}, "Fetcher,Bytes obtained with s3cmd get,".(-s "$dest_dir/$base");
 		push @{$counters}, "Fetcher,Files obtained with s3cmd get,1";
 		return $ret if $ret == 0;
-		system("rm -f $dest_dir/$base* $dest_dir/.$base*");
+		system("rm -rf $dest_dir/$base* $dest_dir/.$base*");
 		$retries--;
 	}
 	return $ret;
@@ -186,7 +186,7 @@ sub do_wget($$$$) {
 	my $url = fix_wget_url($file);
 	my $wget = Tools::wget();
 	mkpath($dest_dir);
-	my $cmd = "$wget $url -O $dest_dir/$base >&2";
+	my $cmd = "$wget --progress=dot -e dotbytes=10M $url -O $dest_dir/$base >&2";
 	print STDERR "Get.pm:do_wget: $cmd\n";
 	my $ret = Util::run($cmd);
 	push @{$counters}, "Fetcher,wget return $ret,1";
@@ -262,6 +262,33 @@ sub ensureDirFetched($$$$) {
 }
 
 ##
+# Ensure all of the files in the source directory have been copied into
+# dest_dir.
+#
+sub ensureDirFetchedNoLock($$$$) {
+	my ($dir, $dest_dir, $counters, $env) = @_;
+	$dir =~ s/^S3N/s3n/;
+	$dir =~ s/^S3/s3/;
+	$dir =~ s/^HDFS/hdfs/;
+	mkpath($dest_dir);
+	my ($proto, $type) = parse_url($dir);
+	my $ret = 0;
+	if($type eq "s3") {
+		$ret = do_s3_get($dir, "", $dest_dir, $counters, 3, $env);
+	} elsif($type eq "hdfs") {
+		$ret = do_hdfs_get($dir, "", $dest_dir, $counters);
+	} elsif($type =~ /https?/ || $proto eq "ftp") {
+		$ret = do_wget($dir, "", $dest_dir, $counters);
+	} else {
+		$type eq "local" || croak("Bad type: $type\n");
+		$ret = do_local($dir, "", $dest_dir, $counters);
+	}
+	if($ret != 0) {
+		croak("Return value from extract task was $ret\n");
+	}
+}
+
+##
 # Do not return until the given file has been obtained and the "done"
 # flag file has been installed.
 #
@@ -306,7 +333,7 @@ sub ensureFetched($$$$$$) {
 			# Got the lock; it's up to me to download and explode the jar file
 			print STDERR "Pid $$: got the lock; downloading file...\n";
 			print STDERR "Pid $$:   file name: $base\n";
-			my $cmd = "rm -f $dest_dir/$base >&2";
+			my $cmd = "rm -rf $dest_dir/$base >&2";
 			print STDERR "$cmd\n";
 			system($cmd);
 			my $ret;
@@ -324,13 +351,13 @@ sub ensureFetched($$$$$$) {
 			print STDERR "ls -al $dest_dir/$base\n";
 			print STDERR `ls -al $dest_dir/$base`;
 			if($ret != 0) {
-				system("rm -f $dest_dir/$base* $dest_dir/.$base*");
+				system("rm -rf $dest_dir/$base* $dest_dir/.$base*");
 				flock(FH, LOCK_UN);
 				close(FH);
 				print STDERR "Return value from download task was $ret\n";
 				croak("Return value from download task was $ret\n");
 			}
-			if(! -f "$dest_dir/$base") {
+			if(! -e "$dest_dir/$base") {
 				flock(FH, LOCK_UN);
 				close(FH);
 				print STDERR "Return value from download task was $ret but the file $dest_dir/$base doesn't exist\n";
@@ -413,11 +440,11 @@ sub fs_exists {
 	my $path = shift;
 	my $rc;
 	if(Util::is_local($path)) {
-		$rc = Util::run("stat $path >& /dev/null");
+		$rc = Util::run("stat $path >/dev/null 2>&1");
 	} else {
 		my $hadoop = Tools::hadoop();
 		$path =~ s/^hdfs:\/\///i;
-		$rc = Util::run("($hadoop fs -stat $path) >& /dev/null");
+		$rc = Util::run("($hadoop fs -stat $path) >/dev/null 2>&1");
 	}
 	return !$rc;
 }
