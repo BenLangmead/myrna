@@ -50,7 +50,7 @@ sub flushCounters() {
 }
 
 my $ivalsjar = "";
-my $dest_dir = "";
+my $dest_dir = ".";
 my $status = "";
 my $calls = "";
 my $exons = "";
@@ -306,15 +306,20 @@ if($exons ne "" && !$noGenes) {
 		print LENS "$n\t$genes{$n}\n";
 	}
 	close(LENS);
+	msg("Finished extracting gene ids from $exons");
 } else {
 	msg("SKIPPING 3/7: Extracting gene ids from $exons");
 }
 
 # Get the set of all genes with non-0 counts
+msg("Getting directory with gene counts: '$counts'");
 if(!Util::is_local($counts)) {
-	Get::ensureDirFetched($counts, $dest_dir, \@counterUpdates, \%env);
+	Get::ensureDirFetchedNoLock($counts, $dest_dir, \@counterUpdates, \%env);
+	my $subdir = "$dest_dir/".fileparse($counts);
+	(-d $subdir) || die "Could not find counts subdir '$subdir'";
+	system("cp $subdir/* $dest_dir") == 0 || die "Error running 'cp $subdir/* $dest_dir'\n";
 } else {
-	$dest_dir = $counts;
+	system("cp $counts/* $dest_dir") == 0 || die "Error running 'cp $counts/* $dest_dir'\n";
 }
 
 msg("4/7: Extracting per-gene, per-label counts from $dest_dir");
