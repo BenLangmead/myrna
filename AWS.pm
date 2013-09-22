@@ -32,6 +32,8 @@ sub ensureKeys($$$) {
 	if($accessKey eq "") {
 		if(defined($env->{AWS_ACCESS_KEY_ID})) {
 			$accessKey = $env->{AWS_ACCESS_KEY_ID};
+		} elsif(defined($env->{AWS_ACCESS_KEY})) {
+			$accessKey = $env->{AWS_ACCESS_KEY};
 		} elsif(defined($hadoopHome)) {
 			$accessKey = `grep fs.s3n.awsAccessKeyId $hadoopHome/conf/*.xml | sed 's/.*<value>//' | sed 's/<\\/value>.*//'`;
 			$accessKey =~ s/\s.*$//; # In case we got multiple lines back
@@ -48,6 +50,8 @@ sub ensureKeys($$$) {
 	if($secretKey eq "") {
 		if(defined($env->{AWS_SECRET_ACCESS_KEY})) {
 			$secretKey = $env->{AWS_SECRET_ACCESS_KEY};
+		} elsif(defined($env->{AWS_SECRET_KEY})) {
+			$secretKey = $env->{AWS_SECRET_KEY};
 		} elsif(defined($hadoopHome)) {
 			$secretKey = `grep fs.s3n.awsSecretAccessKey $hadoopHome/conf/*.xml | sed 's/.*<value>//' | sed 's/<\\/value>.*//'`;
 			$secretKey =~ s/\s.*$//; # In case we got multiple lines back
