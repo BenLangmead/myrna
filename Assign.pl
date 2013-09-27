@@ -450,8 +450,8 @@ while(1) {
 				print join("\t", @s)."\n";
 			}
 			close(CMD);
-			system("touch $doneFile");
 			die "Invocation of '$cmd' aborted with exitlevel $?\n" if $? != 0;
+			system("touch $doneFile");
 			if(defined($errorDir) && $errorDir ne "") {
 				system("rm -rf $errorDir/Assign.pl.$$");
 			}
