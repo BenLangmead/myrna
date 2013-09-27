@@ -612,15 +612,16 @@ $partitionLen = 1000000 if $partitionLen == 0;
 $bt_args = "-m 1" if $bt_args eq "";
 $ref eq "" || $ref =~ /\.jar$/ || dieusage("--reference must end with .jar", $usage, 1);
 $numNodes = "1" if !$numNodes;
-my $totalNodes = 1;
+my $totalNodes = 0;
 if(index($numNodes, ',') != -1) {
 	my @nn = split(/,/, $numNodes);
 	for my $i (1..scalar($#nn)) {
-		$totalNodes += int($i);
+		$totalNodes += int($nn[$i]);
 	}
 } else {
 	$totalNodes = int($numNodes);
 }
+$totalNodes > 0 || die "Bad total number of cluster nodes: $totalNodes";
 my $R_VER = "3.0.1";
 $rUrl = "S3N://$appDir/R-${R_VER}.tar.gz";
 $family = "poisson" if $family eq "";
@@ -1936,7 +1937,7 @@ my $cmdJson = "$emrScript ".
     "--bootstrap-name \"Set memory-intensive mode\" ".
     "--bootstrap-action s3://elasticmapreduce/bootstrap-actions/configure-hadoop ".
     "--bootstrap-name \"Configure Hadoop\" ".
-    "--args \"-s,mapred.job.reuse.jvm.num.tasks=1,-s,mapred.tasktracker.reduce.tasks.maximum=$cores,-s,io.sort.mb=100\" ".
+    "--args \"-s,mapred.job.reuse.jvm.num.tasks=1,-s,mapred.tasktracker.reduce.tasks.maximum=$cores,-s,mapred.tasktracker.map.tasks.maximum=$cores,-s,io.sort.mb=100\" ".
     "--bootstrap-action s3://elasticmapreduce/bootstrap-actions/add-swap ".
     "--bootstrap-name \"Add Swap\" ".
     "--args \"$swap\"";
