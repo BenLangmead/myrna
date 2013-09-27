@@ -7,7 +7,7 @@ Myrna NEWS
    Myrna is now available for download.  1.0.0-beta2 was the first
 version to be released, and it was released under the OSI Artistic
 License (see LICENSE file) and freely available to the public for
-download.  The current version is 1.2.1.
+download.  The current version is 1.2.3.
 
 Reporting Issues
 ================
@@ -18,6 +18,14 @@ Please report any issues using the Sourceforge bug tracker:
 
 Version Release History
 =======================
+
+Version 1.2.3 - September 27, 2013
+   * Fixed performance issue in PostprocessReduce when there are many samples.
+   * Made the overlap step's default partition length smaller for better load
+     balance.
+   * Eliminated problematic types of Hadoop counters that could easily
+     contribute to exceeding the maximum # counters allowed.
+   * Fixed bug whereby defunct matchMatrix function was used in Stats step.
 
 Version 1.2.1 - June 24, 2013
    * Upgraded to R v3.0.1 and fix a DBI module incompatibility.
