@@ -57,6 +57,8 @@ bin/Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite("biomaRt"
 [ $? -ne 0 ] && echo "Error installing Biocondctor biomaRt package" && exit 1
 bin/Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite("geneplotter")'
 [ $? -ne 0 ] && echo "Error installing Biocondctor geneplotter package" && exit 1
+bin/Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite("Biostrings")'
+[ $? -ne 0 ] && echo "Error installing Biocondctor Biostrings package" && exit 1
 
 cd ..
 echo "===="

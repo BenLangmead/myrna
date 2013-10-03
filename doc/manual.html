@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
   <meta name="author" content="Ben Langmead, Kasper Hansen and Jeff Leek" />
-  <title>Myrna 1.2.2-dev Manual - Myrna: Cloud-scale differential gene expression for RNA-seq</title>
+  <title>Myrna 1.2.3 Manual - Myrna: Cloud-scale differential gene expression for RNA-seq</title>
   <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 <body>
@@ -163,7 +163,7 @@
 <li>Run R's <code>./configure</code> script</li>
 <li>Run <code>make</code></li>
 <li>Install <a href="http://www.r-project.org">R</a> packages <code>multicore</code> and <code>lmtest</code></li>
-<li>Install <a href="http://www.bioconductor.org">Bioconductor</a> and packages <code>IRanges</code>, <code>geneplotter</code>, <code>biomaRt</code></li>
+<li>Install <a href="http://www.bioconductor.org">Bioconductor</a> and packages <code>IRanges</code>, <code>geneplotter</code>, <code>biomaRt</code>, <code>Biostrings</code></li>
 </ol>
 <p>When the script completes, the <code>$MYRNA_HOME/R</code> directory contains the <a href="http://www.r-project.org">R</a>/<a href="http://www.bioconductor.org">Bioconductor</a> installation. Myrna looks in this location by default, so no further steps are necessary for Myrna to find it. To test this, run:</p>
 <pre><code>$MYRNA_HOME/myrna_local --test</code></pre>
@@ -190,6 +190,8 @@
 <pre><code>/path/to/Rscript -e &#39;source(&quot;http://bioconductor.org/biocLite.R&quot;); biocLite(&quot;biomaRt&quot;)&#39;</code></pre></li>
 <li><p>The <a href="http://www.bioconductor.org/packages/2.5/bioc/html/geneplotter.html"><code>geneplotter</code> package</a>. Install with:</p>
 <pre><code>/path/to/Rscript -e &#39;source(&quot;http://bioconductor.org/biocLite.R&quot;); biocLite(&quot;geneplotter&quot;)&#39;</code></pre></li>
+<li><p>The <code>Biostrings</code> package]. Install with:</p>
+<pre><code>/path/to/Rscript -e &#39;source(&quot;http://bioconductor.org/biocLite.R&quot;); biocLite(&quot;Biostrings&quot;)&#39;</code></pre></li>
 </ol>
 <h2 id="the-sra-toolkit"><a href="#TOC">The SRA toolkit</a></h2>
 <p>The <a href="http://www.ncbi.nlm.nih.gov/books/NBK47533/">Sequence Read Archive</a> (SRA) is a resource at the <a href="http://www.ncbi.nlm.nih.gov/">National Center for Biotechnology Information</a> (NCBI) for storing sequence data from modern sequencing instruments. Sequence data underlying many studies, including very large studies, can often be downloaded from this archive.</p>

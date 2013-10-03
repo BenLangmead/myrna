@@ -285,7 +285,7 @@ This script will:
 3. Run `make`
 4. Install [R] packages `multicore` and `lmtest`
 5. Install [Bioconductor] and packages `IRanges`, `geneplotter`,
-   `biomaRt`
+   `biomaRt`, `Biostrings`
 
 When the script completes, the `$MYRNA_HOME/R` directory contains the
 [R]/[Bioconductor] installation.  Myrna looks in this location by
@@ -354,6 +354,10 @@ The following [Bioconductor] packages are also required:
         /path/to/Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite("geneplotter")'
 
 `geneplotter` package]: http://www.bioconductor.org/packages/2.5/bioc/html/geneplotter.html
+
+5. The `Biostrings` package].  Install with:
+
+        /path/to/Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite("Biostrings")'
 
 ## The SRA toolkit
 
