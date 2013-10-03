@@ -3,25 +3,25 @@
 # Are Not Conserved Across Closely Related Yeast Species"
 
 # Wild-type reads
-ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014335/SRR014335.sra	0	wild-1
-ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014336/SRR014336.sra	0	wild-2
-ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014337/SRR014337.sra	0	wild-3
-ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014338/SRR014338.sra	0	wild-4
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR014/SRR014335/SRR014335.sra	0	wild-1
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR014/SRR014336/SRR014336.sra	0	wild-2
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR014/SRR014337/SRR014337.sra	0	wild-3
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR014/SRR014338/SRR014338.sra	0	wild-4
 
 # "rrp6 lsm1 pat1"
-ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014339/SRR014339.sra	0	rrp6_lsm1_pat1-1
-ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014340/SRR014340.sra	0	rrp6_lsm1_pat1-2
-ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014341/SRR014341.sra	0	rrp6_lsm1_pat1-3
-ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014342/SRR014342.sra	0	rrp6_lsm1_pat1-4
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR014/SRR014339/SRR014339.sra	0	rrp6_lsm1_pat1-1
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR014/SRR014340/SRR014340.sra	0	rrp6_lsm1_pat1-2
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR014/SRR014341/SRR014341.sra	0	rrp6_lsm1_pat1-3
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR014/SRR014342/SRR014342.sra	0	rrp6_lsm1_pat1-4
 
 # "ski2 ski8 rrp6"
-ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014343/SRR014343.sra	0	ski2_ski8_rrp6-1
-ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014344/SRR014344.sra	0	ski2_ski8_rrp6-3
-ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014345/SRR014345.sra	0	ski2_ski8_rrp6-2
-ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014346/SRR014346.sra	0	ski2_ski8_rrp6-4
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR014/SRR014343/SRR014343.sra	0	ski2_ski8_rrp6-1
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR014/SRR014344/SRR014344.sra	0	ski2_ski8_rrp6-3
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR014/SRR014345/SRR014345.sra	0	ski2_ski8_rrp6-2
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR014/SRR014346/SRR014346.sra	0	ski2_ski8_rrp6-4
 
 # "xrn1 rrp6 lsm1"
-ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014347/SRR014347.sra	0	xrn1_rrp6_lsm1-1
-ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014348/SRR014348.sra	0	xrn1_rrp6_lsm1-2
-ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014349/SRR014349.sra	0	xrn1_rrp6_lsm1-3
-ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/litesra/SRR/SRR014/SRR014350/SRR014350.sra	0	xrn1_rrp6_lsm1-4
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR014/SRR014347/SRR014347.sra	0	xrn1_rrp6_lsm1-1
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR014/SRR014348/SRR014348.sra	0	xrn1_rrp6_lsm1-2
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR014/SRR014349/SRR014349.sra	0	xrn1_rrp6_lsm1-3
+ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR014/SRR014350/SRR014350.sra	0	xrn1_rrp6_lsm1-4
