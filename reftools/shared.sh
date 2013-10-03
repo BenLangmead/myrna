@@ -44,7 +44,7 @@ do_jar() {
 	mkdir -p jar/ivals
 	
 	#if [ ! -f jar/$INDEX.jar -o ! -f jar/$INDEX.idx.jar -o ! -f jar/$INDEX.ivals.jar ]
-	if [ ! -f jar/$INDEX.jar ]
+	if [ ! -f $INDEX.jar ]
 	then
 		rm -f jar/index/*
 		rm -fr jar/ivals/*
