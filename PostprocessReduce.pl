@@ -313,13 +313,14 @@ if($exons ne "" && !$noGenes) {
 
 # Get the set of all genes with non-0 counts
 msg("Getting directory with gene counts: '$counts'");
+mkpath("$dest_dir/counts");
 if(!Util::is_local($counts)) {
-	Get::ensureDirFetchedNoLock($counts, $dest_dir, \@counterUpdates, \%env);
-	my $subdir = "$dest_dir/".fileparse($counts);
+	Get::ensureDirFetchedNoLock($counts, "$dest_dir/counts", \@counterUpdates, \%env);
+	my $subdir = "$dest_dir/counts/".fileparse($counts);
 	(-d $subdir) || die "Could not find counts subdir '$subdir'";
-	system("cp $subdir/* $dest_dir") == 0 || die "Error running 'cp $subdir/* $dest_dir'\n";
+	system("cp $subdir/* $dest_dir/counts") == 0 || die "Error running 'cp $subdir/* $dest_dir/counts'\n";
 } else {
-	system("cp $counts/* $dest_dir") == 0 || die "Error running 'cp $counts/* $dest_dir'\n";
+	system("cp $counts/* $dest_dir/counts") == 0 || die "Error running 'cp $counts/* $dest_dir/counts'\n";
 }
 
 msg("4/7: Extracting per-gene, per-label counts from $dest_dir");
@@ -328,7 +329,7 @@ my %labs = ();
 my %norms = ();
 
 # Now construct matrix of counts per gene/label
-my @count_files = <$dest_dir/*.txt>;
+my @count_files = <$dest_dir/counts/*.txt>;
 msg("Found ".scalar(@count_files)." count files");
 for my $f (@count_files) {
 	msg("  processing counts file $f");
@@ -354,7 +355,7 @@ for my $f (@count_files) {
 }
 
 # Now construct a vector of normalization factors
-my @norm_files = <$dest_dir/*.norm>;
+my @norm_files = <$dest_dir/counts/*.norm>;
 for my $f (@norm_files) {
 	msg("  processing normalization-factor file $f");
 	my $bf = fileparse($f);
@@ -367,10 +368,12 @@ for my $f (@norm_files) {
 }
 
 # Grab all the per-sample count & normalization-factor files
-for my $ty ("txt", "norm", "norms") {
-	my @fs = <$dest_dir/*.$ty>;
-	next if scalar(@fs) == 0;
-	system("cp $dest_dir/*.$ty .") == 0 || die "Error running cp $dest_dir/*.$ty .\n";
+if($dest_dir ne '.') {
+	for my $ty ("txt", "norm", "norms") {
+		my @fs = <$dest_dir/counts/*.$ty>;
+		next if scalar(@fs) == 0;
+		system("cp $dest_dir/*.$ty .") == 0 || die "Error running cp $dest_dir/*.$ty .\n";
+	}
 }
 
 if($noGenes) { for my $k (keys %ival_labs) { $genes{$k} = 1; } }
