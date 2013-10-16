@@ -372,7 +372,8 @@ if($dest_dir ne '.') {
 	for my $ty ("txt", "norm", "norms") {
 		my @fs = <$dest_dir/counts/*.$ty>;
 		next if scalar(@fs) == 0;
-		system("cp $dest_dir/*.$ty .") == 0 || die "Error running cp $dest_dir/*.$ty .\n";
+        my $cmd = "cp @fs ."; 
+		system($cmd) == 0 || die "Error running command: $cmd\n";
 	}
 }
 
