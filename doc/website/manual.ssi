@@ -175,7 +175,7 @@
 <pre><code>/path/to/Rscript -e &#39;source(&quot;http://bioconductor.org/biocLite.R&quot;); biocLite(&quot;biomaRt&quot;)&#39;</code></pre></li>
 <li><p>The <a href="http://www.bioconductor.org/packages/2.5/bioc/html/geneplotter.html"><code>geneplotter</code> package</a>. Install with:</p>
 <pre><code>/path/to/Rscript -e &#39;source(&quot;http://bioconductor.org/biocLite.R&quot;); biocLite(&quot;geneplotter&quot;)&#39;</code></pre></li>
-<li><p>The <code>Biostrings</code> package]. Install with:</p>
+<li><p>The <a href="http://www.bioconductor.org/packages/2.5/bioc/html/Biostrings.html"><code>Biostrings</code> package</a>. Install with:</p>
 <pre><code>/path/to/Rscript -e &#39;source(&quot;http://bioconductor.org/biocLite.R&quot;); biocLite(&quot;Biostrings&quot;)&#39;</code></pre></li>
 </ol>
 <h2 id="the-sra-toolkit"><a href="#TOC">The SRA toolkit</a></h2>

@@ -359,6 +359,8 @@ The following [Bioconductor] packages are also required:
 
         /path/to/Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite("Biostrings")'
 
+`Biostrings` package]: http://www.bioconductor.org/packages/2.5/bioc/html/Biostrings.html
+
 ## The SRA toolkit
 
 The [Sequence Read Archive] (SRA) is a resource at the [National Center for

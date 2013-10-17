@@ -368,9 +368,11 @@ The following [Bioconductor] packages are also required:
 
 [`geneplotter` package]: http://www.bioconductor.org/packages/2.5/bioc/html/geneplotter.html
 
-5. The `Biostrings` package].  Install with:
+5. The [`Biostrings` package].  Install with:
 
         /path/to/Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite("Biostrings")'
+
+[`Biostrings` package]: http://www.bioconductor.org/packages/2.5/bioc/html/Biostrings.html
 
 ## The SRA toolkit
 
