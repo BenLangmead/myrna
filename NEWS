@@ -19,13 +19,18 @@ Please report any issues using the Sourceforge bug tracker:
 Version Release History
 =======================
 
-Version 1.2.3 - September 27, 2013
+Version 1.2.3 - October 17, 2013
    * Fixed performance issue in PostprocessReduce when there are many samples.
    * Made the overlap step's default partition length smaller for better load
      balance.
    * Eliminated problematic types of Hadoop counters that could easily
      contribute to exceeding the maximum # counters allowed.
    * Fixed bug whereby defunct matchMatrix function was used in Stats step.
+   * Updated SRA paths for the examples.
+   * Added Biostrings R package for automatic installation.
+   * Fixed a silent detection failure into the examples.
+   * Fixed a silent count failure.
+   * Fixed a minor failure that made myrna fail under Hadoop.
 
 Version 1.2.2 - June 24, 2013
    * Upgraded to R v3.0.1 and fix a DBI module incompatibility.

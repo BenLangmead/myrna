@@ -16,7 +16,7 @@ use MyrnaIface;
 use S3Util;
 use CGI::Carp qw(fatalsToBrowser);
 
-my $VERSION = "1.2.0";
+my $VERSION = "1.2.3";
 my $debugLev = 0;
 my $cgi  = CGI->new();
 my $ajax = CGI::Ajax->new(submitClicked  => \&submitClicked,
