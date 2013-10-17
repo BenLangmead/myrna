@@ -3,6 +3,19 @@
 <li>Myrna source now lives in a <a href="https://github.com/BenLangmead/myrna">public GitHub repository</a>.</li>
 </ul>
 
+<h2>Version 1.2.3 - October 17, 2013</h2>
+<ul>
+   <li>Fixed performance issue in PostprocessReduce when there are many samples.</li>
+   <li>Made the overlap step's default partition length smaller for better load balance.</li>
+   <li>Eliminated problematic types of Hadoop counters that could easily contribute to exceeding the maximum &#35; counters allowed.</li>
+   <li>Fixed bug whereby defunct matchMatrix function was used in Stats step.</li>
+   <li>Updated SRA paths for the examples.</li>
+   <li>Added Biostrings R package for automatic installation.</li>
+   <li>Fixed a silent detection failure into the examples.</li>
+   <li>Fixed a silent count failure.</li>
+   <li>Fixed a minor failure that made myrna fail under Hadoop.</li>
+</ul>
+
 <h2>Version 1.2.1 - June 24, 2013</h2>
 <ul>
   <li>Upgraded to R v3.0.1 and fix a DBI module incompatibility.</li>
