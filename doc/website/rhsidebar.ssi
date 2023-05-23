@@ -54,80 +54,80 @@
         <i>H. sapiens</i> GRCh37/Ensembl 67
       </td></tr>
       <tr><td style="font-size: x-small;">
-        &nbsp;s3n://myrna-refs/human_ensembl_67.jar<br/>
-        &nbsp;s3n://myrna-refs/human_ensembl_67.cs.jar (color)<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/human_ensembl_67.jar<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs//human_ensembl_67.cs.jar (color)<br/>
       </td></tr>
 
       <tr><td>
         <i>M. musculus</i> NCBIM37/Ensembl 67
       </td></tr>
       <tr><td style="font-size: x-small;">
-        &nbsp;s3n://myrna-refs/mouse_ensembl_67.jar<br/>
-        &nbsp;s3n://myrna-refs/mouse_ensembl_67.cs.jar (color)<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/mouse_ensembl_67.jar<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/mouse_ensembl_67.cs.jar (color)<br/>
       </td></tr>
 
       <tr><td>
         <i>P. troglodytes</i> v2.1/Ensembl 67
       </td></tr>
       <tr><td style="font-size: x-small;">
-        &nbsp;s3n://myrna-refs/chimp_ensembl_67.jar<br/>
-        &nbsp;s3n://myrna-refs/chimp_ensembl_67.cs.jar (color)<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/chimp_ensembl_67.jar<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/chimp_ensembl_67.cs.jar (color)<br/>
       </td></tr>
 
       <tr><td>
         <i>M. mulatta</i> v1/Ensembl 67
       </td></tr>
       <tr><td style="font-size: x-small;">
-        &nbsp;s3n://myrna-refs/rhesus_ensembl_67.jar<br/>
-        &nbsp;s3n://myrna-refs/rhesus_ensembl_67.cs.jar (color)<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/rhesus_ensembl_67.jar<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/rhesus_ensembl_67.cs.jar (color)<br/>
       </td></tr>
 
       <tr><td>
         <i>R. norvegicus</i> RGSC3.4/Ensembl 67
       </td></tr>
       <tr><td style="font-size: x-small;">
-        &nbsp;s3n://myrna-refs/rat_ensembl_67.jar<br/>
-        &nbsp;s3n://myrna-refs/rat_ensembl_67.cs.jar (color)<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/rat_ensembl_67.jar<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/rat_ensembl_67.cs.jar (color)<br/>
       </td></tr>
 
       <tr><td>
         <i>G. gallus</i> WASHUC2/Ensembl 67
       </td></tr>
       <tr><td style="font-size: x-small;">
-        &nbsp;s3n://myrna-refs/chicken_ensembl_67.jar<br/>
-        &nbsp;s3n://myrna-refs/chicken_ensembl_67.cs.jar (color)<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/chicken_ensembl_67.jar<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/chicken_ensembl_67.cs.jar (color)<br/>
       </td></tr>
       
       <tr><td>
         <i>C. familiaris</i> BROADD2/Ensembl 67
       </td></tr>
       <tr><td style="font-size: x-small;">
-        &nbsp;s3n://myrna-refs/dog_ensembl_67.jar<br/>
-        &nbsp;s3n://myrna-refs/dog_ensembl_67.cs.jar (color)<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/dog_ensembl_67.jar<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/dog_ensembl_67.cs.jar (color)<br/>
       </td></tr>
       
       <tr><td>
         <i>D. melanogaster</i> BDGP5.13/Ensembl 67
       </td></tr>
       <tr><td style="font-size: x-small;">
-        &nbsp;s3n://myrna-refs/fly_ensembl_67.jar<br/>
-        &nbsp;s3n://myrna-refs/fly_ensembl_67.cs.jar (color)<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/fly_ensembl_67.jar<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/fly_ensembl_67.cs.jar (color)<br/>
       </td></tr>
       
       <tr><td>
         <i>C. elegans</i> WS210/Ensembl 67
       </td></tr>
       <tr><td style="font-size: x-small;">
-        &nbsp;s3n://myrna-refs/worm_ensembl_67.jar<br/>
-        &nbsp;s3n://myrna-refs/worm_ensembl_67.cs.jar (color)<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/worm_ensembl_67.jar<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/worm_ensembl_67.cs.jar (color)<br/>
       </td></tr>
 
       <tr><td>
         <i>S. cerevisiae</i> v1.01/Ensembl 67
       </td></tr>
       <tr><td style="font-size: x-small;">
-        &nbsp;s3n://myrna-refs/yeast_ensembl_67.jar<br/>
-        &nbsp;s3n://myrna-refs/yeast_ensembl_67.cs.jar (color)<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/yeast_ensembl_67.jar<br/>
+        &nbsp;s3://genome-idx/myrna/myrna-refs/yeast_ensembl_67.cs.jar (color)<br/>
       </td></tr>
 
       </table>

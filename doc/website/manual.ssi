@@ -815,9 +815,9 @@ Myrna web form filled in for the small Yeast example.
 <li><em>Optional</em>: Check that the AWS ID and Secret Key entered are valid by clicking the &quot;Check credentials...&quot; link</li>
 <li>For <strong>Job name</strong>, enter <code>Myrna-Yeast</code></li>
 <li>Make sure that <strong>Job type</strong> is set to &quot;Myrna&quot;</li>
-<li>For <strong>Input URL</strong>, enter <code>s3n://&lt;YOUR-BUCKET&gt;/example/yeast/small.manifest</code>, substituting for <code>&lt;YOUR-BUCKET&gt;</code></li>
+<li>For <strong>Input URL</strong>, enter <code>s3://&lt;YOUR-BUCKET&gt;/example/yeast/small.manifest</code>, substituting for <code>&lt;YOUR-BUCKET&gt;</code></li>
 <li><em>Optional</em>: Check that the Input URL exists by clicking the &quot;Check that input URL exists...&quot; link</li>
-<li>For <strong>Output URL</strong>, enter <code>s3n://&lt;YOUR-BUCKET&gt;/example/yeast/output_small</code>, substituting for <code>&lt;YOUR-BUCKET&gt;</code></li>
+<li>For <strong>Output URL</strong>, enter <code>s3://&lt;YOUR-BUCKET&gt;/example/yeast/output_small</code>, substituting for <code>&lt;YOUR-BUCKET&gt;</code></li>
 <li><em>Optional</em>: Check that the Output URL does not exist by clicking the &quot;Check that output URL doesn't exist...&quot; link</li>
 <li>For <strong>Input type</strong>, select &quot;Manifest file&quot;</li>
 <li>For <strong>Quality encoding</strong>, select &quot;Solexa+64&quot;</li>
@@ -825,7 +825,7 @@ Myrna web form filled in for the small Yeast example.
 <li>For <strong># EC2 instances</strong>, enter 5</li>
 <li>Click Submit</li>
 </ol>
-<p>This job typically takes about 45 minutes on 5 <code>c1.xlarge</code> <a href="http://aws.amazon.com/ec2">EC2</a> nodes. See <a href="#monitoring-your-emr-jobs">Monitoring your EMR jobs</a> for information on how to track job progress. To download the results, use an <a href="#s3-tools">S3 tool</a> to retrieve the contents of the <code>s3n://&lt;YOUR-BUCKET&gt;/example/yeast/output_small</code> directory.</p>
+<p>This job typically takes about 45 minutes on 5 <code>c1.xlarge</code> <a href="http://aws.amazon.com/ec2">EC2</a> nodes. See <a href="#monitoring-your-emr-jobs">Monitoring your EMR jobs</a> for information on how to track job progress. To download the results, use an <a href="#s3-tools">S3 tool</a> to retrieve the contents of the <code>s3://&lt;YOUR-BUCKET&gt;/example/yeast/output_small</code> directory.</p>
 <h4 id="via-command-line"><a href="#TOC">Via command line</a></h4>
 <p>Test your Myrna installation by running:</p>
 <pre><code>$MYRNA_HOME/myrna_emr --test</code></pre>
@@ -837,13 +837,13 @@ Myrna web form filled in for the small Yeast example.
 <pre><code>$MYRNA_HOME/myrna_emr \
     --name &quot;Myrna-Yeast&quot; \
     --preprocess \
-    --input=s3n://&lt;YOUR-BUCKET&gt;/example/yeast/small.manifest \
-    --output=s3n://&lt;YOUR-BUCKET&gt;/example/yeast/output_small \
-    --reference=s3n://myrna-refs/yeast_ensembl_67.jar \
+    --input=s3://&lt;YOUR-BUCKET&gt;/example/yeast/small.manifest \
+    --output=s3://&lt;YOUR-BUCKET&gt;/example/yeast/output_small \
+    --reference=s3://genome-idx/myrna/myrna-refs/yeast_ensembl_67.jar \
     --quality solexa64 \
     --instances 5</code></pre>
-<p>The <code>--reference</code> option instructs Myrna to use a pre-built reference jar at URL <code>s3n://myrna-refs/yeast_ensembl_67.jar</code>. The <a href="#myrna-preprocess"><code>--preprocess</code></a> option instructs Myrna to treat the input as a <a href="#labeled-manifest-files">manifest file</a>, rather than a directory of already-preprocessed reads. As the first stage of the pipeline, Myrna downloads files specified in the manifest file and preprocesses them into Myrna's read format. <a href="#myrna-local-output"><code>--output</code></a> specifies where the final output is placed.</p>
-<p>This job typically takes about 45 minutes on 5 <code>c1.xlarge</code> <a href="http://aws.amazon.com/ec2">EC2</a> nodes. See <a href="#monitoring-your-emr-jobs">Monitoring your EMR jobs</a> for information on how to track job progress. To download the results, use an <a href="#s3-tools">S3 tool</a> to retrieve the contents of the <code>s3n://&lt;YOUR-BUCKET&gt;/example/yeast/output_small</code> directory.</p>
+<p>The <code>--reference</code> option instructs Myrna to use a pre-built reference jar at URL <code>s3://genome-idx/myrna/myrna-refs/yeast_ensembl_67.jar</code>. The <a href="#myrna-preprocess"><code>--preprocess</code></a> option instructs Myrna to treat the input as a <a href="#labeled-manifest-files">manifest file</a>, rather than a directory of already-preprocessed reads. As the first stage of the pipeline, Myrna downloads files specified in the manifest file and preprocesses them into Myrna's read format. <a href="#myrna-local-output"><code>--output</code></a> specifies where the final output is placed.</p>
+<p>This job typically takes about 45 minutes on 5 <code>c1.xlarge</code> <a href="http://aws.amazon.com/ec2">EC2</a> nodes. See <a href="#monitoring-your-emr-jobs">Monitoring your EMR jobs</a> for information on how to track job progress. To download the results, use an <a href="#s3-tools">S3 tool</a> to retrieve the contents of the <code>s3://&lt;YOUR-BUCKET&gt;/example/yeast/output_small</code> directory.</p>
 <h3 id="hadoop"><a href="#TOC">Hadoop</a></h3>
 <div id="myrna-example-yeast-hadoop" />
 
@@ -851,13 +851,13 @@ Myrna web form filled in for the small Yeast example.
 <pre><code>$MYRNA_HOME/myrna_hadoop --test</code></pre>
 <p>This will warn you if any of the supporting tools or packages are missing on the master. <em>You must also ensure</em> that the same tools are installed in the same paths on all slave nodes, and are runnable by the slaves.</p>
 <p>Download <code>yeast_ensembl_67.jar</code> from the following URL:</p>
-<pre><code>http://myrna-refs.s3.amazonaws.com/yeast_ensembl_67.jar</code></pre>
+<pre><code>http://genome-idx.s3.amazonaws.com/myrna/myrna-refs/yeast_ensembl_67.jar</code></pre>
 <p>E.g. with this command:</p>
-<pre><code>wget http://myrna-refs.s3.amazonaws.com/yeast_ensembl_67.jar</code></pre>
+<pre><code>wget http://genome-idx.s3.amazonaws.com/myrna/myrna-refs/yeast_ensembl_67.jar</code></pre>
 <p>Equivalently, you can use an <a href="#s3-tools">S3 tool</a> to download the same file from this URL:</p>
-<pre><code>s3n://myrna-refs/yeast_ensembl_67.jar</code></pre>
+<pre><code>s3://genome-idx/myrna/myrna-refs/yeast_ensembl_67.jar</code></pre>
 <p>E.g. with this <a href="http://s3tools.org/s3cmd">s3cmd</a> command:</p>
-<pre><code>s3cmd get s3://myrna-refs/yeast_ensembl_67.jar</code></pre>
+<pre><code>s3cmd get s3://genome-idx/myrna/myrna-refs/yeast_ensembl_67.jar</code></pre>
 <p>Install <code>yeast_ensembl_67.jar</code> in <a href="http://hadoop.apache.org/hdfs/docs/current/hdfs_design.html">HDFS</a> (the <a href="http://hadoop.apache.org/">Hadoop</a> distributed filesystem) with the following commands. If the <code>hadoop</code> script is not in your <code>PATH</code>, either add it to your <code>PATH</code> (recommended) or specify the full path to the <code>hadoop</code> script in the following commands.</p>
 <pre><code>hadoop dfs -mkdir /myrna-refs
 hadoop dfs -put yeast_ensembl_67.jar /myrna-refs/yeast_ensembl_67.jar</code></pre>
@@ -884,10 +884,10 @@ hadoop dfs -put $MYRNA_HOME/example/yeast/small.manifest /myrna/example/yeast/sm
 <p>If you don't already have a <code>MYRNA_REFS</code> directory, choose one; it will be the default path Myrna searches for reference jars. Permanently set the <code>MYRNA_REFS</code> environment variable to the selected directory.</p>
 <p>Create a subdirectory called <code>$MYRNA_REFS/yeast_ensembl_67</code>:</p>
 <pre><code>mkdir $MYRNA_REFS/yeast_ensembl_67</code></pre>
-<p>Download <code>yeast_ensembl_67.jar</code> from <code>http://myrna-refs.s3.amazonaws.com/yeast_ensembl_67.jar</code> to the new directory, e.g., with this command:</p>
-<pre><code>wget -O $MYRNA_REFS/yeast_ensembl_67/yeast_ensembl_67.jar http://myrna-refs.s3.amazonaws.com/yeast_ensembl_67.jar</code></pre>
-<p>Equivalently, you can use an <a href="#s3-tools">S3 tool</a> to download the same file from: <code>s3n://myrna-refs/yeast_ensembl_67.jar</code>, e.g. with this <a href="http://s3tools.org/s3cmd">s3cmd</a> command:</p>
-<pre><code>s3cmd get s3://myrna-refs/yeast_ensembl_67.jar $MYRNA_REFS/yeast_ensembl_67/yeast_ensembl_67.jar</code></pre>
+<p>Download <code>yeast_ensembl_67.jar</code> from <code>http://genome-idx.s3.amazonaws.com/myrna/myrna-refs/yeast_ensembl_67.jar</code> to the new directory, e.g., with this command:</p>
+<pre><code>wget -O $MYRNA_REFS/yeast_ensembl_67/yeast_ensembl_67.jar http://genome-idx.s3.amazonaws.com/myrna/myrna-refs/yeast_ensembl_67.jar</code></pre>
+<p>Equivalently, you can use an <a href="#s3-tools">S3 tool</a> to download the same file from: <code>s3://genome-idx/myrna/myrna-refs/yeast_ensembl_67.jar</code>, e.g. with this <a href="http://s3tools.org/s3cmd">s3cmd</a> command:</p>
+<pre><code>s3cmd get s3://genome-idx/myrna/myrna-refs/yeast_ensembl_67.jar $MYRNA_REFS/yeast_ensembl_67/yeast_ensembl_67.jar</code></pre>
 <p>Change to the new <code>yeast</code> directory and expand <code>yeast_ensembl_67.jar</code> using the command:</p>
 <pre><code>cd $MYRNA_REFS/yeast_ensembl_67 &amp;&amp; unzip yeast_ensembl_67.jar</code></pre>
 <p>Now you may remove <code>yeast_ensembl_67.jar</code> to save space:</p>
@@ -942,9 +942,9 @@ sh ./human_ensembl.sh</code></pre>
 <li><em>Optional</em>: Check that the AWS ID and Secret Key entered are valid by clicking the &quot;Check credentials...&quot; link</li>
 <li>For <strong>Job name</strong>, enter <code>Myrna-Human</code></li>
 <li>Make sure that <strong>Job type</strong> is set to &quot;Myrna&quot;</li>
-<li>For <strong>Input URL</strong>, enter <code>s3n://&lt;YOUR-BUCKET&gt;/example/human/full.manifest</code>, substituting for <code>&lt;YOUR-BUCKET&gt;</code></li>
+<li>For <strong>Input URL</strong>, enter <code>s3://&lt;YOUR-BUCKET&gt;/example/human/full.manifest</code>, substituting for <code>&lt;YOUR-BUCKET&gt;</code></li>
 <li><em>Optional</em>: Check that the Input URL exists by clicking the &quot;Check that input URL exists...&quot; link</li>
-<li>For <strong>Output URL</strong>, enter <code>s3n://&lt;YOUR-BUCKET&gt;/example/human/output_full</code>, substituting for <code>&lt;YOUR-BUCKET&gt;</code></li>
+<li>For <strong>Output URL</strong>, enter <code>s3://&lt;YOUR-BUCKET&gt;/example/human/output_full</code>, substituting for <code>&lt;YOUR-BUCKET&gt;</code></li>
 <li><em>Optional</em>: Check that the Output URL does not exist by clicking the &quot;Check that output URL doesn't exist...&quot; link</li>
 <li>For <strong>Input type</strong>, select &quot;Manifest file&quot;</li>
 <li>For <strong>Quality encoding</strong>, select &quot;Phred+33&quot;</li>
@@ -952,7 +952,7 @@ sh ./human_ensembl.sh</code></pre>
 <li>For <strong># EC2 instances</strong>, enter 9</li>
 <li>Click Submit</li>
 </ol>
-<p>This job typically takes about 55 minutes on 9 <code>c1.xlarge</code> <a href="http://aws.amazon.com/ec2">EC2</a> nodes. See <a href="#monitoring-your-emr-jobs">Monitoring your EMR jobs</a> for information on how to track job progress. To download the results, use an <a href="#s3-tools">S3 tool</a> to retrieve the contents of the <code>s3n://&lt;YOUR-BUCKET&gt;/example/human/output_full</code> directory.</p>
+<p>This job typically takes about 55 minutes on 9 <code>c1.xlarge</code> <a href="http://aws.amazon.com/ec2">EC2</a> nodes. See <a href="#monitoring-your-emr-jobs">Monitoring your EMR jobs</a> for information on how to track job progress. To download the results, use an <a href="#s3-tools">S3 tool</a> to retrieve the contents of the <code>s3://&lt;YOUR-BUCKET&gt;/example/human/output_full</code> directory.</p>
 <h4 id="via-command-line-1"><a href="#TOC">Via command line</a></h4>
 <p>First we build a reference jar for a human assembly and annotations using scripts included with Myrna. The script searches for a <code>bowtie-build</code> executable with the same rules Myrna uses to search for <code>bowtie</code>. See <a href="#installing-myrna">Installing Myrna</a> for details. Because one of the steps executed by the script builds an index of the human genome, it should be run on a computer with plenty of memory (at least 4 gigabytes, preferably 6 or more).</p>
 <p>Run the following commands:</p>
@@ -976,11 +976,11 @@ sh ./human_ensembl.sh</code></pre>
 <pre><code>$MYRNA_HOME/myrna_emr \
     --name &quot;Myrna-Human&quot; \
     --preprocess \
-    --input=s3n://&lt;YOUR-BUCKET&gt;/example/human/full.manifest \
-    --output=s3n://&lt;YOUR-BUCKET&gt;/example/human/output_full \
-    --reference=s3n://&lt;YOUR-BUCKET&gt;/myrna-refs/human_ensembl_67.jar \
+    --input=s3://&lt;YOUR-BUCKET&gt;/example/human/full.manifest \
+    --output=s3://&lt;YOUR-BUCKET&gt;/example/human/output_full \
+    --reference=s3://&lt;YOUR-BUCKET&gt;/myrna-refs/human_ensembl_67.jar \
     --instances 9</code></pre>
-<p>This job typically takes about 55 minutes on 9 <code>c1.xlarge</code> <a href="http://aws.amazon.com/ec2">EC2</a> nodes. See <a href="#monitoring-your-emr-jobs">Monitoring your EMR jobs</a> for information on how to track job progress. To download the results, use an <a href="#s3-tools">S3 tool</a> to retrieve the contents of the <code>s3n://&lt;YOUR-BUCKET&gt;/example/human/output_full</code> directory.</p>
+<p>This job typically takes about 55 minutes on 9 <code>c1.xlarge</code> <a href="http://aws.amazon.com/ec2">EC2</a> nodes. See <a href="#monitoring-your-emr-jobs">Monitoring your EMR jobs</a> for information on how to track job progress. To download the results, use an <a href="#s3-tools">S3 tool</a> to retrieve the contents of the <code>s3://&lt;YOUR-BUCKET&gt;/example/human/output_full</code> directory.</p>
 <h3 id="hadoop-1"><a href="#TOC">Hadoop</a></h3>
 <div id="myrna-example-human-hadoop" />
 
@@ -1150,7 +1150,7 @@ YCL050C APA1    III 37836   38801   -1  protein_coding</code></pre>
 <h2 id="using-a-pre-built-reference-jar"><a href="#TOC">Using a pre-built reference jar</a></h2>
 <p>The <a href="http://bowtie-bio.sf.net/myrna">Myrna</a> web site lists pre-built reference jars in the right-hand sidebar, including for human, mouse, rat, chimpanzee, and rhesus macaque genomes. All use <a href="http://www.ensembl.org/">Ensembl</a> gene annotations. To use one of these reference jars:</p>
 <ol style="list-style-type: decimal">
-<li>If running in <a href="http://aws.amazon.com/elasticmapreduce">EMR</a> from the command line: make a note of the desired jar's S3 URL (starting with <code>s3n://</code>) and specify that URL using the <a href="#myrna-local-reference"><code>--reference</code></a> option when running Myrna.</li>
+<li>If running in <a href="http://aws.amazon.com/elasticmapreduce">EMR</a> from the command line: make a note of the desired jar's S3 URL (starting with <code>s3://</code>) and specify that URL using the <a href="#myrna-local-reference"><code>--reference</code></a> option when running Myrna.</li>
 <li>If running in <a href="http://hadoop.apache.org/">Hadoop</a> mode: download the desired jars using a tool like <a href="http://s3tools.org/s3cmd">s3cmd</a> (in which case, use the <code>s3://</code> URL) or <code>wget</code> (in which case, use the <code>http://</code> URL). Be sure to download all three</li>
 </ol>
 <h2 id="building-a-reference-jar-using-automatic-scripts"><a href="#TOC">Building a reference jar using automatic scripts</a></h2>
